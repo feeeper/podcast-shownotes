@@ -1,0 +1,40 @@
+channels:
+  - conda-forge
+  - nvidia
+  - pytorch
+dependencies:
+  - ipython=*
+  - jupyter=*
+  - jupyterlab=*
+  - jupyterthemes=*
+  - jupytext=*
+  - matplotlib=*
+  - pandas=*
+  - flake8=*
+  - mypy=*
+  - numpy=*
+  - pip=*
+  - pip:
+      - brunette==0.2.7
+      - json-logging==1.5.0rc0
+      - pydantic-yaml
+      - sphinx>=5,<6
+      - sphinx-removed-in
+      - sphinxcontrib-asyncio
+      - sphinxcontrib-trio
+      - yandex-taxi-testsuite
+  - polars=*
+  - pyarrow=*
+  - psutil=*
+  - pydantic=*
+  - pytest=*
+  - pytest-profiling=*
+  - python-lsp-server[all]=
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=11.8
+  - scikit-learn=*
+  - seaborn=*
+  - theme-darcula=*
+  
