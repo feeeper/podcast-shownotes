@@ -1,0 +1,13 @@
+/.cache/
+/.ipython/profile_default/
+/.jupyter/custom/
+/.jupyter/lab/
+/.jupyter/migrated
+/.mypy_cache/
+/.pytest_cache/
+/envs/
+__pycache__/
+.ipynb_checkpoints/
+*.ipynb
+/.cache/
+/data/

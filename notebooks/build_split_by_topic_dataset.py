@@ -22,6 +22,9 @@
 #
 # The podcast has a timestamps for a discussed topics from the [120th episode](https://devzen.ru/episode-0120/). So at the beginning let's take a look into the 120th episode data.
 
+# %% [markdown]
+# ## Build a dataset with timestamps and title for each shownote
+
 # %%
 import pandas as pd
 import numpy as np
@@ -29,8 +32,11 @@ import polars as pl
 import json
 from datetime import datetime
 import re
+from pathlib import Path
 
 pl.Config(fmt_str_lengths=100)
+
+data_path = Path('/mnt/d/Projects/podcast-shownotes')
 
 # %%
 episode_number_regex = re.compile('https?\:\/\/devzen\.ru\/episode-0*(?P<episode_number>\d*)')
@@ -41,7 +47,7 @@ def get_episode_num_from_href(href: str) -> int:
 
 
 # %%
-df = pl.read_ndjson('/mnt/d/Projects/podcast-shownotes/dataset.jsonl').sort('href')
+df = pl.read_ndjson(data_path / 'dataset.jsonl').sort('href')
 df = df.with_columns(pl.col('release_date').str.to_date('%d.%m.%Y'))
 df = df.with_columns((pl.col('href').apply(get_episode_num_from_href).alias('episode')))
 df.sample(10)
@@ -65,8 +71,12 @@ def timestamp_to_seconds(hour: str, minutes: str, seconds: str|None) -> int:
 # %%
 timestamp_regexp = re.compile('\[(?P<ts_hour>\d\d):(?P<ts_min>\d\d):?(?P<ts_sec>\d\d)?\]\s+(?P<title>.*)$')
 def get_shownotes_with_timestamps(shownotes: str) -> list[tuple]:
-    m = [(timestamp_to_seconds(x.group('ts_hour'), x.group('ts_min'), x.group('ts_sec')), x.group('title')) for x in [timestamp_regexp.search(sn) for sn in shownotes.split('\n')] if x is not None]
-    return m
+    timestamps = [(timestamp_to_seconds(x.group('ts_hour'), x.group('ts_min'), x.group('ts_sec')), x.group('title')) for x in [timestamp_regexp.search(sn) for sn in shownotes.split('\n')] if x is not None]
+    # some episodes have multiple topics related to the same timestamp.
+    grouped_timestamps = []
+    for k, group in groupby(timestamps, key=lambda x: x[0]):
+        grouped_timestamps.append((k, '. '.join([x[1] for x in list(group)])))
+    return grouped_timestamps
 
 
 # %%
@@ -88,3 +98,42 @@ timestamps_df.sample(10).sort('episode')
 
 # %%
 timestamps_df.write_csv('../data/timestamps.csv')
+
+# %% [markdown]
+# ## Add transcript to the timestamp datasets
+
+# %%
+with open(data_path / 'episodes' / 'episode-0120.mp3-large.json', 'r', encoding='utf8') as f:
+    transcript = json.load(f)
+
+# %%
+text = transcript['text']
+text[:200]
+
+# %%
+transcript['segments'][0]
+
+# %%
+timestamps = get_shownotes_with_timestamps_for_episode(120)
+print(f'{len(timestamps)=}')
+timestamps
+
+# %%
+topics = []
+
+current_topic_text = ''
+next_topic_timestamp_idx = 1
+for segment in transcript['segments']:
+    current_topic_text += segment['text']
+    if next_topic_timestamp_idx < len(timestamps) - 1 and segment['end'] > timestamps[next_topic_timestamp_idx][0]:        
+        topics.append(current_topic_text)
+        current_topic_text = ''
+        next_topic_timestamp_idx += 1
+        
+topics.append(current_topic_text)
+
+# %%
+len(topics)
+
+# %%
+topics[0]
