@@ -9,7 +9,8 @@ class Segment:
                  temperature: float,
                  avg_logprob: float,
                  compression_ratio: float,
-                 no_speech_prob: float):
+                 no_speech_prob: float,
+                 **kwargs):
         self.id = id
         self.seek = int(seek)
         self.start = float(start)

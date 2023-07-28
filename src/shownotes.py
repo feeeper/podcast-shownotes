@@ -1,16 +1,11 @@
 import sys
 sys.path.append('../src')
 
-import json
 import re
 from itertools import groupby
-from pathlib import Path
-
-import polars as pl
 
 from transcription import Transcription, Shownotes
 
-data_path = Path('/mnt/d/Projects/podcast-shownotes')
 
 timestamp_regexp = re.compile('\[(?P<ts_hour>\d\d):(?P<ts_min>\d\d):?(?P<ts_sec>\d\d)?\]\s+(?P<title>.*)$')
 
@@ -29,24 +24,28 @@ def get_shownotes_with_timestamps(shownotes: str) -> list[tuple]:
     return grouped_timestamps
 
 
-def get_topic_texts(transcription: Transcription, shownotes: list[Shownotes]) -> list[tuple[float, str]]:
+def get_topic_texts(transcription: Transcription, shownotes: list[Shownotes]) -> list[Shownotes]:
+    if shownotes[-1].timestamp > transcription.segments[-1].end:
+        return []
+
     topics = []
     current_topic_text = ''
     current_topic_index = 0
     next_topic_index = 1
-    current_topic_end = shownotes[next_topic_index].timestamp
+    current_shownote_start = shownotes[current_topic_index].timestamp
+    current_shownote_end = 1_000_000 if len(shownotes) == 1 else shownotes[next_topic_index].timestamp
+    current_topic_start = transcription.segments[0].start
+
     for segment in transcription.segments:
         current_topic_text += segment.text
-        if segment.end >= current_topic_end:
-            topics.append((segment.end, current_topic_text))
+        if segment.end >= current_shownote_end:
+            topics.append(Shownotes(current_topic_start, current_topic_text))
             next_topic_index += 1
-            if next_topic_index >= len(shownotes):
-                break
-
             current_topic_index += 1
             current_topic_text = ''
-            current_topic_end = shownotes[next_topic_index].timestamp
+            current_topic_start = segment.end
+            current_shownote_start = shownotes[current_topic_index].timestamp
+            current_shownote_end = 1_000_000 if next_topic_index >= len(shownotes) else shownotes[next_topic_index].timestamp
 
-    topics.append((shownotes[current_topic_index].timestamp, current_topic_text))
-
+    topics.append(Shownotes(current_shownote_start, current_topic_text))
     return topics

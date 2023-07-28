@@ -26,6 +26,9 @@
 # ## Build a dataset with timestamps and title for each shownote
 
 # %%
+import sys
+sys.path.append('../src')
+
 import pandas as pd
 import numpy as np
 import polars as pl
@@ -33,6 +36,9 @@ import json
 from datetime import datetime
 import re
 from pathlib import Path
+from itertools import groupby
+from shownotes import get_topic_texts, get_shownotes_with_timestamps
+from transcription import Shownotes, Segment, Transcription
 
 pl.Config(fmt_str_lengths=100)
 
@@ -50,7 +56,7 @@ def get_episode_num_from_href(href: str) -> int:
 df = pl.read_ndjson(data_path / 'dataset.jsonl').sort('href')
 df = df.with_columns(pl.col('release_date').str.to_date('%d.%m.%Y'))
 df = df.with_columns((pl.col('href').apply(get_episode_num_from_href).alias('episode')))
-df.sample(10)
+df.sample(5)
 
 # %%
 episode = df.filter(pl.col('episode') == 120)
@@ -62,34 +68,18 @@ print(episode_shownotes)
 
 
 # %%
-def timestamp_to_seconds(hour: str, minutes: str, seconds: str|None) -> int:
-    if seconds is None:
-        seconds = 0
-    return 60 * 60 * int(hour) + 60 * int(minutes) + int(seconds)
+def get_shownotes_with_timestamps_for_episode(df: pl.DataFrame, episode_num: int) -> list[tuple]:
+    shownotes_text = df.filter(pl.col('episode') == episode_num)['shownotes'][0]
+    shownotes_source = get_shownotes_with_timestamps(shownotes_text)
+    shownotes = [Shownotes(*x) for x in shownotes_source]
+    return shownotes
 
 
 # %%
-timestamp_regexp = re.compile('\[(?P<ts_hour>\d\d):(?P<ts_min>\d\d):?(?P<ts_sec>\d\d)?\]\s+(?P<title>.*)$')
-def get_shownotes_with_timestamps(shownotes: str) -> list[tuple]:
-    timestamps = [(timestamp_to_seconds(x.group('ts_hour'), x.group('ts_min'), x.group('ts_sec')), x.group('title')) for x in [timestamp_regexp.search(sn) for sn in shownotes.split('\n')] if x is not None]
-    # some episodes have multiple topics related to the same timestamp.
-    grouped_timestamps = []
-    for k, group in groupby(timestamps, key=lambda x: x[0]):
-        grouped_timestamps.append((k, '. '.join([x[1] for x in list(group)])))
-    return grouped_timestamps
-
+get_shownotes_with_timestamps_for_episode(df, 120)
 
 # %%
-def get_shownotes_with_timestamps_for_episode(episode_num: int) -> list[tuple]:
-    shownotes = df.filter(pl.col('episode') == episode_num)['shownotes'][0]
-    return get_shownotes_with_timestamps(shownotes)
-
-
-# %%
-get_shownotes_with_timestamps_for_episode(120)
-
-# %%
-timestamps = [(x, *y) for x in df['episode'] for y in get_shownotes_with_timestamps_for_episode(x)]
+timestamps = [(x, y.timestamp, y.title) for x in df['episode'] for y in get_shownotes_with_timestamps_for_episode(df, x)]
 timestamps_df = pl.from_records(timestamps, schema={'episode': int, 'timestamp': int, 'title': str})
 timestamps_df.shape
 
@@ -103,37 +93,63 @@ timestamps_df.write_csv('../data/timestamps.csv')
 # ## Add transcript to the timestamp datasets
 
 # %%
-with open(data_path / 'episodes' / 'episode-0120.mp3-large.json', 'r', encoding='utf8') as f:
-    transcript = json.load(f)
+episode_numbers = timestamps_df['episode'].unique()
 
-# %%
-text = transcript['text']
-text[:200]
+def get_topic_texts_for_episode(df: pl.DataFrame, episode_number: int, debug: bool = False) -> tuple[list[Shownotes], str]:
+    def _last_timestamp_bigger_than_last_segment_end() -> bool:
+        return timestamps[-1].timestamp > transcription.segments[-1].end
+    
+    def _get_transcription_file(episode_number: int) -> Path:
+        sizes = ['large', 'medium', 'small']
+        
+        for size in sizes:        
+            if Path(data_path / 'episodes' / f'episode-{episode_number}.mp3-{size}.json').exists():
+                return Path(data_path / 'episodes' / f'episode-{episode_number}.mp3-{size}.json'), size
+            elif Path(data_path / 'episodes' / f'episode-0{episode_number}.mp3-{size}.json').exists():
+                return Path(data_path / 'episodes' / f'episode-0{episode_number}.mp3-{size}.json'), size  
+    
+    transcription_path, size = _get_transcription_file(episode_number)
+    with open(transcription_path, 'r', encoding='utf8') as f:
+        transcription_data = json.load(f)
+        segments = [Segment(**x) for x in transcription_data['segments']]
+        transcription = Transcription(
+            transcription_data['text'],
+            segments,
+            transcription_data['language'])
+        
+        text = transcription.text
+        timestamps = get_shownotes_with_timestamps_for_episode(df, episode_number)
 
-# %%
-transcript['segments'][0]
+        if _last_timestamp_bigger_than_last_segment_end():
+            print(f'WARN: episode={episode_number}\tlast timestamp={timestamps[-1].timestamp}\tlast segment\'s end={transcription.segments[-1].end}')
+        
+        topics = get_topic_texts(transcription, timestamps), size
 
-# %%
-timestamps = get_shownotes_with_timestamps_for_episode(120)
-print(f'{len(timestamps)=}')
-timestamps
+    return topics
+
 
 # %%
 topics = []
+failed_episodes = []
+episode_numbers = timestamps_df['episode'].unique()
 
-current_topic_text = ''
-next_topic_timestamp_idx = 1
-for segment in transcript['segments']:
-    current_topic_text += segment['text']
-    if next_topic_timestamp_idx < len(timestamps) - 1 and segment['end'] > timestamps[next_topic_timestamp_idx][0]:        
-        topics.append(current_topic_text)
-        current_topic_text = ''
-        next_topic_timestamp_idx += 1
-        
-topics.append(current_topic_text)
+for episode_number in episode_numbers:
+    try:
+        human_shownotes = get_shownotes_with_timestamps_for_episode(df, episode_number)
+        episode_shownotes, size = get_topic_texts_for_episode(df, episode_number)
+        topics += [(episode_number, sn.timestamp, sn.title, hsn.timestamp, hsn.title) for sn, hsn in zip(episode_shownotes, human_shownotes)]
+    except Exception as e:
+        failed_episodes.append(episode_number)
+        raise
+
+pd.DataFrame(topics)
 
 # %%
-len(topics)
+human_and_whispertimestamps_with_topics = pd.DataFrame(topics, columns=['episode', 'whisper_timestamp', 'topic_text', 'human_timestamp', 'human_title'])
+human_and_whispertimestamps_with_topics
+
+# %%
+human_and_whispertimestamps_with_topics.to_csv('../data/human_and_whispertimestamps_with_topics.csv', index=None)
 
 # %%
 topics[0]

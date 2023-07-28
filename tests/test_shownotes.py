@@ -71,13 +71,11 @@ def test_get_topics():
     ]
     shownotes = [Shownotes(*x) for x in shownotes_source]
     topics = get_topic_texts(transcription, shownotes)
-    print(f'{len(topics)=}\t{len(shownotes)=}')
-    for i in range(len(shownotes)):
-        print(f'{topics[i][0]}\t{shownotes[i].timestamp}')
     assert len(topics) == len(shownotes)
 
 
-def test_get_topics_if_first_topic_start_not_from_the_beginning():
+def test_get_topics_should_return_empty_if_last_timestamp_if_greater_than_last_segment_end():
+    # 137 episode's last shownote has timestamp after the mp3's end
     with open('./episode-0137.mp3-large.json', 'r', encoding='utf8') as f:
         data = json.load(f)
         segments = [Segment(**x) for x in data['segments']]
@@ -104,7 +102,16 @@ def test_get_topics_if_first_topic_start_not_from_the_beginning():
     ]
     shownotes = [Shownotes(*x) for x in shownotes_source]
     topics = get_topic_texts(transcription, shownotes)
-    print(f'{len(topics)=}\t{len(shownotes)=}')
-    for i in range(len(shownotes)):
-        print(f'{topics[i][0]}\t{shownotes[i].timestamp}')
+    assert len(topics) == 0
+
+
+def test_get_topics_for_single_timestamp():
+    # episode 322 has single topic for entire episode
+    with open('./episode-0137.mp3-large.json', 'r', encoding='utf8') as f:
+        data = json.load(f)
+        segments = [Segment(**x) for x in data['segments']]
+        transcription = Transcription(data['text'], segments, data['language'])
+
+    shownotes = [Shownotes(timestamp=151.0, title='Интервью с гостем — книга про юнит тестирование')]
+    topics = get_topic_texts(transcription, shownotes)
     assert len(topics) == len(shownotes)
