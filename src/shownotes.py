@@ -1,10 +1,11 @@
 import sys
 sys.path.append('../src')
 
+import typing as t
 import re
 from itertools import groupby
 
-from transcription import Transcription, Shownotes
+from models import Transcription, Shownotes
 
 
 timestamp_regexp = re.compile('\[(?P<ts_hour>\d\d):(?P<ts_min>\d\d):?(?P<ts_sec>\d\d)?\]\s+(?P<title>.*)$')
@@ -49,3 +50,52 @@ def get_topic_texts(transcription: Transcription, shownotes: list[Shownotes]) ->
 
     topics.append(Shownotes(current_shownote_start, current_topic_text))
     return topics
+
+
+def get_sentences_with_timestamps(
+        transcription: Transcription,
+        get_sentences_callback: t.Callable[[str], list[str]]
+) -> list[tuple[float, float, str]]:
+    text = transcription.text
+    sentences = get_sentences_callback(text)
+
+    sentence_timestamps = []
+    start_from_idx = 0
+    start_from_in_segment_idx = 0
+
+    segment_sentences_dict = {}
+    for sentence in sentences:
+        first_segment = transcription.segments[start_from_idx]
+        sentence_timestamp = first_segment.start
+        test_sentence = first_segment.text.strip()
+
+        # segment.text contains whole sentence
+        if sentence == test_sentence.strip():
+            start_from_idx += 1
+            sentence_timestamps.append((sentence_timestamp, first_segment.end, sentence))
+            continue
+
+        test_sentence = ''
+        for i, segment in enumerate(transcription.segments[start_from_idx:]):
+            break_outer_loop = False
+            if segment.text not in segment_sentences_dict:
+                segment_sentences_dict[segment.text] = get_sentences_callback(segment.text)
+
+            segment_sentences = segment_sentences_dict[segment.text]
+            least_segment_sentences = segment_sentences[start_from_in_segment_idx:]
+            for seg_sentence_idx, seg_sentence in enumerate(least_segment_sentences):
+                test_sentence += ' ' + seg_sentence
+                if sentence == test_sentence.strip():
+                    if seg_sentence_idx == len(least_segment_sentences) - 1:
+                        start_from_idx += i + 1
+                        start_from_in_segment_idx = 0
+                    else:
+                        start_from_in_segment_idx = seg_sentence_idx + 1
+
+                    sentence_timestamps.append((sentence_timestamp, segment.end, sentence))
+                    break_outer_loop = True
+                    break
+            if break_outer_loop:
+                break
+
+    return sentence_timestamps

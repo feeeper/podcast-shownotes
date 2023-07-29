@@ -22,7 +22,6 @@ dependencies:
       - sphinx-removed-in
       - sphinxcontrib-asyncio
       - sphinxcontrib-trio
-      - trankit
       - yandex-taxi-testsuite
   - polars=*
   - pyarrow=*
@@ -38,4 +37,4 @@ dependencies:
   - scikit-learn=*
   - seaborn=*
   - theme-darcula=*
-  
+  - stanza
