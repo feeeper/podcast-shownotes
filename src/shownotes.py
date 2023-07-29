@@ -79,6 +79,8 @@ def get_sentences_with_timestamps(
         for i, segment in enumerate(transcription.segments[start_from_idx:]):
             break_outer_loop = False
             if segment.text not in segment_sentences_dict:
+                # segment text can contain more than one sentence or
+                # even one sentence and a beginning of a next sentence
                 segment_sentences_dict[segment.text] = get_sentences_callback(segment.text)
 
             segment_sentences = segment_sentences_dict[segment.text]
@@ -90,12 +92,14 @@ def get_sentences_with_timestamps(
                         start_from_idx += i + 1
                         start_from_in_segment_idx = 0
                     else:
-                        start_from_in_segment_idx = seg_sentence_idx + 1
+                        start_from_in_segment_idx += seg_sentence_idx + 1
 
                     sentence_timestamps.append((sentence_timestamp, segment.end, sentence))
                     break_outer_loop = True
                     break
             if break_outer_loop:
                 break
+            else:
+                start_from_in_segment_idx = 0
 
     return sentence_timestamps

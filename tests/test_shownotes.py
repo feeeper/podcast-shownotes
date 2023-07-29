@@ -167,6 +167,53 @@ def test_get_sentences_with_timestamps_segment_contains_two_sentences():
     assert 304.38 == sentences_with_timestamps[2][0] and 307.38 == sentences_with_timestamps[2][1]
     assert 307.38 == sentences_with_timestamps[3][0] and 314.38 == sentences_with_timestamps[3][1]
 
-    assert transcription is not None
+
+
+def test_get_sentences_with_timestamps_segment_contains_three_sentences():
+    segments_json = [
+        {"id":96,"seek":27538,"start":297.38,"end":301.38,"text":" Поэтому это был как-то пробный шар, и потом мы вышли,","tokens":[],"temperature":0,"avg_logprob":-0.313,"compression_ratio":2.079,"no_speech_prob":0.1},
+        {"id":97,"seek":27538,"start":301.38,"end":304.38,"text":" собственно, отдать наизнанный проект в Apache.","tokens":[],"temperature":0,"avg_logprob":-0.313,"compression_ratio":2.079,"no_speech_prob":0.1},
+        {"id":98,"seek":30438,"start":304.38,"end":307.38,"text":" Делается так. Пишется пропозал. Проверяется пропозал.","tokens":[],"temperature":0,"avg_logprob":-0.183,"compression_ratio":1.997,"no_speech_prob":0.041},
+        {"id":99,"seek":30438,"start":307.38,"end":310.38,"text":" Пропозал, наверное, самая главная часть того,","tokens":[],"temperature":0,"avg_logprob":-0.183,"compression_ratio":1.997,"no_speech_prob":0.041},
+        {"id":100,"seek":30438,"start":310.38,"end":314.38,"text":" как податься в инкубатор.","tokens":[],"temperature":0,"avg_logprob":-0.183,"compression_ratio":1.997,"no_speech_prob":0.041}
+    ]
+    transcription = Transcription(
+        text=' Поэтому это был как-то пробный шар, и потом мы вышли, собственно, отдать наизнанный проект в Apache. Делается так. Пишется пропозал. Проверяется пропозал. Пропозал, наверное, самая главная часть того, как податься в инкубатор.',
+        segments=[Segment(**x) for x in segments_json],
+        language='ru')
+
+    pipeline = Pipeline('ru', processors=['tokenize'])
+
+    sentences_with_timestamps = get_sentences_with_timestamps(transcription, lambda text: [x.text for x in pipeline(text).sentences])
+
+    assert len(sentences_with_timestamps) == 5
+    assert 297.38 == sentences_with_timestamps[0][0] and 304.38 == sentences_with_timestamps[0][1]
+    assert 304.38 == sentences_with_timestamps[1][0] and 307.38 == sentences_with_timestamps[1][1]
+    assert 304.38 == sentences_with_timestamps[2][0] and 307.38 == sentences_with_timestamps[2][1]
+    assert 304.38 == sentences_with_timestamps[3][0] and 307.38 == sentences_with_timestamps[3][1]
+    assert 307.38 == sentences_with_timestamps[4][0] and 314.38 == sentences_with_timestamps[4][1]
+
+
 def test_get_sentences_with_timestamps_segment_contains_end_of_prev_sent_full_next_sent():
-    ...
+    segments_json = [
+        {"id":99,"seek":30438,"start":307.38,"end":310.38,"text":" Пропозал, наверное, самая главная часть того,","tokens":[],"temperature":0,"avg_logprob":-0.183,"compression_ratio":1.997,"no_speech_prob":0.041},
+        {"id":100,"seek":30438,"start":310.38,"end":314.38,"text":" как податься в инкубатор.","tokens":[],"temperature":0,"avg_logprob":-0.183,"compression_ratio":1.997,"no_speech_prob":0.041},
+        {"id":101,"seek":30438,"start":314.38,"end":318.38,"text":" Обычно пропозал... Там есть очень четкая структура,","tokens":[],"temperature":0,"avg_logprob":-0.183,"compression_ratio":1.997,"no_speech_prob":0.041},
+        {"id":102,"seek":30438,"start":318.38,"end":321.38,"text":" что должно быть в пропозале, написать, какой, собственно,","tokens":[],"temperature":0,"avg_logprob":-0.183,"compression_ratio":1.997,"no_speech_prob":0.041},
+        {"id":103,"seek":30438,"start":321.38,"end":325.38,"text":" задача проекта решает, что он даст комьюнити.","tokens":[],"temperature":0,"avg_logprob":-0.183,"compression_ratio":1.997,"no_speech_prob":0.041}
+    ]
+    transcription = Transcription(
+        text=' Пропозал, наверное, самая главная часть того, как податься в инкубатор. Обычно пропозал... Там есть очень четкая структура, что должно быть в пропозале, написать, какой, собственно, задача проекта решает, что он даст комьюнити.',
+        segments=[Segment(**x) for x in segments_json],
+        language='ru')
+
+    pipeline = Pipeline('ru', processors=['tokenize'])
+
+    sentences_with_timestamps = get_sentences_with_timestamps(
+        transcription,
+        lambda text: [x.text for x in pipeline(text).sentences])
+
+    assert len(sentences_with_timestamps) == 3
+    assert 307.38 == sentences_with_timestamps[0][0] and 314.38 == sentences_with_timestamps[0][1]
+    assert 314.38 == sentences_with_timestamps[1][0] and 318.38 == sentences_with_timestamps[1][1]
+    assert 314.38 == sentences_with_timestamps[2][0] and 325.38 == sentences_with_timestamps[2][1]
