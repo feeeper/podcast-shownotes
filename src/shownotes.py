@@ -4,6 +4,7 @@ sys.path.append('../src')
 import typing as t
 import re
 from itertools import groupby
+from tqdm import tqdm
 
 from models import Transcription, Shownotes
 
@@ -54,9 +55,14 @@ def get_topic_texts(transcription: Transcription, shownotes: list[Shownotes]) ->
 
 def get_sentences_with_timestamps(
         transcription: Transcription,
-        get_sentences_callback: t.Callable[[str], list[str]]
+        get_sentences_callback: t.Callable[[str], list[str]],
+        verbose: bool = False
 ) -> list[tuple[float, float, str]]:
-    text = transcription.text
+    def _replace_dots_without_space(text_to_process: str) -> str:
+        return rx.sub(r'.\n\n\1', text_to_process)
+
+    rx = re.compile('\.\.\.\s*(\w?)')
+    text = _replace_dots_without_space(transcription.text)
     sentences = get_sentences_callback(text)
 
     sentence_timestamps = []
@@ -64,13 +70,14 @@ def get_sentences_with_timestamps(
     start_from_in_segment_idx = 0
 
     segment_sentences_dict = {}
-    for sentence in sentences:
+    for sentence in tqdm(sentences, disable=not verbose):
+        sentence_wo_spaces = sentence.replace(' ', '')
         first_segment = transcription.segments[start_from_idx]
         sentence_timestamp = first_segment.start
-        test_sentence = first_segment.text.strip()
+        test_sentence =  _replace_dots_without_space(first_segment.text.strip())
 
         # segment.text contains whole sentence
-        if sentence == test_sentence.strip():
+        if sentence_wo_spaces == test_sentence.strip().replace(' ', ''):
             start_from_idx += 1
             sentence_timestamps.append((sentence_timestamp, first_segment.end, sentence))
             continue
@@ -81,18 +88,19 @@ def get_sentences_with_timestamps(
             if segment.text not in segment_sentences_dict:
                 # segment text can contain more than one sentence or
                 # even one sentence and a beginning of a next sentence
-                segment_sentences_dict[segment.text] = get_sentences_callback(segment.text)
+                segment_sentences_dict[segment.text] = get_sentences_callback(_replace_dots_without_space(segment.text))
 
             segment_sentences = segment_sentences_dict[segment.text]
             least_segment_sentences = segment_sentences[start_from_in_segment_idx:]
             for seg_sentence_idx, seg_sentence in enumerate(least_segment_sentences):
-                test_sentence += ' ' + seg_sentence
-                if sentence == test_sentence.strip():
+                test_sentence += seg_sentence.replace(' ', '')
+                if sentence_wo_spaces == test_sentence:
                     if seg_sentence_idx == len(least_segment_sentences) - 1:
                         start_from_idx += i + 1
                         start_from_in_segment_idx = 0
                     else:
                         start_from_in_segment_idx += seg_sentence_idx + 1
+                        start_from_idx += i
 
                     sentence_timestamps.append((sentence_timestamp, segment.end, sentence))
                     break_outer_loop = True

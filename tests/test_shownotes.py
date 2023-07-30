@@ -5,6 +5,9 @@ from src.models import Transcription, Segment, Shownotes
 
 from stanza import Pipeline
 
+pipeline = Pipeline('ru', processors=['tokenize'])
+
+
 def test_get_shownotes_should_return_shownotes_basic():
     shownotes_text = '\n\nТемы выпуска: все, что вы хотели узнать о 2600, безопасности беспроводных сетей и том, как ограбить поезд без оружия; обмазываемся Elixir’ом: вакансия на удаленку, предстоящий релиз 1.4, митап в Rambler’е, и не только; другие предстоящие и прошедшие конференции и митапы; новости от Amazon: Aurora теперь совместима с PostgreSQL, новая альтернатива Digital Ocean, новые инстансы с FPGA; как разработчики Scylla чинили баги в ядре Linux; потрясающие новости для любителей игр; и, конечно же, темы наших слушателей. \nШоу нотес:\n\n\n[00:00] Благодарим наших замечательных патронов\n[00:02] Расспрашиваем гостей\n\nhttp://defcon.su/\nhttps://twitter.com/dc7499\n\n\n[01:07] Вакансия от компании Netronix\n\nhttp://netronixgroup.com\nhttp://bit.ly/backend-ruby\n\n\n[01:08] Эликсир 1.4 на подходе\n[01:21] Positive Hack Days 23-24 мая\n[01:26] Прошел Flink meetup Berlin\n\nhttp://www.slideshare.net/robertmetzger1/apache-flink-community-updates-november-2016-berlin-meetup\nhttp://www.slideshare.net/StefanRichter10/a-look-at-flink-12\n\n\n[01:32] Митап Elixir-разработчиков в Rambler&Co\n[01:33] Global Game Jam 2017 Berlin Registration\n[01:37] Strip Hack Moscow 2016\n[01:47] Amazon Aurora Update – PostgreSQL Compatibility\n\nhttps://aws.amazon.com/blogs/aws/amazon-aurora-update-postgresql-compatibility/\nhttps://news.ycombinator.com/item?id=13072861\n\n\n[01:52] Убийца DO от Amazon\n\nhttps://amazonlightsail.com/pricing/\nhttps://news.ycombinator.com/item?id=13072155\n\n\n[01:58] Новые инстансы EC2 с программируемым железом\n\nhttps://aws.amazon.com/blogs/aws/developer-preview-ec2-instances-f1-with-programmable-hardware/\nhttp://papilio.cc/\n\n\n[02:06] Big latencies? It’s open season for kernel bug-hunting!\n\nhttp://www.scylladb.com/2016/11/14/cfq-kernel-bug/\nhttps://github.com/iovisor/bcc\n\n\n[02:11] The Last Of Us — Part II\n[02:13] Темы и вопросы слушателей для 0121\n\n\n\nПоддержи DevZen Podcast на Patreon!\n\nЛог чата: https://gitter.im/DevZenRu/live/archives/2016/12/03\nГолоса выпуска: Светлана, Валерий, Иван, Александр а также гости — Олег и Юрий.\nФоновая музыка: Plastic3 — Corporate Rock Motivation Loop 4\n\n\n\n\nПодкаст: Скачать (80.4MB) \n\n \n'
     shownotes = get_shownotes_with_timestamps(shownotes_text)
@@ -157,8 +160,6 @@ def test_get_sentences_with_timestamps_segment_contains_two_sentences():
         segments=[Segment(**x) for x in segments_json],
         language='ru')
 
-    pipeline = Pipeline('ru', processors=['tokenize'])
-
     sentences_with_timestamps = get_sentences_with_timestamps(transcription, lambda text: [x.text for x in pipeline(text).sentences])
 
     assert len(sentences_with_timestamps) == 4
@@ -182,8 +183,6 @@ def test_get_sentences_with_timestamps_segment_contains_three_sentences():
         segments=[Segment(**x) for x in segments_json],
         language='ru')
 
-    pipeline = Pipeline('ru', processors=['tokenize'])
-
     sentences_with_timestamps = get_sentences_with_timestamps(transcription, lambda text: [x.text for x in pipeline(text).sentences])
 
     assert len(sentences_with_timestamps) == 5
@@ -194,7 +193,7 @@ def test_get_sentences_with_timestamps_segment_contains_three_sentences():
     assert 307.38 == sentences_with_timestamps[4][0] and 314.38 == sentences_with_timestamps[4][1]
 
 
-def test_get_sentences_with_timestamps_segment_contains_end_of_prev_sent_full_next_sent():
+def test_get_sentences_with_timestamps_segment_contains_full_prev_sent_and_beginning_of_next_sent():
     segments_json = [
         {"id":99,"seek":30438,"start":307.38,"end":310.38,"text":" Пропозал, наверное, самая главная часть того,","tokens":[],"temperature":0,"avg_logprob":-0.183,"compression_ratio":1.997,"no_speech_prob":0.041},
         {"id":100,"seek":30438,"start":310.38,"end":314.38,"text":" как податься в инкубатор.","tokens":[],"temperature":0,"avg_logprob":-0.183,"compression_ratio":1.997,"no_speech_prob":0.041},
@@ -207,8 +206,6 @@ def test_get_sentences_with_timestamps_segment_contains_end_of_prev_sent_full_ne
         segments=[Segment(**x) for x in segments_json],
         language='ru')
 
-    pipeline = Pipeline('ru', processors=['tokenize'])
-
     sentences_with_timestamps = get_sentences_with_timestamps(
         transcription,
         lambda text: [x.text for x in pipeline(text).sentences])
@@ -217,3 +214,102 @@ def test_get_sentences_with_timestamps_segment_contains_end_of_prev_sent_full_ne
     assert 307.38 == sentences_with_timestamps[0][0] and 314.38 == sentences_with_timestamps[0][1]
     assert 314.38 == sentences_with_timestamps[1][0] and 318.38 == sentences_with_timestamps[1][1]
     assert 314.38 == sentences_with_timestamps[2][0] and 325.38 == sentences_with_timestamps[2][1]
+
+
+def test_get_sentences_with_timestamps_segment_text_split_single_dot():
+    segments_json = [
+        {"id":60,"seek":16738,"start":167.38,"end":170.38,"text":" Сейчас, примерно год назад...","tokens":[],"temperature":0,"avg_logprob":-0.273,"compression_ratio":1.903,"no_speech_prob":0.015},
+        {"id":61,"seek":16738,"start":170.38,"end":174.38,"text":" Изначально этот проект составлен как чисто университетский","tokens":[],"temperature":0,"avg_logprob":-0.273,"compression_ratio":1.903,"no_speech_prob":0.015},
+        {"id":62,"seek":16738,"start":174.38,"end":177.38,"text":" ресерш-проект, но потом...","tokens":[],"temperature":0,"avg_logprob":-0.273,"compression_ratio":1.903,"no_speech_prob":0.015},
+        {"id":63,"seek":16738,"start":177.38,"end":178.38,"text":" Я кинул в гидр.","tokens":[],"temperature":0,"avg_logprob":-0.273,"compression_ratio":1.903,"no_speech_prob":0.015},
+        {"id":64,"seek":16738,"start":178.38,"end":184.38,"text":" Потом, примерно год назад, мы вышли в Apache-инкубатор,","tokens":[],"temperature":0,"avg_logprob":-0.273,"compression_ratio":1.903,"no_speech_prob":0.015},
+        {"id":65,"seek":16738,"start":184.38,"end":187.38,"text":" и где-то полгода назад это уже является топ-левел","tokens":[],"temperature":0,"avg_logprob":-0.273,"compression_ratio":1.903,"no_speech_prob":0.015},
+        {"id":66,"seek":16738,"start":187.38,"end":189.38,"text":" Apache-проекта.","tokens":[],"temperature":0,"avg_logprob":-0.273,"compression_ratio":1.903,"no_speech_prob":0.015}
+    ]
+
+    transcription = Transcription(
+        text=' Сейчас, примерно год назад... Изначально этот проект составлен как чисто университетский ресерш-проект, но потом... Я кинул в гидр. Потом, примерно год назад, мы вышли в Apache-инкубатор, и где-то полгода назад это уже является топ-левел Apache-проекта.',
+        segments=[Segment(**x) for x in segments_json],
+        language='ru')
+
+    sentences_with_timestamps = get_sentences_with_timestamps(
+        transcription,
+        lambda text: [x.text for x in pipeline(text).sentences])
+
+    assert len(sentences_with_timestamps) == 4
+    assert 167.38 == sentences_with_timestamps[0][0] and 170.38 == sentences_with_timestamps[0][1]
+    assert 170.38 == sentences_with_timestamps[1][0] and 177.38 == sentences_with_timestamps[1][1]
+    assert 177.38 == sentences_with_timestamps[2][0] and 178.38 == sentences_with_timestamps[2][1]
+    assert 178.38 == sentences_with_timestamps[3][0] and 189.38 == sentences_with_timestamps[3][1]
+
+
+def test_get_sentences_with_timestamps_segment_contains_end_of_prev_sent_and_full_next_sent():
+    segments_json = [
+        {"id":407,"seek":161738,"start":1632.38,"end":1636.38,"text":" Во-вторых, очень большой эффорт вначале был приложен на то,","tokens":[],"temperature":0,"avg_logprob":-0.228,"compression_ratio":1.793,"no_speech_prob":0.074},
+        {"id":408,"seek":161738,"start":1636.38,"end":1643.38,"text":" чтобы не использовать... минимизировать эффект garbage collection в Java.","tokens":[],"temperature":0,"avg_logprob":-0.228,"compression_ratio":1.793,"no_speech_prob":0.074},
+        {"id":409,"seek":164338,"start":1644.38,"end":1647.38,"text":" Для этого мы используем...","tokens":[],"temperature":0,"avg_logprob":-0.314,"compression_ratio":1.818,"no_speech_prob":0.061}
+    ]
+
+    transcription = Transcription(
+        text=' Во-вторых, очень большой эффорт вначале был приложен на то, чтобы не использовать... минимизировать эффект garbage collection в Java. Для этого мы используем...',
+        segments=[Segment(**x) for x in segments_json],
+        language='ru')
+
+    sentences_with_timestamps = get_sentences_with_timestamps(
+        transcription,
+        lambda text: [x.text for x in pipeline(text).sentences])
+
+    assert len(sentences_with_timestamps) == 3
+    assert 1632.38 == sentences_with_timestamps[0][0] and 1643.38 == sentences_with_timestamps[0][1]
+    assert 1636.38 == sentences_with_timestamps[1][0] and 1643.38 == sentences_with_timestamps[1][1]
+    assert 1644.38 == sentences_with_timestamps[2][0] and 1647.38 == sentences_with_timestamps[2][1]
+
+
+def test_get_sentences_with_timestamps_segment_has_new_sent_starts_with_lower_and_prev_ends_with_dots():
+    segments_json = [
+        {"id":1727,"seek":406800,"start":4092,"end":4094,"text":" Я смотрю на это и говорю, подождите,","tokens":[],"temperature":0,"avg_logprob":-0.17,"compression_ratio":2.038,"no_speech_prob":0.303},
+        {"id":1728,"seek":406800,"start":4094,"end":4096,"text":" а у вас разве нету какого-то","tokens":[],"temperature":0,"avg_logprob":-0.17,"compression_ratio":2.038,"no_speech_prob":0.303},
+        {"id":1729,"seek":409600,"start":4096,"end":4098,"text":" стандарта для диссертации","tokens":[],"temperature":0,"avg_logprob":-0.167,"compression_ratio":2.006,"no_speech_prob":0.044},
+        {"id":1730,"seek":409600,"start":4098,"end":4100,"text":" там в","tokens":[],"temperature":0,"avg_logprob":-0.167,"compression_ratio":2.006,"no_speech_prob":0.044},
+        {"id":1731,"seek":409600,"start":4100,"end":4102,"text":" там...темплейт где-нибудь.","tokens":[],"temperature":0,"avg_logprob":-0.167,"compression_ratio":2.006,"no_speech_prob":0.044},
+    ]
+
+    transcription = Transcription(
+        text=' Я смотрю на это и говорю, подождите, а у вас разве нету какого-то стандарта для диссертации там в там...темплейт где-нибудь.',
+        segments=[Segment(**x) for x in segments_json],
+        language='ru')
+
+    sentences_with_timestamps = get_sentences_with_timestamps(
+        transcription,
+        lambda text: [x.text for x in pipeline(text).sentences])
+
+    assert len(sentences_with_timestamps) == 2
+    assert 4092 == sentences_with_timestamps[0][0] and 4102 == sentences_with_timestamps[0][1]
+    assert 4100 == sentences_with_timestamps[1][0] and 4102 == sentences_with_timestamps[1][1]
+
+
+def test_unknown2():
+    segments_json = [
+        {"id":1751,"seek":412400,"start":4140,"end":4142,"text":" А оказывается, можно совершенно","tokens":[],"temperature":0,"avg_logprob":-0.205,"compression_ratio":2.042,"no_speech_prob":0.115},
+        {"id":1752,"seek":412400,"start":4142,"end":4144,"text":" иначе. И это, наверное, идет","tokens":[],"temperature":0,"avg_logprob":-0.205,"compression_ratio":2.042,"no_speech_prob":0.115},
+        {"id":1753,"seek":412400,"start":4144,"end":4146,"text":" из нашего... нас просто","tokens":[],"temperature":0,"avg_logprob":-0.205,"compression_ratio":2.042,"no_speech_prob":0.115},
+        {"id":1754,"seek":412400,"start":4146,"end":4148,"text":" готовят как хороших, прекрасных","tokens":[],"temperature":0,"avg_logprob":-0.205,"compression_ratio":2.042,"no_speech_prob":0.115},
+        {"id":1755,"seek":412400,"start":4148,"end":4150,"text":" исполнителей. Вот почему","tokens":[],"temperature":0,"avg_logprob":-0.205,"compression_ratio":2.042,"no_speech_prob":0.115},
+        {"id":1756,"seek":412400,"start":4150,"end":4152,"text":" белорусские, российские инженеры так сильно ценятся,","tokens":[],"temperature":0,"avg_logprob":-0.205,"compression_ratio":2.042,"no_speech_prob":0.115},
+        {"id":1757,"seek":415200,"start":4152,"end":4154,"text":" когда мы прекрасно умеем исполнять.","tokens":[],"temperature":0,"avg_logprob":-0.158,"compression_ratio":1.904,"no_speech_prob":0.175}
+    ]
+
+    transcription = Transcription(
+        text=' А оказывается, можно совершенно иначе. И это, наверное, идет из нашего... нас просто готовят как хороших, прекрасных исполнителей. Вот почему белорусские, российские инженеры так сильно ценятся, когда мы прекрасно умеем исполнять.',
+        segments=[Segment(**x) for x in segments_json],
+        language='ru')
+
+    sentences_with_timestamps = get_sentences_with_timestamps(
+        transcription,
+        lambda text: [x.text for x in pipeline(text).sentences])
+
+    assert len(sentences_with_timestamps) == 4
+    assert 4140 == sentences_with_timestamps[0][0] and 4144 == sentences_with_timestamps[0][1]
+    assert 4142 == sentences_with_timestamps[1][0] and 4146 == sentences_with_timestamps[1][1]
+    assert 4144 == sentences_with_timestamps[2][0] and 4150 == sentences_with_timestamps[2][1]
+    assert 4148 == sentences_with_timestamps[3][0] and 4154 == sentences_with_timestamps[3][1]
