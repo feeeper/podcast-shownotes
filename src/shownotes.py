@@ -5,6 +5,7 @@ import typing as t
 import re
 from itertools import groupby
 from tqdm import tqdm
+import editdistance
 
 from models import Transcription, Shownotes
 
@@ -94,7 +95,8 @@ def get_sentences_with_timestamps(
             least_segment_sentences = segment_sentences[start_from_in_segment_idx:]
             for seg_sentence_idx, seg_sentence in enumerate(least_segment_sentences):
                 test_sentence += seg_sentence.replace(' ', '')
-                if sentence_wo_spaces == test_sentence:
+                # test_get_sentences_with_timestamps_segment_could_not_split_into_sentences_correctly
+                if editdistance.distance(sentence_wo_spaces, test_sentence) <= 1:
                     if seg_sentence_idx == len(least_segment_sentences) - 1:
                         start_from_idx += i + 1
                         start_from_in_segment_idx = 0

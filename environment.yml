@@ -3,6 +3,7 @@ channels:
   - nvidia
   - pytorch
 dependencies:
+  - editdistance
   - ipython=*
   - jupyter=*
   - jupyterlab=*

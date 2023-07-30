@@ -313,3 +313,36 @@ def test_unknown2():
     assert 4142 == sentences_with_timestamps[1][0] and 4146 == sentences_with_timestamps[1][1]
     assert 4144 == sentences_with_timestamps[2][0] and 4150 == sentences_with_timestamps[2][1]
     assert 4148 == sentences_with_timestamps[3][0] and 4154 == sentences_with_timestamps[3][1]
+
+
+# awful case for stanza.
+# Stanza counts segments 1253, 1254, 1255, 1256 as
+# a [["То есть это не 100%"], ["А, не 100% С"], ["и не 100% отсутствие П."], ["Вот это так можно расценить."]]
+# but in whole episode transcript splits to [
+#  'То есть это не на 100%.',
+#  'То есть это не 100% А, не 100%',
+#  'С и не 100% отсутствие П. Вот это так можно расценить.'
+#  ]
+def test_get_sentences_with_timestamps_segment_could_not_split_into_sentences_correctly():
+    segments_json = [
+        {"id":1252,"seek":342192,"start":3431.92,"end":3433.92,"text":" Я понял. То есть это не на 100%.","tokens":[],"temperature":0,"avg_logprob":-0.187,"compression_ratio":2.240,"no_speech_prob":0.271},
+        {"id":1253,"seek":342192,"start":3433.92,"end":3435.92,"text":" То есть это не 100%","tokens":[],"temperature":0,"avg_logprob":-0.187,"compression_ratio":2.24,"no_speech_prob":0.271},
+        {"id":1254,"seek":342192,"start":3435.92,"end":3437.92,"text":" А, не 100% С","tokens":[],"temperature":0,"avg_logprob":-0.187,"compression_ratio":2.24,"no_speech_prob":0.271},
+        {"id":1255,"seek":342192,"start":3437.92,"end":3439.92,"text":" и не 100% отсутствие П.","tokens":[],"temperature":0,"avg_logprob":-0.187,"compression_ratio":2.24,"no_speech_prob":0.271},
+        {"id":1256,"seek":342192,"start":3439.92,"end":3441.92,"text":" Вот это так можно расценить.","tokens":[],"temperature":0,"avg_logprob":-0.187,"compression_ratio":2.24,"no_speech_prob":0.271}
+    ]
+
+    transcription = Transcription(
+        text=' Я понял. То есть это не на 100%. То есть это не 100% А, не 100% С и не 100% отсутствие П. Вот это так можно расценить.',
+        segments=[Segment(**x) for x in segments_json],
+        language='ru')
+
+    sentences_with_timestamps = get_sentences_with_timestamps(
+        transcription,
+        lambda text: [x.text for x in pipeline(text).sentences])
+
+    assert len(sentences_with_timestamps) == 4
+    assert 3431.92 == sentences_with_timestamps[0][0] and 3433.92 == sentences_with_timestamps[0][1] and 'Я понял.' == sentences_with_timestamps[0][2]
+    assert 3431.92 == sentences_with_timestamps[1][0] and 3433.92 == sentences_with_timestamps[1][1] and 'То есть это не на 100%.' == sentences_with_timestamps[1][2]
+    assert 3433.92 == sentences_with_timestamps[2][0] and 3437.92 == sentences_with_timestamps[2][1] and 'То есть это не 100% А, не 100%' == sentences_with_timestamps[2][2]
+    assert 3437.92 == sentences_with_timestamps[3][0] and 3441.92 == sentences_with_timestamps[3][1] and 'С и не 100% отсутствие П. Вот это так можно расценить.' == sentences_with_timestamps[3][2]
