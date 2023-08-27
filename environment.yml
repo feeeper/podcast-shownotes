@@ -14,6 +14,7 @@ dependencies:
   - flake8=*
   - mypy=*
   - numpy=*
+  - nltk=*
   - pip=*
   - pip:
       - brunette==0.2.7
