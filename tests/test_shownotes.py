@@ -1,6 +1,11 @@
 import json
 
-from src.shownotes import get_shownotes_with_timestamps, get_topic_texts, get_sentences_with_timestamps
+from src.shownotes import (
+    get_shownotes_with_timestamps,
+    get_topic_texts,
+    get_sentences_with_timestamps,
+    get_sentences_with_timestamps_by_letter
+)
 from src.models import Transcription, Segment, Shownotes
 
 from stanza import Pipeline
@@ -288,7 +293,7 @@ def test_get_sentences_with_timestamps_segment_has_new_sent_starts_with_lower_an
     assert 4100 == sentences_with_timestamps[1][0] and 4102 == sentences_with_timestamps[1][1]
 
 
-def test_unknown2():
+def test_get_sentences_with_timestamps_segment_splits_incorrectly_into_sentences_if_contains_dots():
     segments_json = [
         {"id":1751,"seek":412400,"start":4140,"end":4142,"text":" А оказывается, можно совершенно","tokens":[],"temperature":0,"avg_logprob":-0.205,"compression_ratio":2.042,"no_speech_prob":0.115},
         {"id":1752,"seek":412400,"start":4142,"end":4144,"text":" иначе. И это, наверное, идет","tokens":[],"temperature":0,"avg_logprob":-0.205,"compression_ratio":2.042,"no_speech_prob":0.115},
@@ -346,3 +351,59 @@ def test_get_sentences_with_timestamps_segment_could_not_split_into_sentences_co
     assert 3431.92 == sentences_with_timestamps[1][0] and 3433.92 == sentences_with_timestamps[1][1] and 'То есть это не на 100%.' == sentences_with_timestamps[1][2]
     assert 3433.92 == sentences_with_timestamps[2][0] and 3437.92 == sentences_with_timestamps[2][1] and 'То есть это не 100% А, не 100%' == sentences_with_timestamps[2][2]
     assert 3437.92 == sentences_with_timestamps[3][0] and 3441.92 == sentences_with_timestamps[3][1] and 'С и не 100% отсутствие П. Вот это так можно расценить.' == sentences_with_timestamps[3][2]
+
+
+def test_get_sentences_with_timestamps_111():
+    # with open('/mnt/d/projects/podcast-shownotes/episodes/episode-0190.mp3-large.json', 'r', ) as f:
+    #     data = json.load(f)
+    #     segments = [Segment(**x) for x in data['segments']]
+    #     transcription = Transcription(data['text'], segments, data['language'])
+
+    segments_json = [
+        {"id":410,"seek":138440,"start":1390.4,"end":1393.4,"text":" Так как compare-and-set у нас работает нормально,","tokens":[],"temperature":0,"avg_logprob":-0.184,"compression_ratio":1.745,"no_speech_prob":0.025},
+        {"id":411,"seek":138440,"start":1393.4,"end":1396.4,"text":" даже в sequential consistency, если он есть,","tokens":[],"temperature":0,"avg_logprob":-0.184,"compression_ratio":1.745,"no_speech_prob":0.025},
+        {"id":412,"seek":138440,"start":1396.4,"end":1398.4,"text":" то получается sequential consistency","tokens":[],"temperature":0,"avg_logprob":-0.184,"compression_ratio":1.745,"no_speech_prob":0.025},
+        {"id":413,"seek":138440,"start":1398.4,"end":1401.4,"text":" с compare-and-set дает нам linearizability.","tokens":[],"temperature":0,"avg_logprob":-0.184,"compression_ratio":1.745,"no_speech_prob":0.025},
+        {"id":414,"seek":138440,"start":1401.4,"end":1403.4,"text":" И тогда мы можем,","tokens":[],"temperature":0,"avg_logprob":-0.184,"compression_ratio":1.745,"no_speech_prob":0.025},
+        {"id":415,"seek":138440,"start":1403.4,"end":1406.4,"text":" используя вот этот read mapping и write mapping,","tokens":[],"temperature":0,"avg_logprob":-0.184,"compression_ratio":1.745,"no_speech_prob":0.025},
+        {"id":416,"seek":138440,"start":1406.4,"end":1409.4,"text":" взять и свести задачу","tokens":[],"temperature":0,"avg_logprob":-0.184,"compression_ratio":1.745,"no_speech_prob":0.025},
+        {"id":417,"seek":140940,"start":1410.4,"end":1414.4,"text":" с np.complete к nlogn.n.","tokens":[],"temperature":0,"avg_logprob":-0.271,"compression_ratio":1.982,"no_speech_prob":0.179},
+        {"id":418,"seek":140940,"start":1414.4,"end":1417.4,"text":" И тогда можно вообще все протестировать очень быстро.","tokens":[],"temperature":0,"avg_logprob":-0.271,"compression_ratio":1.982,"no_speech_prob":0.179}
+    ]
+
+    transcription = Transcription(
+        text=' Так как compare-and-set у нас работает нормально, даже в sequential consistency, если он есть, то получается sequential consistency с compare-and-set дает нам linearizability. И тогда мы можем, используя вот этот read mapping и write mapping, взять и свести задачу с np.complete к nlogn.n. И тогда можно вообще все протестировать очень быстро.',
+        segments=[Segment(**x) for x in segments_json],
+        language='ru')
+
+    sentences_with_timestamps = get_sentences_with_timestamps_by_letter(
+        transcription,
+        lambda text: [x.text for x in pipeline(text).sentences],)
+
+    assert len(sentences_with_timestamps) == 3
+
+
+def test_unknown():
+    # with open('/mnt/d/projects/podcast-shownotes/episodes/episode-0207.mp3-large.json', 'r', ) as f:
+    #     data = json.load(f)
+    #     segments = [Segment(**x) for x in data['segments']]
+    #     transcription = Transcription(data['text'], segments, data['language'])
+
+    segments_json = [
+        {"id":480,"seek":261004,"start":2624.04,"end":2630.04,"text":" Ну вот я вначале не сказал, опять же, повторюсь, я работаю в компании Postgres Pro","tokens":[],"temperature":0,"avg_logprob":-0.229,"compression_ratio":1.739,"no_speech_prob":0.014},
+        {"id":481,"seek":261004,"start":2630.04,"end":2639.04,"text":" и в основном занимаюсь Postgres, и какое-то время назад мне попала задачка поревьюить реализацию","tokens":[],"temperature":0,"avg_logprob":-0.229,"compression_ratio":1.739,"no_speech_prob":0.014},
+        {"id":482,"seek":263904,"start":2639.04,"end":2645.04,"text":" такого стандарта SQL.JSON для Postgres.","tokens":[],"temperature":0,"avg_logprob":-0.248,"compression_ratio":1.795,"no_speech_prob":0.054},
+        {"id":483,"seek":263904,"start":2645.04,"end":2652.04,"text":" Ну и вот какое-то время уже хотел на это внимательнее посмотреть, ну и так вот все сложилось.","tokens":[],"temperature":0,"avg_logprob":-0.248,"compression_ratio":1.795,"no_speech_prob":0.054},
+    ]
+
+    transcription = Transcription(
+        text=' Ну вот я вначале не сказал, опять же, повторюсь, я работаю в компании Postgres Pro и в основном занимаюсь Postgres, и какое-то время назад мне попала задачка поревьюить реализацию такого стандарта SQL.JSON для Postgres. Ну и вот какое-то время уже хотел на это внимательнее посмотреть, ну и так вот все сложилось.',
+        segments=[Segment(**x) for x in segments_json],
+        language='ru')
+
+    sentences_with_timestamps = get_sentences_with_timestamps_by_letter(
+        transcription,
+        lambda text: [x.text for x in pipeline(text).sentences],
+        verbose=2)
+
+    assert len(sentences_with_timestamps) == 3

@@ -4,6 +4,8 @@ sys.path.append('../src')
 import typing as t
 import re
 from itertools import groupby
+import time
+
 from tqdm import tqdm
 import editdistance
 
@@ -13,12 +15,33 @@ from models import Transcription, Shownotes
 timestamp_regexp = re.compile('\[(?P<ts_hour>\d\d):(?P<ts_min>\d\d):?(?P<ts_sec>\d\d)?\]\s+(?P<title>.*)$')
 
 
+class bcolors:
+    OKBLUE = '\033[94m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+
+class Log:
+    @staticmethod
+    def error(message: str) -> None:
+        print(bcolors.FAIL + message + bcolors.ENDC)
+
+    @staticmethod
+    def warn(message) -> None:
+        print(bcolors.WARNING + message + bcolors.ENDC)
+
+    @staticmethod
+    def info(message) -> None:
+        print(bcolors.OKBLUE + message + bcolors.ENDC)
+
+
 def timestamp_to_seconds(hour: str, minutes: str, seconds: str|None) -> int:
     if seconds is None: seconds = 0
     return 60 * 60 * int(hour) + 60 * int(minutes) + int(seconds)
 
 
 def get_shownotes_with_timestamps(shownotes: str) -> list[tuple]:
+    shownotes = re.sub('\\\\n', '\\n', shownotes)
     timestamps = [(timestamp_to_seconds(x.group('ts_hour'), x.group('ts_min'), x.group('ts_sec')), x.group('title')) for x in (timestamp_regexp.search(sn) for sn in shownotes.split('\n')) if x is not None]
     # some episodes have multiple topics related to the same timestamp.
     grouped_timestamps = []
@@ -57,21 +80,26 @@ def get_topic_texts(transcription: Transcription, shownotes: list[Shownotes]) ->
 def get_sentences_with_timestamps(
         transcription: Transcription,
         get_sentences_callback: t.Callable[[str], list[str]],
-        verbose: bool = False
+        verbose: int = 0
 ) -> list[tuple[float, float, str]]:
     def _replace_dots_without_space(text_to_process: str) -> str:
         return rx.sub(r'.\n\n\1', text_to_process)
 
+    st = time.time()
     rx = re.compile('\.\.\.\s*(\w?)')
     text = _replace_dots_without_space(transcription.text)
     sentences = get_sentences_callback(text)
+
+    if verbose:
+        Log.info(f'total sentences: {len(sentences)}')
+        Log.info(f'total segments: {len(transcription.segments)}')
 
     sentence_timestamps = []
     start_from_idx = 0
     start_from_in_segment_idx = 0
 
     segment_sentences_dict = {}
-    for sentence in tqdm(sentences, disable=not verbose):
+    for sentence in tqdm(sentences, disable=(verbose < 2)):
         sentence_wo_spaces = sentence.replace(' ', '')
         first_segment = transcription.segments[start_from_idx]
         sentence_timestamp = first_segment.start
@@ -96,7 +124,7 @@ def get_sentences_with_timestamps(
             for seg_sentence_idx, seg_sentence in enumerate(least_segment_sentences):
                 test_sentence += seg_sentence.replace(' ', '')
                 # test_get_sentences_with_timestamps_segment_could_not_split_into_sentences_correctly
-                if editdistance.distance(sentence_wo_spaces, test_sentence) <= 1:
+                if editdistance.distance(sentence_wo_spaces, test_sentence) <= 2:
                     if seg_sentence_idx == len(least_segment_sentences) - 1:
                         start_from_idx += i + 1
                         start_from_in_segment_idx = 0
@@ -104,6 +132,8 @@ def get_sentences_with_timestamps(
                         start_from_in_segment_idx += seg_sentence_idx + 1
                         start_from_idx += i
 
+                    if len(sentence_timestamps) == 160:
+                        print(160)
                     sentence_timestamps.append((sentence_timestamp, segment.end, sentence))
                     break_outer_loop = True
                     break
@@ -111,5 +141,85 @@ def get_sentences_with_timestamps(
                 break
             else:
                 start_from_in_segment_idx = 0
+
+    if verbose:
+        if len(sentences) == len(sentence_timestamps):
+            Log.info(f'expected timestamps: {len(sentences)}\tactual timestamps: {len(sentence_timestamps)}\tprocessed in: {time.time() - st}')
+        else:
+            Log.warn(f'Expected timestamps: {len(sentences)}. Actual timestamps: {len(sentence_timestamps)}')
+            if len(sentence_timestamps) > 0:
+                Log.warn(f'Last timestamp: {sentence_timestamps[-1]}')
+
+    return sentence_timestamps
+
+
+def get_sentences_with_timestamps_by_letter(
+        transcription: Transcription,
+        get_sentences_callback: t.Callable[[str], list[str]],
+        verbose: int = 0
+) -> list[tuple[float, float, str]]:
+    st = time.time()
+
+    text = transcription.text
+    sentences = get_sentences_callback(text)
+
+    if verbose:
+        Log.info(f'total sentences: {len(sentences)}')
+        Log.info(f'total segments: {len(transcription.segments)}')
+
+    sentence_timestamps = []
+    start_from_idx = 0
+    start_from_in_segment_idx = 0
+
+    for sentence in tqdm(sentences, disable=(verbose < 2)):
+        break_outer_loop = False
+        search_sentence = sentence.replace(' ', '')
+        start_sentence = transcription.segments[start_from_idx].start
+        test_sentence = transcription.segments[start_from_idx].text.replace(' ', '')[start_from_in_segment_idx:]
+
+        if search_sentence == test_sentence:
+            sentence_timestamps.append((start_sentence, transcription.segments[start_from_idx].end, sentence))
+            start_from_idx += 1
+            start_from_in_segment_idx = 0
+            continue
+
+        # start_from_idx += 1
+        test_sentence = ''
+        for segment_idx, segment in enumerate(transcription.segments[start_from_idx:]):
+            # test_sentence += segment.text
+            segment_text = segment.text.replace(' ', '')[start_from_in_segment_idx:]
+            if search_sentence == test_sentence + segment_text:
+                sentence_timestamps.append((start_sentence, segment.end, sentence))
+                test_sentence = ''
+                start_from_in_segment_idx = 0
+                start_from_idx += segment_idx + 1
+                break
+
+            if search_sentence.startswith(test_sentence + segment_text):
+                test_sentence += segment_text
+                start_from_in_segment_idx = 0
+                continue
+            else:
+                for i, letter in enumerate(segment_text):
+                    if search_sentence.startswith(test_sentence + letter):
+                        test_sentence += letter
+                    else:
+                        sentence_timestamps.append((start_sentence, segment.end, sentence))
+                        # test_sentence = segment.text[i:]
+                        start_from_in_segment_idx += i
+                        start_from_idx += segment_idx
+                        break_outer_loop = True
+                        break
+
+            if break_outer_loop:
+                break
+
+    if verbose > 0:
+        if len(sentences) == len(sentence_timestamps):
+            Log.info(f'expected timestamps: {len(sentences)}\tactual timestamps: {len(sentence_timestamps)}\tprocessed in: {time.time() - st}')
+        else:
+            Log.warn(f'Expected timestamps: {len(sentences)}. Actual timestamps: {len(sentence_timestamps)}')
+            if len(sentence_timestamps) > 0:
+                Log.warn(f'Last timestamp: {sentence_timestamps[-1]}')
 
     return sentence_timestamps
