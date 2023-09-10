@@ -25,6 +25,7 @@ dependencies:
       - sphinxcontrib-asyncio
       - sphinxcontrib-trio
       - yandex-taxi-testsuite
+      - pyconverse
   - polars=*
   - pyarrow=*
   - psutil=*
@@ -33,6 +34,10 @@ dependencies:
   - pytest-profiling=*
   - python-lsp-server[all]=
   - pytorch
+  - pymorphy3=*
+#  - pymorphy2=*
+#  - pymorphy2-dicts=*
+  - stop-words=*
   - torchvision
   - torchaudio
   - pytorch-cuda=11.8
