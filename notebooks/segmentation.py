@@ -94,15 +94,15 @@ nltk.download('stopwords')
 
 from pyconverse import SemanticTextSegmention
 
+# %%
+df = pd.read_csv('../data/412_ep_reference.csv')
+
 
 # %%
-def text_tiling_windowdiff(lang: str, text_tiling_tokenizer: TokenizerI, verbose: bool=False) -> None:
-    df = pd.read_csv('../data/412_ep_reference.csv')
-    sentence_column = 'sentence' if lang == 'ru' else 'en_translation'
-
-    df = df[[sentence_column, 'ground_truth']].groupby('ground_truth').agg(topic=(sentence_column, lambda x: '\n\n'.join(x)))
-    source_text = ' '.join(df['topic'])
-    ground_truth = ''.join(df['topic'].apply(lambda x: '|' + x.replace('\n\n', '').replace(' ', '')[1:]))
+def text_tiling_windowdiff(df: pd.DataFrame, lang: str, text_tiling_tokenizer: TokenizerI, verbose: bool=False, **kwargs) -> None:    
+    topic_df = df[[f'{lang}_sentence', 'ground_truth']].groupby('ground_truth').agg(topic=(f'{lang}_sentence', lambda x: '\n\n\t'.join(x)))
+    source_text = ' '.join(topic_df['topic'])
+    ground_truth = ''.join(topic_df['topic'].apply(lambda x: '|' + x.replace('\n\n', '').replace(' ', '')[1:]))
         
     stop_words = get_stop_words(lang)
     
@@ -110,8 +110,12 @@ def text_tiling_windowdiff(lang: str, text_tiling_tokenizer: TokenizerI, verbose
 
     metrics = []
     segmentations = {}
-    for sent_size in tqdm([20, 40, 80, 100, 200], disable=not verbose):
-        for block_size in tqdm([10, 20, 40, 80, 100], disable=not verbose):
+    sent_sizes = [20, 40, 80, 100, 200]
+    block_sizes = [10, 20, 40, 80, 100]
+    t = tqdm(total=len(sent_sizes) * len(block_sizes), disable=not verbose)
+
+    for sent_size in sent_sizes:
+        for block_size in block_sizes:
             ttt = text_tiling_tokenizer(stopwords=stop_words, w=sent_size, k=block_size)
             topics = ttt.tokenize(source_text)
             actual = ''.join(['|' + topic.replace('\n', '').replace(' ', '')[1:] for topic in topics])
@@ -129,6 +133,8 @@ def text_tiling_windowdiff(lang: str, text_tiling_tokenizer: TokenizerI, verbose
                 'win_diff': win_diff,
             })
             segmentations[(sent_size, block_size)] = topics
+            t.update(1)                
+
     return pd.DataFrame(metrics), segmentations
 
 
@@ -158,13 +164,12 @@ def plot_segmentation(ground_truth_topics: list[str], actual_topics: list[str], 
 # ### Russian text segmentation
 
 # %%
-ru_text_tiling_metrics_df, ru_text_tiling_segments = text_tiling_windowdiff('ru', texttiling.TextTilingTokenizer)
+ru_text_tiling_metrics_df, ru_text_tiling_segments = text_tiling_windowdiff(df, 'ru', texttiling.TextTilingTokenizer, verbose=True)
 ru_text_tiling_metrics_df
 
 # %%
-df = pd.read_csv('../data/412_ep_reference.csv')
-ru_ground_truth = df[['sentence', 'ground_truth']].groupby('ground_truth').agg(topic=('sentence', lambda x: ' '.join(x)))['topic'].values
-en_ground_truth = df[['en_translation', 'ground_truth']].groupby('ground_truth').agg(topic=('en_translation', lambda x: ' '.join(x)))['topic'].values
+ru_ground_truth = df[['ru_sentence', 'ground_truth']].groupby('ground_truth').agg(topic=('ru_sentence', lambda x: ' '.join(x)))['topic'].values
+en_ground_truth = df[['en_sentence', 'ground_truth']].groupby('ground_truth').agg(topic=('en_sentence', lambda x: ' '.join(x)))['topic'].values
 
 
 # %%
@@ -457,8 +462,7 @@ class TextTilingTokenizerExt(TokenizerI):
         #clip boundaries: this holds on the rule of thumb(my thumb)
         #that a section shouldn't be smaller than at least 2
         #pseudosentences for small texts and around 5 for larger ones.
-
-        clip = min(max(len(scores)/10, 2), 5)
+        clip = min(max(int(len(scores)/10), 2), 5)
         index = clip
 
         for gapscore in scores[clip:-clip]:
@@ -512,7 +516,7 @@ class TextTilingTokenizerExt(TokenizerI):
         return norm_boundaries
 
 # %%
-ru_text_tiling_ext_metrics_df, ru_text_tiling_ext_segments = text_tiling_windowdiff('ru', TextTilingTokenizerExt, verbose=True)
+ru_text_tiling_ext_metrics_df, ru_text_tiling_ext_segments = text_tiling_windowdiff(df, 'ru', TextTilingTokenizerExt, verbose=True)
 ru_text_tiling_ext_metrics_df
 
 # %%
@@ -542,7 +546,7 @@ print_segmentation(ru_text_tiling_ext_segments[(200, 20)], limit=130)
 # ### English text segmentation
 
 # %%
-en_text_tiling_metrics, en_text_tiling_segments = text_tiling_windowdiff('en', text_tiling_tokenizer=texttiling.TextTilingTokenizer)
+en_text_tiling_metrics, en_text_tiling_segments = text_tiling_windowdiff(df, 'en', text_tiling_tokenizer=texttiling.TextTilingTokenizer, verbose=True)
 en_text_tiling_metrics_df = pd.DataFrame(en_text_tiling_metrics)
 en_text_tiling_metrics_df
 
@@ -554,28 +558,6 @@ plot_segmentation_for_best_score(en_text_tiling_metrics_df, en_text_tiling_segme
 
 # %%
 print_segmentation(en_text_tiling_segments[(200, 40)], limit=130)
-
-# %% [markdown]
-# Let's take a look at segments that seems like almost matched.
-
-# %%
-sent_size, block_size = 200, 40
-
-source_text = re.sub('\s+', '', ''.join([f'|{x[1:]}' for x in en_ground_truth]))
-actual_text = re.sub('\s+', '', ''.join([f'|{x[1:]}' for x in en_text_tiling_segments[(sent_size, block_size)]]))
-
-source_text_idxs = find(source_text, '|')
-actual_text_idxs = find(actual_text, '|')
-
-for si, source_text_idx in enumerate(source_text_idxs):
-    for ai, actual_text_idx in enumerate(actual_text_idxs):
-        if abs(source_text_idx - actual_text_idx) < 130:
-            expected_topic = en_ground_truth[si][:150]
-            actual_topic = en_text_tiling_segments[(sent_size, block_size)][ai][:150].replace('\n\n', ' ')
-            print(f'{si:<5}{ai:<5}{source_text_idx:<7}{actual_text_idx:<7}')
-            print(expected_topic.strip())
-            print(actual_topic.strip())
-            print()
 
 
 # %% [markdown]
@@ -590,12 +572,11 @@ for si, source_text_idx in enumerate(source_text_idxs):
 # You can find the code and the resulting output below.
 
 # %%
-def graph_seg_windowdiff(lang: str, verbose: bool = False) -> None:
-    df = pd.read_csv('../data/412_ep_reference.csv')
-    sentence_column = 'sentence' if lang == 'ru' else 'en_translation'
-    df = df[[sentence_column, 'ground_truth']].groupby('ground_truth').agg(topic=(sentence_column, lambda x: ''.join(x)))
-    df['topic'] = df['topic'].apply(lambda x: '|' + x[1:])
-    ground_truth = ''.join(df['topic']).replace(' ', '')
+def graph_seg_windowdiff(df: pd.DataFrame, lang: str, verbose: bool = False, **kwargs) -> None:
+    episode = kwargs['episode']
+    topic_df = df[[f'{lang}_sentence', 'ground_truth']].groupby('ground_truth').agg(topic=(f'{lang}_sentence', lambda x: ''.join(x)))
+    topic_df['topic'] = topic_df['topic'].apply(lambda x: '|' + x[1:])
+    ground_truth = ''.join(topic_df['topic']).replace(' ', '')
 
     # default k value for windowdiff
     k = int(round(len(ground_truth) / (ground_truth.count('|') * 2.)))
@@ -603,12 +584,12 @@ def graph_seg_windowdiff(lang: str, verbose: bool = False) -> None:
     metrics = []
     all_topics = {}
     for min_seg in tqdm([3, 6, 12, 24, 48, 96], disable=not verbose):
-        # files 412_episode_lang={lang}_min_seg={min_seg}_segments were built separately.
-        actual = open(f'../data/412_episode_lang={lang}_min_seg={min_seg}_segments.txt', 'r', encoding='utf8').read().strip()
+        # files {episode}_episode_lang={lang}_min_seg={min_seg}_segments were built separately.
+        actual = open(f'../data/{episode}_ep_reference_lang={lang}_min_seg={min_seg}_segments.txt', 'r', encoding='utf8').read().strip()
         topics = actual.split('\n\n')
         actual = ''.join(['|' + t.replace(' ', '').replace('\n', '')[1:] for t in topics])
         # for windowdiff ground truth and actual segmentation should have the same lengths        
-        assert len(ground_truth) == len(actual)
+        assert len(ground_truth) == len(actual), f'{ground_truth[:200]=}\n{actual[:200]}'
 
         win_diff = windowdiff(ground_truth, actual, boundary="|", k=k)
         metrics.append({
@@ -624,7 +605,7 @@ def graph_seg_windowdiff(lang: str, verbose: bool = False) -> None:
 
 
 # %%
-ru_graph_seg_metrics_df, ru_segments_graph_seg = graph_seg_windowdiff('ru', verbose=True)
+ru_graph_seg_metrics_df, ru_segments_graph_seg = graph_seg_windowdiff(df, 'ru', episode=412)
 ru_graph_seg_metrics_df
 
 # %%
@@ -634,7 +615,7 @@ plot_segmentation_for_best_score(ru_graph_seg_metrics_df, ru_segments_graph_seg,
 print_segmentation(ru_segments_graph_seg[(48,)], limit=130)
 
 # %%
-en_graph_seg_metrics_df, en_graph_seg_segments = graph_seg_windowdiff('en', verbose=True)
+en_graph_seg_metrics_df, en_graph_seg_segments = graph_seg_windowdiff(df, 'en', episode=412, verbose=True)
 en_graph_seg_metrics_df
 
 # %%
@@ -653,13 +634,10 @@ print_segmentation(en_graph_seg_segments[(48,)])
 # For this experiment, I'm using an implementation from `pyconverse`. The library's maintainer utilizes NLTK's `TextTilingTokenizer` to implement the algorithm described in the research paper. I'm applying this method to segment my own data to compare it with the vanilla **TextTiling** and **GraphSeg** approaches.
 
 # %%
-def sts_windowdiff(lang: str, semantic_text_segmentation_impl, verbose: bool = False) -> None:
-    df = pd.read_csv('../data/412_ep_reference.csv')
-    sentence_column = 'sentence' if lang == 'ru' else 'en_translation'
-        
-    df = df[[sentence_column, 'ground_truth']].groupby('ground_truth').agg(topic=(sentence_column, lambda x: ''.join(x)))
-    df['topic'] = df['topic'].apply(lambda x: '|' + x[1:])
-    ground_truth = ''.join(df['topic']).replace(' ', '')
+def sts_windowdiff(df: pd.DataFrame, lang: str, semantic_text_segmentation_impl, verbose: bool = False, **kwargs) -> None:
+    topic_df = df[[f'{lang}_sentence', 'ground_truth']].groupby('ground_truth').agg(topic=(f'{lang}_sentence', lambda x: ''.join(x)))
+    topic_df['topic'] = topic_df['topic'].apply(lambda x: '|' + x[1:])
+    ground_truth = ''.join(topic_df['topic']).replace(' ', '')
       
     # default k value for windowdiff
     k = int(round(len(ground_truth) / (ground_truth.count('|') * 2.)))
@@ -690,7 +668,7 @@ def sts_windowdiff(lang: str, semantic_text_segmentation_impl, verbose: bool = F
 
 
 # %%
-ru_sts_metrics_df, ru_sts_segments = sts_windowdiff('ru', SemanticTextSegmention(df, 'sentence'), verbose=True)
+ru_sts_metrics_df, ru_sts_segments = sts_windowdiff(df, 'ru', SemanticTextSegmention(df, 'sentence'), verbose=True)
 ru_sts_metrics_df
 
 # %% [markdown]
@@ -938,7 +916,7 @@ class SemanticTextSegmentationMultilingual:
 # As an initial attempt, I used the same model that the `pyconverse` author used, which is `all-MiniLM-L6-v2`:
 
 # %%
-ru_sts_ext_all_mini_lm_metrics_df, ru_sts_ext_all_mini_lm_segments = sts_windowdiff('ru', SemanticTextSegmentationMultilingual(df, 'sentence', 'all-MiniLM-L6-v2'), verbose=True)
+ru_sts_ext_all_mini_lm_metrics_df, ru_sts_ext_all_mini_lm_segments = sts_windowdiff(df, 'ru', SemanticTextSegmentationMultilingual(df, 'sentence', 'all-MiniLM-L6-v2'), verbose=True)
 ru_sts_ext_all_mini_lm_metrics_df
 
 # %% [markdown]
@@ -954,7 +932,7 @@ print_segmentation(ru_sts_ext_all_mini_lm_segments[(.0,)], limit=130)
 # The next option is to replace `all-MiniLM-L6-v2` with `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`. This model is more up-to-date and provides support for multiple languages:
 
 # %%
-ru_sts_ext_multilang_mini_lm_metrics_df, ru_sts_ext_multilang_mini_lm_segments = sts_windowdiff('ru', SemanticTextSegmentationMultilingual(df, 'sentence', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'), verbose=True)
+ru_sts_ext_multilang_mini_lm_metrics_df, ru_sts_ext_multilang_mini_lm_segments = sts_windowdiff(df, 'ru', SemanticTextSegmentationMultilingual(df, 'sentence', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'), verbose=True)
 ru_sts_ext_multilang_mini_lm_metrics_df
 
 # %% [markdown]
@@ -970,7 +948,7 @@ print_segmentation(ru_sts_ext_multilang_mini_lm_segments[(.85,)], limit=130)
 # Let's test this algorithm with English text. For the initial attempt, I'll use the default `SemanticTextSegmentation`, and then I'll try `SemanticTextSegmentationMultilingual` with two models: `all-MiniLM-L6-v2` and `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`:
 
 # %%
-en_sts_metrics_df, en_sts_segments = sts_windowdiff('en', SemanticTextSegmention(df, 'en_translation'), verbose=True)
+en_sts_metrics_df, en_sts_segments = sts_windowdiff(df, 'en', SemanticTextSegmention(df, 'en_translation'), verbose=True)
 en_sts_metrics_df
 
 # %%
@@ -983,7 +961,7 @@ print_segmentation(en_sts_segments[(.1,)], limit=130)
 # Now, let's see what results I can achieve with the multilingual TextTiling algorithm and the English-only embedding model `all-MiniLM-L6-v2`, which I used in `SemanticTextSegmentationMultilingual`:
 
 # %%
-en_sts_ext_all_mini_lm_metrics_df, en_sts_ext_all_mini_lm_segments = sts_windowdiff('en', SemanticTextSegmentationMultilingual(df, 'en_translation', 'all-MiniLM-L6-v2'), verbose=True)
+en_sts_ext_all_mini_lm_metrics_df, en_sts_ext_all_mini_lm_segments = sts_windowdiff(df, 'en', SemanticTextSegmentationMultilingual(df, 'en_translation', 'all-MiniLM-L6-v2'), verbose=True)
 en_sts_ext_all_mini_lm_metrics_df
 
 # %%
@@ -993,7 +971,7 @@ plot_segmentation_for_best_score(en_sts_ext_all_mini_lm_metrics_df, en_sts_ext_a
 # The last combination is the same as the previous one, but with the new multilingual model `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`:
 
 # %%
-en_sts_ext_multilang_mini_lm_metrics_df, en_sts_ext_multilang_mini_lm_segments = sts_windowdiff('en', SemanticTextSegmentationMultilingual(df, 'en_translation', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'), verbose=True)
+en_sts_ext_multilang_mini_lm_metrics_df, en_sts_ext_multilang_mini_lm_segments = sts_windowdiff(df, 'en', SemanticTextSegmentationMultilingual(df, 'en_sentence', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'), verbose=True)
 en_sts_ext_multilang_mini_lm_metrics_df
 
 # %%
@@ -1003,7 +981,7 @@ plot_segmentation_for_best_score(en_sts_ext_multilang_mini_lm_metrics_df, en_sts
 # As I expect with a more modern model, the results were improved &mdash; the best score is 0.290955 for 0.65 threshold.
 
 # %% [markdown]
-# ## Results
+# # Concnulsion
 
 # %% [markdown]
 # In this article, I attempted to find the best existing text segmentation implementation. While I didn't conduct an exhaustive study of all available algorithms, I did select some of the most popular ones: TextTiling, GraphSeg, and Semantic Segmentation.
@@ -1026,6 +1004,7 @@ ru_metrics = pd.concat([
 
 min_windiff = ru_metrics['win_diff'].min()
 ru_metrics[ru_metrics['win_diff'] == min_windiff][['algorithm', 'win_diff', 'topics_count']]
+# ru_metrics[ru_metrics['topics_count'] > 1].sort_values('win_diff').head(40)
 
 # %% [markdown]
 # Semantic text segmentation with the modified Sentence Transformers model yielded the best overall result for Russian text. Let's take another look at what this segmentation looks like:
@@ -1058,3 +1037,107 @@ plot_segmentation(en_ground_truth, en_sts_ext_multilang_mini_lm_segments[(.65,)]
 # PS: You might be wondering why I segmented Google-translated texts. Here's the reason: I wanted to test whether Google-translated text could be segmented more accurately than simply matching boundaries from the translation to the corresponding sentences in the original Russian text.
 #
 # As you can see, even for Russian text with some modifications, I've achieved a basic level of segmentation. The next challenge is to find a way to improve upon this baseline segmentation.
+
+# %% [markdown]
+# # PPS: Analyzing WindowDiff Metrics for 12 Episodes
+
+# %% [markdown]
+# To be honest, comparing different algorithms on a single episode is not ideal. So, in this section, I'm going to gather WindowDiff metrics for 12 episodes including 412th.
+
+# %% [markdown]
+# First, let's compute WindowDiff for each episode and construct a dataframe containing all the metrics.
+
+# %%
+algorithms = {
+    'graph_seg': lambda df, lang, ep: graph_seg_windowdiff(df, lang, episode=ep),
+    'text_tiling_seg': lambda df, lang, _: text_tiling_windowdiff(df, lang, texttiling.TextTilingTokenizer if lang == 'en' else TextTilingTokenizerExt),
+    'semantic_text_seg': lambda df, lang, _: sts_windowdiff(df, lang, SemanticTextSegmentationMultilingual(df, f'{lang}_sentence', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'))
+}
+
+episodes = list(range(400, 413))
+langs = ['ru', 'en']
+
+results = {}
+t = tqdm(total=(len(episodes) * len(langs) * len(algorithms)))
+for ep in episodes:
+    df = pd.read_csv(f'../data/{ep}_ep_reference.csv')
+    for lang in langs:
+        for name, func in algorithms.items():
+            try:
+                metrics_df, segments = func(df, lang, ep)
+                results[f'{name}_{ep}_{lang}'] = {
+                    'episode': ep,
+                    'metrics': metrics_df,
+                    'segments': segments
+                }
+            except Exception as e:
+                print(e)
+                print(name, ep, lang)
+            finally:
+                t.update(1)
+
+# %%
+for k, v in results.items():
+    v['metrics']['episode'] = v['episode']
+
+# %%
+ru_result_keys = {x for x in results.keys() if x.endswith('ru')}
+ru_results = {k: v for k, v in results.items() if k in ru_result_keys}
+
+ru_results_df = pd.concat([v['metrics'] for k, v in ru_results.items()])
+ru_results_df
+
+# %%
+ru_results_df = pd.concat([v['metrics'] for k, v in results.items()])
+ru_results_df = ru_results_df.fillna('_')
+ru_results_df['grouping_key'] = ru_results_df.apply(lambda x: f'{x["lang"]}__{x["algorithm"]}__{x["min_seg"]}__{x["sent_size"]}__{x["block_size"]}__{x["threshold"]}', axis='columns')
+
+agg_df = ru_results_df.groupby(['grouping_key']).agg(
+    win_diff_median=('win_diff', np.median),
+    topic_count_median=('topics_count', np.median),
+    win_diff_mean=('win_diff', np.mean),
+    topic_count_mean=('topics_count', np.mean),
+    win_diff_std=('win_diff', np.std),
+    single_topic_count=('topics_count', lambda x: np.count_nonzero(x == 1))).reset_index().sort_values('win_diff_median')
+
+agg_df
+
+# %% [markdown]
+# I'd like to clarify the meaning of the `single_topic_count` column.
+#
+# As observed earlier, some segmentation algorithms might treat the entire text as a single segment. I want to identify these algorithms that do not perform any segmentation. Therefore, the column `single_topic_count` indicates how many times the corresponding algorithm did not segment the text.
+
+# %%
+agg_df[agg_df['single_topic_count'] != 0].apply(lambda x: x['grouping_key'][:2], axis='columns').value_counts()
+
+# %% [markdown]
+# So, 18 algorithms for Russian and 15 algorithms for English (each "algorithm" representing specific hyperparameters) did not perform well.
+
+# %%
+agg_df[(agg_df['single_topic_count'] != 0) & (agg_df['grouping_key'].str[:2] == 'ru')].sort_index()
+
+# %% [markdown]
+# Out of the 20 semantic text segmentation variations, 18 failed to split a Russian text into segments.
+
+# %%
+agg_df[(agg_df['single_topic_count'] != 0) & (agg_df['grouping_key'].str[:2] == 'en')].sort_index()
+
+# %% [markdown]
+# Similarly, in the case of English, 15 out of 20 semantic segmentations were unable to split the text into segments.
+
+# %% [markdown]
+# What's particularly intriguing is that only the semantic segmentation algorithms proved unsuccessful in segmenting both English and Russian texts.
+
+# %% [markdown]
+# ## And the winners are...
+
+# %%
+agg_df[(agg_df['single_topic_count'] == 0) & (agg_df['grouping_key'].str[:2] == 'ru')].sort_values('win_diff_median').head(5)
+
+# %%
+agg_df[(agg_df['single_topic_count'] == 0) & (agg_df['grouping_key'].str[:2] == 'en')].sort_values('win_diff_median').head(5)
+
+# %% [markdown]
+# GraphSeg with `min_seg` values of 96 and 48, along with Semantic Text Segmentation using a 0.9 threshold, exhibited the best performance. While TextTiling showed some effectiveness, it didn't meet my desired expectations. 
+#
+# On the other hand, for English texts, the WindowDiff metric is slightly lower, but GraphSeg with the same `min_seg` values stands out among the winners. Surprisingly, none of the "versions" of the TextTiling algorithm are present in the list of top performers.
