@@ -32,7 +32,7 @@ sys.path.append('../src')
 import pandas as pd
 import numpy as np
 import polars as pl
-from tqdm import notebook
+from tqdm.notebook import tqdm
 import json
 from datetime import datetime
 import time
@@ -202,9 +202,9 @@ sentences_with_timestamps[-5:]
 # %%
 sentences_by_letter_timestamps_df = None
 
-if Path('../data/sentences_by_letter_timestamps.csv').exists:
-    sentences_by_letter_timestamps_df = pd.read_csv('../data/sentences_by_letter_timestamps.csv')
-    sentences_by_letter_timestamps_df.head()
+# if Path('../data/sentences_by_letter_timestamps.csv').exists:
+#     sentences_by_letter_timestamps_df = pd.read_csv('../data/sentences_by_letter_timestamps.csv')
+#     sentences_by_letter_timestamps_df.head()
 
 # %%
 if sentences_by_letter_timestamps_df is None:
@@ -219,8 +219,8 @@ if sentences_by_letter_timestamps_df is None:
     sentences_by_letter_timestamps_df.head()
 
 # %%
-if not Path('../data/sentences_by_letter_timestamps.csv').exists:
-    sentences_by_letter_timestamps_df.to_csv('../data/sentences_by_letter_timestamps.csv', index=None)
+# if not Path('../data/sentences_by_letter_timestamps.csv').exists:
+sentences_by_letter_timestamps_df.write_csv('../data/sentences_by_letter_timestamps.csv', has_header=True)
 
 # %%
 sentences_by_letter_timestamps_df.groupby('episode').agg(count=('size', 'count')).sort_values('count', ascending=False)
@@ -246,17 +246,17 @@ sentences_by_letter_timestamps_df.filter(pl.col('sentence_length') == sentences_
 sentences_by_letter_timestamps_df.filter(pl.col('episode') == 358)
 
 # %%
-sentences_by_letter_timestamps_df.filter(pl.col('sentence_length') > 489)[44, 'sentence']
+sentences_by_letter_timestamps_df.filter(pl.col('sentence_length') > 489) # [44, 'sentence']
 
 # %%
 transcription_358, size = get_transcription_for_episode(358)
 transcription_358_sentences = get_sentences(transcription_358.text)
 
 # %%
-transcription_358_sentences[-1][-200:]
+transcription_358_sentences[-1][-5000:]
 
 # %%
-sentences_by_letter_timestamps_df[207030,'sentence'][-200:]
+sentences_by_letter_timestamps_df[207030,'sentence'][-5000:]
 
 # %%
 sentences_by_letter_timestamps_df.groupby(['size', 'episode']).agg(pl.col('sentence').count())
@@ -266,11 +266,11 @@ sentences_by_letter_timestamps_df.groupby(pl.col('episode')).agg(pl.col('sentenc
 
 # %%
 # episode with appropriate max sentence length
-episodes_with_appropriate_max_sentences = sentences_by_letter_timestamps_df.groupby(pl.col('episode')).agg(pl.col('sentence_length').max()).filter(pl.col('sentence_length') <= 1280)['episode']
+episodes_with_appropriate_max_sentences = sentences_by_letter_timestamps_df.groupby(pl.col('episode')).agg(pl.col('sentence_length').max()).filter(pl.col('sentence_length') <= 380)['episode']
 sentences_by_letter_timestamps_df.filter(pl.col('episode').is_in(episodes_with_appropriate_max_sentences))
 
 # %%
-len(sentences_by_letter_timestamps_df.filter(pl.col('episode').is_in(episodes_with_appropriate_max_sentences))['episode'].unique())
+sentences_by_letter_timestamps_df.filter(pl.col('episode').is_in(episodes_with_appropriate_max_sentences))['episode'].unique()
 
 # %% [markdown]
 # ## Build topics by sentences
@@ -319,30 +319,32 @@ def sentence_to_segment(row: Sentence) -> Segment:
 topics_from_sentences = {}
 episodes_with_ok_max_length_sentences = sentences_by_letter_timestamps_df.filter(pl.col('episode').is_in(episodes_with_appropriate_max_sentences))['episode'].unique()
 for episode in episodes_with_ok_max_length_sentences:
+    # [print(len(row)) for row in sentences_by_letter_timestamps_df.filter(pl.col('episode') == episode).iter_rows()]
+    
     segments = [sentence_to_segment(Sentence(*row)) for row in sentences_by_letter_timestamps_df.filter(pl.col('episode') == episode).iter_rows()]
     transcription = Transcription(' '.join([s.text for s in segments]), segments, 'ru')
     shownotes = get_shownotes_with_timestamps_for_episode(df, episode)
     topics_from_sentences[episode] = get_topic_texts(transcription, shownotes)
 
 # %%
-episode = 121
+episode = 160
 shownotes_for_episode = get_shownotes_with_timestamps_for_episode(df, episode)
 for i in range(len(shownotes_for_episode)):
     print(f'Title: {shownotes_for_episode[i].title}')
-    print(f'Transcript: {topics_from_sentences[episode][i].title[:1000]}\n')
+    print(f'Transcript: {topics_from_sentences[episode][i].title[:500]} [...] {topics_from_sentences[episode][i].title[-500:]}\n')
 
 # %% [markdown]
 # # Reference segmentation
 
 # %%
-episode = 412
+episode = 160
 shownotes_for_episode = get_shownotes_with_timestamps_for_episode(df, episode)
 for i in range(len(shownotes_for_episode)):
     print(f'Title: {shownotes_for_episode[i].title}')
     print(f'Transcript: {topics_from_sentences[episode][i].title[:3000]}\n')
 
 # %%
-sentences_by_letter_timestamps_df.filter(pl.col('episode') == episode).to_pandas().to_csv('../data/412_ep_reference.csv', index=None)
+sentences_by_letter_timestamps_df.filter(pl.col('episode') == episode).to_pandas().to_csv('../data/160_ep_reference.csv', index=None)
 
 # %%
 get_shownotes_with_timestamps_for_episode(df, episode_num=episode)
@@ -378,7 +380,43 @@ sentences_by_letter_timestamps_df
 sentences_by_letter_timestamps_df.write_csv('../data/sentences_by_letter_timestamps_topics.csv', has_header=True)
 
 # %%
+sentences_by_letter_timestamps_df.filter(pl.col('episode') == 358)
+
+# %%
 sentences_by_letter_timestamps_df.filter(pl.col('episode') == 415).write_csv('../data/415_ep_reference.csv', has_header=True)
 
 # %%
 [f'{x.timestamp},{x.title}' for x in get_shownotes_with_timestamps_for_episode(df, 415)]
+
+# %%
+sentences_by_letter_timestamps_df.filter(pl.col('episode') == 358)
+
+# %%
+text = sentences_by_letter_timestamps_df.filter(pl.col('episode') == 358)['sentence'][-1]
+
+# %%
+len(' '.join(text.split()[:50]))
+
+# %%
+len(sentences_by_letter_timestamps_df.filter(pl.col('episode') == 358)['sentence'][-4].split())
+
+# %%
+# texts = [' '.join(text.split()[:50]), ' '.join(text.split()[50:100]), text]
+# texts = sum([ [x] for x in texts if len(x.split()) < 51 else x[:50]], [])
+texts = [ ' '.join(text.split()[i:i+50]) for i in range(0, len(text.split()), 50) ]
+texts[:10]
+
+# %%
+sentences_with_timestamps = get_sentences_with_timestamps_by_letter(get_transcription_for_episode(358)[0], get_sentences, verbose=2)
+sentences_with_timestamps[-5:]
+# sentences_timestamps[episode_num] = sentences_with_timestamps
+
+# %%
+sentences_with_timestamps = get_sentences_with_timestamps_by_letter(get_transcription_for_episode(358)[0], get_sentences, verbose=2)
+[print(x) for x in sentences_with_timestamps[-15:]]
+
+# %%
+pd.DataFrame(sentences_with_timestamps)
+
+# %%
+len('Замечательно, вот вы по традиции прошлись по всем ведущим, я была в отпуске, и это было прекрасно, я вернулась на этой неделе, точнее, на прошлое, я прилетела в воскресенье, я уже дошла от Jetlag, я побывала в Нью-Йорке, и в Нью-Йорке я встретилась с моими очень хорошими друзьями и знакомыми, многие из которых, многих из которых я знаю благодаря подкасту.'.split())
