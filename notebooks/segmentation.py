@@ -95,7 +95,10 @@ nltk.download('stopwords')
 from pyconverse import SemanticTextSegmention
 
 # %%
-df = pd.read_csv('../data/412_ep_reference.csv')
+# df = pd.read_csv('../data/412_ep_reference.csv')
+df = pd.read_csv('/mnt/c/Users/andrei/Downloads/400-415-episodes-ground-truth.csv')
+df = df[df['episode'] == 412]
+df
 
 
 # %%
@@ -668,7 +671,7 @@ def sts_windowdiff(df: pd.DataFrame, lang: str, semantic_text_segmentation_impl,
 
 
 # %%
-ru_sts_metrics_df, ru_sts_segments = sts_windowdiff(df, 'ru', SemanticTextSegmention(df, 'sentence'), verbose=True)
+ru_sts_metrics_df, ru_sts_segments = sts_windowdiff(df, 'ru', SemanticTextSegmention(df, 'ru_sentence'), verbose=True)
 ru_sts_metrics_df
 
 # %% [markdown]
@@ -916,7 +919,7 @@ class SemanticTextSegmentationMultilingual:
 # As an initial attempt, I used the same model that the `pyconverse` author used, which is `all-MiniLM-L6-v2`:
 
 # %%
-ru_sts_ext_all_mini_lm_metrics_df, ru_sts_ext_all_mini_lm_segments = sts_windowdiff(df, 'ru', SemanticTextSegmentationMultilingual(df, 'sentence', 'all-MiniLM-L6-v2'), verbose=True)
+ru_sts_ext_all_mini_lm_metrics_df, ru_sts_ext_all_mini_lm_segments = sts_windowdiff(df, 'ru', SemanticTextSegmentationMultilingual(df, 'ru_sentence', 'all-MiniLM-L6-v2'), verbose=True)
 ru_sts_ext_all_mini_lm_metrics_df
 
 # %% [markdown]
@@ -932,7 +935,7 @@ print_segmentation(ru_sts_ext_all_mini_lm_segments[(.0,)], limit=130)
 # The next option is to replace `all-MiniLM-L6-v2` with `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`. This model is more up-to-date and provides support for multiple languages:
 
 # %%
-ru_sts_ext_multilang_mini_lm_metrics_df, ru_sts_ext_multilang_mini_lm_segments = sts_windowdiff(df, 'ru', SemanticTextSegmentationMultilingual(df, 'sentence', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'), verbose=True)
+ru_sts_ext_multilang_mini_lm_metrics_df, ru_sts_ext_multilang_mini_lm_segments = sts_windowdiff(df, 'ru', SemanticTextSegmentationMultilingual(df, 'ru_sentence', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'), verbose=True)
 ru_sts_ext_multilang_mini_lm_metrics_df
 
 # %% [markdown]
@@ -948,7 +951,7 @@ print_segmentation(ru_sts_ext_multilang_mini_lm_segments[(.85,)], limit=130)
 # Let's test this algorithm with English text. For the initial attempt, I'll use the default `SemanticTextSegmentation`, and then I'll try `SemanticTextSegmentationMultilingual` with two models: `all-MiniLM-L6-v2` and `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`:
 
 # %%
-en_sts_metrics_df, en_sts_segments = sts_windowdiff(df, 'en', SemanticTextSegmention(df, 'en_translation'), verbose=True)
+en_sts_metrics_df, en_sts_segments = sts_windowdiff(df, 'en', SemanticTextSegmention(df, 'en_sentence'), verbose=True)
 en_sts_metrics_df
 
 # %%
@@ -961,7 +964,7 @@ print_segmentation(en_sts_segments[(.1,)], limit=130)
 # Now, let's see what results I can achieve with the multilingual TextTiling algorithm and the English-only embedding model `all-MiniLM-L6-v2`, which I used in `SemanticTextSegmentationMultilingual`:
 
 # %%
-en_sts_ext_all_mini_lm_metrics_df, en_sts_ext_all_mini_lm_segments = sts_windowdiff(df, 'en', SemanticTextSegmentationMultilingual(df, 'en_translation', 'all-MiniLM-L6-v2'), verbose=True)
+en_sts_ext_all_mini_lm_metrics_df, en_sts_ext_all_mini_lm_segments = sts_windowdiff(df, 'en', SemanticTextSegmentationMultilingual(df, 'en_sentence', 'all-MiniLM-L6-v2'), verbose=True)
 en_sts_ext_all_mini_lm_metrics_df
 
 # %%
@@ -1048,22 +1051,28 @@ plot_segmentation(en_ground_truth, en_sts_ext_multilang_mini_lm_segments[(.65,)]
 # First, let's compute WindowDiff for each episode and construct a dataframe containing all the metrics.
 
 # %%
+results = {}
+
+# %%
 algorithms = {
     'graph_seg': lambda df, lang, ep: graph_seg_windowdiff(df, lang, episode=ep),
     'text_tiling_seg': lambda df, lang, _: text_tiling_windowdiff(df, lang, texttiling.TextTilingTokenizer if lang == 'en' else TextTilingTokenizerExt),
     'semantic_text_seg': lambda df, lang, _: sts_windowdiff(df, lang, SemanticTextSegmentationMultilingual(df, f'{lang}_sentence', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'))
 }
 
-episodes = list(range(400, 413))
+episodes = list(range(400, 416))
 langs = ['ru', 'en']
 
-results = {}
 t = tqdm(total=(len(episodes) * len(langs) * len(algorithms)))
+all_df = pd.read_csv('/mnt/c/Users/andrei/Downloads/400-415-episodes-ground-truth.csv')
 for ep in episodes:
-    df = pd.read_csv(f'../data/{ep}_ep_reference.csv')
+    df = all_df[all_df['episode'] == ep] # pd.read_csv(f'../data/{ep}_ep_reference.csv')
     for lang in langs:
         for name, func in algorithms.items():
             try:
+                if f'{name}_{ep}_{lang}' in results:
+                    continue
+
                 metrics_df, segments = func(df, lang, ep)
                 results[f'{name}_{ep}_{lang}'] = {
                     'episode': ep,
