@@ -12,3 +12,5 @@ __pycache__/
 *.ipynb
 /.cache/
 /data/
+envs39
+envs3918
