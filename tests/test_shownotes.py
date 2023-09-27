@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from src.shownotes import (
     get_shownotes_with_timestamps,
     get_topic_texts,
@@ -407,3 +409,48 @@ def test_unknown():
         verbose=2)
 
     assert len(sentences_with_timestamps) == 3
+
+
+def test_should_split_large_sentences_into_smaller_when_sentence_is_longer_than_50_words():
+    segments_json = [
+        { "id": 27, "seek": 20388, "start": 209.48, "end": 214.079, "text": " Да, конечно. Вот я сейчас скину в чат, прям такой, мне кажется максимально серьезное отношение к", "tokens": [], "temperature": 0, "avg_logprob": -0.288, "compression_ratio": 2.066, "no_speech_prob": 0.369 },
+        { "id": 28, "seek": 20388, "start": 214.079, "end": 220.8, "text": " звукоизоляции, даже мне кажется серьезнее, чем у меня. Ну и давайте тогда может быть перейдем сразу к", "tokens": [], "temperature": 0, "avg_logprob": -0.288, "compression_ratio": 2.066, "no_speech_prob": 0.369 },
+        { "id": 29, "seek": 20388, "start": 220.8, "end": 230.12, "text": " Сергею, а нет, нет, нет, у нас же первая тема, это что мы, чему мы научились за неделю. Ну можно и в таком", "tokens": [], "temperature": 0, "avg_logprob": -0.288, "compression_ratio": 2.066, "no_speech_prob": 0.369 },
+        { "id": 30, "seek": 23012, "start": 230.12, "end": 241.480, "text": " порядке, конечно, я от себя добавил один маленький пунктик, я обратил внимание, что когда ты сидишь,", "tokens": [], "temperature": 0, "avg_logprob": -0.181, "compression_ratio": 1.974, "no_speech_prob": 0.487 },
+        { "id": 31, "seek": 23012, "start": 241.480, "end": 251.6, "text": " ну у нас распределенная команда и основной канал коммуникации это слэк, и ну когда ты новый сотрудник", "tokens": [], "temperature": 0, "avg_logprob": -0.181, "compression_ratio": 1.974, "no_speech_prob": 0.487 },
+        { "id": 32, "seek": 23012, "start": 251.6, "end": 257.32, "text": " в компании, то тебя особо никто ничего не пишет, потому что тебя все равно мало кто знает и так", "tokens": [], "temperature": 0, "avg_logprob": -0.181, "compression_ratio": 1.974, "no_speech_prob": 0.487 },
+        { "id": 33, "seek": 25732, "start": 257.32, "end": 264.64, "text": " далее. Вот сейчас я в компании уже около полугода, чуть больше, и люди меня знают, и я обратил внимание,", "tokens": [], "temperature": 0, "avg_logprob": -0.279, "compression_ratio": 1.901, "no_speech_prob": 0.274 },
+        { "id": 34, "seek": 25732, "start": 264.64, "end": 270.6, "text": " что мне стали достаточно часто писать в слэк, при том часто там какой-нибудь треки, где меня", "tokens": [], "temperature": 0, "avg_logprob": -0.279, "compression_ratio": 1.901, "no_speech_prob": 0.274 },
+        { "id": 35, "seek": 25732, "start": 270.6, "end": 277.36, "text": " mention, о кстати Александр, а было бы вот клево, нам и такую штуку, загонтребьетесь куда-нибудь по", "tokens": [], "temperature": 0, "avg_logprob": -0.279, "compression_ratio": 1.901, "no_speech_prob": 0.274 },
+        { "id": 36, "seek": 25732, "start": 277.36, "end": 283.76, "text": " пансорс, что ты об этом думаешь, такого рода вещи, и это начинает отвлекать меня, ну я первый раз", "tokens": [], "temperature": 0, "avg_logprob": -0.279, "compression_ratio": 1.901, "no_speech_prob": 0.274 },
+        { "id": 37, "seek": 28376, "start": 283.76, "end": 292.039, "text": " работаю в полностью, ну как-то в remote first команде компании, и впервые столкнулся такой", "tokens": [], "temperature": 0, "avg_logprob": -0.227, "compression_ratio": 1.942, "no_speech_prob": 0.358 },
+        { "id": 38, "seek": 28376, "start": 292.039, "end": 296.88, "text": " проблемой, что по сути ты оказываешься в одном огромном open space, где вот любой человек из", "tokens": [], "temperature": 0, "avg_logprob": -0.227, "compression_ratio": 1.942, "no_speech_prob": 0.358 },
+        { "id": 39, "seek": 28376, "start": 296.88, "end": 300.56, "text": " компании, компания растет к тебе, вот в любой момент, любой может подойти и что-то написать.", "tokens": [], "temperature": 0, "avg_logprob": -0.227, "compression_ratio": 1.942, "no_speech_prob": 0.358 }
+    ]
+
+    transcription = Transcription(
+        text=' Да, конечно. Вот я сейчас скину в чат, прям такой, мне кажется максимально серьезное отношение к звукоизоляции, даже мне кажется серьезнее, чем у меня. Ну и давайте тогда может быть перейдем сразу к Сергею, а нет, нет, нет, у нас же первая тема, это что мы, чему мы научились за неделю. Ну можно и в таком порядке, конечно, я от себя добавил один маленький пунктик, я обратил внимание, что когда ты сидишь, ну у нас распределенная команда и основной канал коммуникации это слэк, и ну когда ты новый сотрудник в компании, то тебя особо никто ничего не пишет, потому что тебя все равно мало кто знает и так далее. Вот сейчас я в компании уже около полугода, чуть больше, и люди меня знают, и я обратил внимание, что мне стали достаточно часто писать в слэк, при том часто там какой-нибудь треки, где меня mention, о кстати Александр, а было бы вот клево, нам и такую штуку, загонтребьетесь куда-нибудь по пансорс, что ты об этом думаешь, такого рода вещи, и это начинает отвлекать меня, ну я первый раз работаю в полностью, ну как-то в remote first команде компании, и впервые столкнулся такой проблемой, что по сути ты оказываешься в одном огромном open space, где вот любой человек из компании, компания растет к тебе, вот в любой момент, любой может подойти и что-то написать.',
+        segments=[Segment(**x) for x in segments_json],
+        language='ru')
+
+    sentences_with_timestamps = get_sentences_with_timestamps_by_letter(
+        transcription,
+        lambda text: [x.text for x in pipeline(text).sentences],
+        verbose=2)
+
+    assert len(sentences_with_timestamps) == 8
+
+
+# @pytest.mark.skip('explicit text')
+def test_get_sentences_for_358():
+    with open('/mnt/d/projects/podcast-shownotes/episodes/episode-0358.mp3-medium.json', 'r', ) as f:
+        data = json.load(f)
+        segments = [Segment(**x) for x in data['segments']]
+        transcription = Transcription(data['text'], segments, data['language'])
+
+    sentences_with_timestamps = get_sentences_with_timestamps_by_letter(
+        transcription,
+        lambda text: [x.text for x in pipeline(text).sentences],
+        verbose=2)
+
+    assert len(sentences_with_timestamps) == 8

@@ -35,7 +35,7 @@ class Log:
         print(bcolors.OKBLUE + message + bcolors.ENDC)
 
 
-def timestamp_to_seconds(hour: str, minutes: str, seconds: str|None) -> int:
+def timestamp_to_seconds(hour: str, minutes: str, seconds: t.Union[str,None]) -> int:
     if seconds is None: seconds = 0
     return 60 * 60 * int(hour) + 60 * int(minutes) + int(seconds)
 
@@ -158,10 +158,18 @@ def get_sentences_with_timestamps_by_letter(
         get_sentences_callback: t.Callable[[str], list[str]],
         verbose: int = 0
 ) -> list[tuple[float, float, str]]:
+    def split_large_sentences(sentences: list[str], limit: int = 50):
+        result = []
+        for sent in sentences:
+            sent_words = sent.split()
+            result.extend([ ' '.join(sent_words[i:i+limit]) for i in range(0, len(sent_words), limit) ])
+        return result
+
     st = time.time()
 
     text = transcription.text
     sentences = get_sentences_callback(text)
+    sentences = split_large_sentences(sentences, limit=50)
 
     if verbose:
         Log.info(f'total sentences: {len(sentences)}')
