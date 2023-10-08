@@ -628,7 +628,7 @@ plot_segmentation_for_best_score(en_graph_seg_metrics_df, en_graph_seg_segments,
 print_segmentation(en_graph_seg_segments[(48,)])
 
 
-# %% [markdown]
+# %% [markdown] toc-hr-collapsed=true
 # ## Unsupervised Topic Segmentation of Meetings with BERT Embeddings
 
 # %% [markdown]
@@ -936,6 +936,10 @@ print_segmentation(ru_sts_ext_all_mini_lm_segments[(.0,)], limit=130)
 
 # %%
 ru_sts_ext_multilang_mini_lm_metrics_df, ru_sts_ext_multilang_mini_lm_segments = sts_windowdiff(df, 'ru', SemanticTextSegmentationMultilingual(df, 'ru_sentence', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'), verbose=True)
+ru_sts_ext_multilang_mini_lm_metrics_df
+
+# %%
+ru_sts_ext_multilang_mini_lm_metrics_df, ru_sts_ext_multilang_mini_lm_segments = sts_windowdiff(df, 'ru', SemanticTextSegmentationMultilingual(df, 'ru_sentence', 'sentence-transformers/labse'), verbose=True)
 ru_sts_ext_multilang_mini_lm_metrics_df
 
 # %% [markdown]
