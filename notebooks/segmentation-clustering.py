@@ -200,7 +200,9 @@ def pca_scatter(embeddings: list[float], title: str, color_column: str) -> None:
         x='x',
         y='y',
         color=color_column,
-        hover_data=['ru_sentence', 'en_sentence'],)
+        hover_data=['ru_sentence', 'en_sentence'],
+        width=1000
+    )
     
     fig.update_layout(legend=dict(
         orientation='h',
@@ -215,7 +217,7 @@ def pca_scatter(embeddings: list[float], title: str, color_column: str) -> None:
 for color_column in color_columns:
     for lang, embedding_pairs in embeddings.items():
         for model_name, embedding in embedding_pairs.items():
-            pca_scatter(embedding, f'lang={lang}, model_name={model_name}, color={color_column}', color_column=color_column).show()
+            pca_scatter(embedding, f'lang={lang}, model_name={model_name}, color={color_column}', color_column=color_column).show(renderer='png')
 
 # %% [markdown]
 # As observed, PCA does not effectively assist in segregating topics into distinct clusters — neither into 11 clusters for each topic nor into 2 clusters for first/inner sentences.
@@ -255,7 +257,8 @@ def tsne_scatter(embeddings: list[list[float]], metric: t.Union[str, t.Callable]
         x='x',
         y='y',
         color=color_column,
-        hover_data=['ru_sentence', 'en_sentence'],)
+        hover_data=['ru_sentence', 'en_sentence'],
+        width=1000)
     
     fig.update_layout(legend=dict(
         orientation='h',
@@ -286,7 +289,7 @@ for metric_name, metric in metrics.items():
                     embeddings=embedding,
                     metric=metric_name,
                     title=f'lang={lang}, metric={metric_name}, model_name={model_name}, color={color_column}',
-                    color_column=color_column).show()
+                    color_column=color_column).show(renderer='png')
 
 # %% [markdown]
 # Unfortunately, t-SNE also didn't assist me in visualizing distinct differences between topics or identifying first/inner sentences within a topic.
@@ -324,7 +327,9 @@ def umap_scatter(embeddings: list[float], metric: t.Union[str, t.Callable], colo
         x='x',
         y='y',
         color=color_column,
-        hover_data=['ru_sentence', 'en_sentence'],)
+        hover_data=['ru_sentence', 'en_sentence'],
+        width=1000
+    )
 
     fig.update_layout(legend=dict(
         orientation='h',
@@ -349,7 +354,7 @@ for metric_name, metric in metrics.items():
                     embeddings=embedding,
                     metric=metric_name,
                     title=f'lang={lang}, metric={metric_name}, model_name={model_name}, color={color_column}',
-                    color_column=color_column).show()
+                    color_column=color_column).show(renderer='png')
 
 # %% [markdown]
 # So, there are no strong indications that we can segment the transcript into topics using just embeddings and clustering.
