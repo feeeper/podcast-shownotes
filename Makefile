@@ -112,4 +112,4 @@ SHELL := $(shell which bash)
 # https://stackoverflow.com/a/71548453/6656775
 .ONESHELL:
 CONDA_ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate
-CONDA_RUN = $(CONDA_ACTIVATE) ./envs;
+CONDA_RUN = $(CONDA_ACTIVATE) ./envs39;
