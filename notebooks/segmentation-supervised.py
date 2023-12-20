@@ -220,17 +220,6 @@ preds[:, 1]
 test[['is_first_sentence_in_topic']].to_pandas()[['is_first_sentence_in_topic']].corrwith(pd.Series(preds[:, 1]))
 
 # %%
-df1 = pl.DataFrame(
-    {
-        "foo": [1, 2, 3],
-        "bar": [6, 7, 8],
-        "ham": ["a", "b", "c"],
-    }
-)
-x = pl.Series("apple", [10, 20, 30])
-df1.hstack([x])
-
-# %%
 test = test.hstack([pl.Series('ru_labse_preds', preds[:, 1])])
 print(test.select(pl.corr('is_first_sentence_in_topic', 'ru_labse_preds')))
 
@@ -323,5 +312,3 @@ ru_orig, en_orig, ru_sents, en_sents = paraphrase_by_index(195, test)
 
 # %%
 print_paraphrases(ru_orig, en_orig, ru_sents, en_sents)
-
-# %%
