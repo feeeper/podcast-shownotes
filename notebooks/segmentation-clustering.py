@@ -217,7 +217,11 @@ def pca_scatter(embeddings: list[float], title: str, color_column: str) -> None:
 for color_column in color_columns:
     for lang, embedding_pairs in embeddings.items():
         for model_name, embedding in embedding_pairs.items():
-            pca_scatter(embedding, f'lang={lang}, model_name={model_name}, color={color_column}', color_column=color_column).show(renderer='png')
+            pca_scatter(
+                embeddings=embedding,
+                title=f'lang={lang}, model_name={model_name}, color={color_column}',
+                color_column=color_column).show(renderer='png')
+            print(f'[lang={lang}-model_name={model_name}-color={color_column}.html](./pca-lang={lang}-model_name={model_name}-color={color_column}.html)')
 
 # %% [markdown]
 # As observed, PCA does not effectively assist in segregating topics into distinct clusters — neither into 11 clusters for each topic nor into 2 clusters for first/inner sentences.
@@ -289,7 +293,8 @@ for metric_name, metric in metrics.items():
                     embeddings=embedding,
                     metric=metric_name,
                     title=f'lang={lang}, metric={metric_name}, model_name={model_name}, color={color_column}',
-                    color_column=color_column).show(renderer='png')
+                    color_column=color_column).show(renderer='png')                
+                print(f'[lang={lang}-metric={metric_name}-model_name={model_name}-color={color_column}.html](./tsne-lang={lang}-metric={metric_name}-model_name={model_name}-color={color_column}.html)')
 
 # %% [markdown]
 # Unfortunately, t-SNE also didn't assist me in visualizing distinct differences between topics or identifying first/inner sentences within a topic.
@@ -355,6 +360,7 @@ for metric_name, metric in metrics.items():
                     metric=metric_name,
                     title=f'lang={lang}, metric={metric_name}, model_name={model_name}, color={color_column}',
                     color_column=color_column).show(renderer='png')
+                print(f'[interactive plot](./umap-lang={lang}-metric={metric_name}-model_name={model_name}-color={color_column}.html)')
 
 # %% [markdown]
 # So, there are no strong indications that we can segment the transcript into topics using just embeddings and clustering.
@@ -410,4 +416,7 @@ fig.add_trace(trace1, row=1, col=1)
 fig.add_trace(trace2, row=1, col=2)
 
 # Display the plot
-fig.show()
+fig.show(renderer='png')
+
+# %%
+fig.write_html('./subplots.html')
