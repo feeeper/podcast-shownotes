@@ -91,6 +91,9 @@ env-patch:
 env-update:
 	mamba env update -p ./envs -f environment.yml
 
+env-update-39:
+	mamba env update -p ./envs39 -f env.yml
+
 env-remove:
 	conda env remove -p ./envs
 
