@@ -41,12 +41,15 @@
 
 # %% [markdown]
 # Here is probably the last article about text segmentation. [Previously]() I've explored three approaches: GraphSeg, TextTiling, and an improved TextTiling with an embeddings-based similarity metric. The results were only okay — not great. Additionally, I mentioned a supervised approach: building a classifier that could determine if a sentence is a boundary sentence or not. The text and code below detail my attempt to construct a binary classifier for this task.
+#
+# > **Friendly Alert**: This post will include really huge amount of Python code. Be ready.
+#
+# This articles contains two large sections:
+# 1. **Dataset** section related to dataset that I'll later,
+# 2. **Analysis** section will be about testing different classifers and how they perform on this task with my data.
 
 # %% [markdown]
-# ## Dataset
-
-# %% [markdown]
-# I'll use the same dataset I've used earlier: an automatic transcript of some DevZen podcast episodes.
+# But firstly I need to import all necessary libraries and modules.
 
 # %%
 import sys
@@ -71,9 +74,26 @@ import lazypredict
 import sklearn
 from nltk.metrics import windowdiff
 
+from xgboost import XGBClassifier
+from lightgbm import LGBMClassifier
+from sklearn import (
+    neighbors,
+    naive_bayes,
+    discriminant_analysis,
+    ensemble,
+    calibration,
+    semi_supervised,
+)
+
 from src.utils import get_segmentation
 
 memory = Memory('../.cache')
+
+# %% [markdown]
+# ## Dataset
+
+# %% [markdown]
+# I'll use the same dataset I've used earlier: an automatic transcript of some DevZen podcast episodes. The same dataset I used in the previous article in this series.
 
 # %%
 csv_path = '../data/400-415-with-target.csv'
@@ -102,6 +122,9 @@ class Models:
     paraphrase = 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'
     labse = 'sentence-transformers/labse'
 
+
+# %% [markdown]
+# `memory.cache` is a great way to cache function results. It could be really helpful if you have to do long-running calculation. For instance, building embeddings for a bunch of texts.
 
 # %%
 @memory.cache(verbose=False)
@@ -144,7 +167,7 @@ embeddings = {
 # ### Build the dataset
 
 # %% [markdown]
-# Below you can see a short function to build a dataset from embeddings.
+# Below you can see a short function to build a dataset from embeddings. For binary classification I need only embeddings and targets for each of them. I'll add `ru_sentence`, `en_sentence`, and `episode` columns only for further research.
 
 # %%
 def build_dataset(
@@ -159,6 +182,9 @@ def build_dataset(
     return res
 
 
+# %% [markdown]
+# Let's use the function and see what I get. The only reason why I printed only four first values from embeddings is that the whole table wouldn't fit into any screen.
+
 # %%
 ru_labse_ds = build_dataset(df, ru_labse_embeddings)
 ru_paraphrase_ds = build_dataset(df, ru_paraphrase_embeddings)
@@ -166,9 +192,12 @@ ru_paraphrase_ds = build_dataset(df, ru_paraphrase_embeddings)
 en_labse_ds = build_dataset(df, en_labse_embeddings)
 en_paraphrase_ds = build_dataset(df, en_paraphrase_embeddings)
 
-with pl.Config(fmt_str_lengths=100):
-    print(en_paraphrase_ds[['ru_sentence', 'en_sentence', 'episode', 'target'] + [f'{x}' for x in range(1, 5)]].head())
+with pl.Config(fmt_str_lengths=100, tbl_width_chars=120):
+    print(ru_labse_ds[['ru_sentence', 'en_sentence', 'episode', 'target'] + [f'{x}' for x in range(1, 5)]].head())
 
+
+# %% [markdown]
+# I use the same function to split dataset into train and test parts as I used earlier. All sentences related to episodes from 400 to 409 included were gone to the train part, others &mdash; to the test part.
 
 # %%
 def split_train_test(df: pl.DataFrame) -> t.Tuple[pl.DataFrame, pl.DataFrame]:
@@ -182,6 +211,9 @@ def split_train_test(df: pl.DataFrame) -> t.Tuple[pl.DataFrame, pl.DataFrame]:
     return train, test
 
 
+# %% [markdown]
+# To measure a classifier's performace I `windowdiff` metric that I already used in the article about unsupervised approaches.
+
 # %%
 def window_diff(gt: str, pred: str, boundary='|') -> float:
     k = int(round(len(gt) / (gt.count(boundary) * 2.)))
@@ -189,7 +221,7 @@ def window_diff(gt: str, pred: str, boundary='|') -> float:
 
 
 # %% [markdown]
-# ### One line EDA
+# ### [Maybe should be deleted] One line EDA
 
 # %% [markdown]
 # I have to admit that dataset is dramatically disbalanced:
@@ -202,7 +234,10 @@ df['target'].value_counts().with_columns(pl.col('count').apply(lambda x: f'{x/df
 # As you can see only 0.67% sentences in the dataset are boundary sentences. So we keep it in mind for future work.
 
 # %% [markdown]
-# ## The first attempt
+# ## Analysis
+
+# %% [markdown]
+# ### Train and score classifiers
 
 # %% [markdown]
 # I'm not ready to spend hours to check all algorithms in sklearn so I'll write a simple function that train and test passed classifer. After that I'll get the best perfroming classifiers.
@@ -211,6 +246,9 @@ df['target'].value_counts().with_columns(pl.col('count').apply(lambda x: f'{x/df
 def data_columns(data_frame: pl.DataFrame, exclude_columns: list[str]) -> list[str]:
     return [col for col in data_frame.columns if col not in exclude_columns]
 
+
+# %% [markdown]
+# The `clore_clf` function gets a classifer and dataframe, fits the classifer, and collects metrics for it. In case if the classifer could return probability than the function tries different thresholds. As a result the function returns an array with metrics for each threshold.
 
 # %%
 def score_clf(
@@ -242,6 +280,7 @@ def score_clf(
             best_ts = None
             min_wd = 1
             topics_count = 0
+            # score classifier for different thresholds
             for threshold in [x/10 for x in range(1, 10)]:
                 predicred_seg = ''.join([str(int(x > threshold)) for x in g[1]['prediction']])
                 wd = window_diff(ground_truth_seg, predicred_seg, boundary='1')
@@ -275,25 +314,17 @@ def score_clf(
     return metrics
 
 
-# %%
-from xgboost import XGBClassifier
-from lightgbm import LGBMClassifier
-from sklearn import (
-    neighbors,
-    naive_bayes,
-    discriminant_analysis,
-    ensemble,
-    calibration,
-    semi_supervised,
-)
+# %% [markdown]
+# Below the code that helped me to train 25 different classifers on LaBSE-based dataset. Classifers are from default LogisticRegression to XGB and LGB boostings.
 
+# %%
 random_state = 42
 
 nc_clf = neighbors.NearestCentroid()
 gauss_clf = sklearn.naive_bayes.GaussianNB()
 bernoulli_clf = sklearn.naive_bayes.BernoulliNB()
 logreg_clf = sklearn.linear_model.LogisticRegression()
-logdis_clf = sklearn.discriminant_analysis.LinearDiscriminantAnalysis()
+lindis_clf = sklearn.discriminant_analysis.LinearDiscriminantAnalysis()
 linear_svc_clf = sklearn.svm.LinearSVC(random_state=random_state)
 knn_clf = sklearn.neighbors.KNeighborsClassifier()
 perc_clf = sklearn.linear_model.Perceptron(random_state=random_state)
@@ -321,7 +352,7 @@ clfs = [
     gauss_clf,
     bernoulli_clf,
     logreg_clf,
-    logdis_clf,
+    lindis_clf,
     linear_svc_clf,
     knn_clf,
     perc_clf,
@@ -351,13 +382,23 @@ for clf in clfs:
     except Exception as e:
         print(e)
 
-# %% [markdown]
-# So let's take a look to results episode by episode:
-
 # %%
 metrics_df = pl.DataFrame(labse_metrics)
+metrics_df.shape
+
+# %% [markdown]
+# There are 1014 rows contains the dataframe with result metrics.
+#
+# It would be hard to dive into all 1014 rows so lets take a look at the results for 410 episode &mdash; the first test episode:
+
+# %%
 episode_metrics = metrics_df.filter(pl.col('episode') == 410).sort(['episode', 'clf', 'threshold'])
 print(episode_metrics)
+
+# %% [markdown]
+# Interesting but not informative. Too noisy results.
+#
+# The worst classifers couldn't find any boundary sentence. It means that `predicted_topics_count` for these classifers will be equal to 1:
 
 # %%
 worst_classifers = metrics_df.group_by([
@@ -381,6 +422,9 @@ print(set(worst_classifers['clf']))
 metrics_df = metrics_df.filter(~pl.col('clf').is_in(set(worst_classifers['clf'])))
 metrics_df
 
+# %% [markdown]
+# Even if I remove worst classifers I have too many data. So the next step is to try to find the best classifers. The best classifer is the one that performs best (in terms of `windowdiff` score) for at least one test episode:
+
 # %%
 metrics_df = metrics_df.with_columns(
     pl.struct(
@@ -390,7 +434,6 @@ metrics_df = metrics_df.with_columns(
     ).alias('ratio')
 )
 
-metrics_df = metrics_df.filter((pl.col('ratio') < 2) & (pl.col('predicted_topics_count') > 1) & (pl.col('ratio') > 0.2))
 best_performing_clfs = metrics_df.group_by(
     ['episode']
 ).agg([
@@ -403,6 +446,10 @@ best_performing_clfs = metrics_df.group_by(
 best_performing_clfs
 
 # %% [markdown]
+# A table above represents the best performing classifer for each episode. For some episodes there are more than one best performing classifier &mdash; that's fine.
+#
+# Also I added `ratio` column as a ratio found topics count to the real topics count. This field will be used later.
+#
 # The list below contains the best performed classifers. Let's deep dive into those models.
 
 # %%
@@ -411,7 +458,15 @@ best_performing_clfs_names
 
 
 # %% [markdown]
-# ### CalibratedClassifierCV
+# ### Best performing classifiers analysis
+
+# %% [markdown]
+# The best of the best classifers:
+# 1. should have small `windowdiff` score,
+# 2. should find topics for each test episode,
+# 3. should have ratio ~1.
+#
+# The functions below will show me these classifiers:
 
 # %%
 def get_clf_best_metrics(clf_name: str) -> pl.DataFrame:
@@ -453,57 +508,11 @@ def get_results_for_best_thresholds(
 
 
 # %%
-calibrated_classifier_best_scores = get_clf_best_metrics('CalibratedClassifierCV')
-print(calibrated_classifier_best_scores)
-
-# %%
-for d in get_results_for_best_thresholds(calibrated_classifier_best_scores, calibrated_classifier_metrics):
-    print(d)
-
-# %% [markdown]
-# ### ExtraTreesClassifier
-
-# %%
-extra_trees_best_metrics = get_clf_best_metrics('ExtraTreesClassifier')
-print(extra_trees_best_metrics)
-
-# %%
-for d in get_results_for_best_thresholds(extra_trees_best_metrics, metrics_df.filter(pl.col('clf') == 'ExtraTreesClassifier')):
-    print(d)
-
-# %% [markdown]
-# The best threshold doesn't work for even for all episodes from my tiny dataset &mdash; wasted.
-
-# %%
-classifier_metrics = metrics_df.filter(pl.col('clf') == 'PassiveAggressiveClassifier')
-classifier_best_scores = classifier_metrics.groupby([
-    pl.col('episode')
-]).agg([
-    pl.col('window_diff').min().alias('best_win_diff')
-]).sort([
-    pl.col('episode')
-]).join(
-    classifier_metrics,
-    left_on='best_win_diff',
-    right_on='window_diff')
-classifier_metrics
-
-# %%
-winning_clfs = [
-    'CalibratedClassifierCV',
-    'ExtraTreesClassifier',
-    'KNeighborsClassifier',
-    'LinearDiscriminantAnalysis',
-    'PassiveAggressiveClassifier',
-    'RandomForestClassifier',
-    'XGBClassifier'
-]
-
 test_episodes = list(split_train_test(ru_labse_ds)[1]['episode'].unique())
-for wc in winning_clfs:
+best_results = []
+for wc in best_performing_clfs_names:
     print(f'{wc:=^100}')
     clf_best_metrics = get_clf_best_metrics(wc)
-    print(clf_best_metrics)
     
     print()
     for d in get_results_for_best_thresholds(clf_best_metrics, metrics_df.filter(pl.col('clf') == wc)):
@@ -512,7 +521,71 @@ for wc in winning_clfs:
         print(f'avg window diff: {tmp["window_diff"].mean():.2f}')
         print(f'avg ratio: {tmp["ratio"].mean():.2f}')
         print(f'episodes found: {len(tmp)} out of {len(test_episodes)}')
+        best_results.append({
+            'clf': wc,
+            'threshold': tmp['threshold'][0],
+            'avg_win_diff': tmp["window_diff"].mean(),
+            'avg_ratio': tmp["ratio"].mean(),
+            'episodes_with_topics': len(tmp),
+            'total_test_episodes': len(test_episodes),
+        })
         print()
     print()
 
+# %% [markdown]
+# Each classifer has at least one threshold value that somehow works. Lets see which of these classifers and thresholds work better than others:
+
 # %%
+with pl.Config(fmt_str_lengths=100, tbl_width_chars=120):
+    print(pl.DataFrame(best_results).sort([pl.col('avg_win_diff')]))
+
+# %% [markdown]
+# JFYI: null `threshold` means that classifer doesn't provide `predict_proba` method.
+#
+# There are three classifiers that showed `avg_ratio` near 1 but LinearDiscriminantAnalysis performs pretty well with thresholds 0.2 and 0.7:
+# 1. LinearDiscriminantAnalysis,
+# 2. PassiveAggressiveClassifier,
+# 3. LogisticRegression.
+
+# %% [markdown]
+# Now I want to see two things:
+# 1. detailed metrics,
+# 2. sentences that were predicted as boundary sentence.
+
+# %%
+final_clfs = {
+    'LinearDiscriminantAnalysis': [(lindis_clf, 0.2), (lindis_clf, 0.7)],
+    'PassiveAggressiveClassifier': [(pass_agg_clf, None)],
+    'LogisticRegression': [(logreg_clf, 0.1)]
+}
+
+
+# %%
+def get_metrics_for_clf_and_threshold(clf: str, threshold: t.Optional[float]) -> pl.DataFrame:
+    clf_metrics = metrics_df.filter(pl.col('clf') == clf)
+    if threshold is not None:
+        clf_metrics = clf_metrics.filter(pl.col('threshold') == threshold)
+    return clf_metrics
+
+
+# %%
+_, test_labse_df = split_train_test(ru_labse_ds)
+data = test_labse_df[data_columns(test_labse_df, ['ru_sentence', 'en_sentence', 'episode', 'target'])]
+
+for clf_name, vals in final_clfs.items():
+    for val in vals:
+        with pl.Config(fmt_str_lengths=200, tbl_width_chars=200, tbl_rows=-1):
+            print(f'{clf_name:=^130}')
+            print(get_metrics_for_clf_and_threshold(clf_name, val[1]))
+            
+            if hasattr(val[0], 'predict_proba'):
+                preds = val[0].predict_proba(data)
+                result_df = test_labse_df.hstack([pl.Series('prediction', [int(x > val[1]) for x in preds[:,1]])])
+            else:
+                result_df = test_labse_df.hstack([pl.Series('prediction', val[0].predict(data))])
+                
+            for ep in test_episodes:
+                episode_result_df = result_df.filter(((pl.col('prediction') == 1) | (pl.col('target') == 1)) & (pl.col('episode')== ep))[['episode', 'ru_sentence', 'en_sentence', 'target', 'prediction']]
+                title = f'{clf_name}.{ep}'
+                print(f'{title:-^130}')
+                print(episode_result_df)
