@@ -24,7 +24,7 @@
 # ```
 
 # %% [markdown]
-# статья про сегментацию при помощи supervised ml: первое предложение топика vs "внутреннее" предложение топика
+# <!--статья про сегментацию при помощи supervised ml: первое предложение топика vs "внутреннее" предложение топика
 #
 # 1. интро: пробовал всякие разные варианты, а что если просто взять логрег и на эмбеддингах обучить бинарный классификатор?
 # 2. делаем разные эмбединги
@@ -34,7 +34,7 @@
 # 6. результат 2
 # 7. выборка несбалансированная - давайте добавим сгенерированные примеры
 # 8. результат 3
-# 9. итого
+# 9. итого-->
 
 # %% [markdown]
 # # Text Segmentation: Supervised approach
@@ -52,15 +52,10 @@
 # But firstly I need to import all necessary libraries and modules.
 
 # %%
-import sys
-sys.path.append('..')
-
 import typing as t
 from dataclasses import dataclass
-import re
 import warnings
 warnings.filterwarnings("ignore")
-import os
 
 from joblib import Memory
 
@@ -68,14 +63,12 @@ import pandas as pd
 import polars as pl
 import numpy as np
 
-from stop_words import get_stop_words
 from sentence_transformers import SentenceTransformer
-import lazypredict
-import sklearn
 from nltk.metrics import windowdiff
 
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
+import sklearn
 from sklearn import (
     neighbors,
     naive_bayes,
@@ -85,9 +78,9 @@ from sklearn import (
     semi_supervised,
 )
 
-from src.utils import get_segmentation
-
 memory = Memory('../.cache')
+
+# %load_ext watermark
 
 # %% [markdown]
 # ## Dataset
@@ -197,7 +190,9 @@ with pl.Config(fmt_str_lengths=100, tbl_width_chars=120):
 
 
 # %% [markdown]
-# I use the same function to split dataset into train and test parts as I used earlier. All sentences related to episodes from 400 to 409 included were gone to the train part, others &mdash; to the test part.
+# I used the same function to divide the dataset into training and testing sets as I did before.
+# All sentences related to episodes from 400 to 409, inclusive, were allocated to the training set, 
+# while the rest were assigned to the testing set.
 
 # %%
 def split_train_test(df: pl.DataFrame) -> t.Tuple[pl.DataFrame, pl.DataFrame]:
@@ -212,7 +207,7 @@ def split_train_test(df: pl.DataFrame) -> t.Tuple[pl.DataFrame, pl.DataFrame]:
 
 
 # %% [markdown]
-# To measure a classifier's performace I `windowdiff` metric that I already used in the article about unsupervised approaches.
+# To measure a classifier's performace I `windowdiff` [metric](https://en.makesomecode.me/post/measuring-text-segmentation-success-a-deep-dive-into-key-metrics/#:~:text=WindowDiff,r_i%20%2D%20a_i%7C%20%3E%200%24) that I already used in [the article about unsupervised approaches](https://en.makesomecode.me/post/exploring-text-segmentation-algorithms-and-their-performance/).
 
 # %%
 def window_diff(gt: str, pred: str, boundary='|') -> float:
@@ -240,7 +235,7 @@ df['target'].value_counts().with_columns(pl.col('count').apply(lambda x: f'{x/df
 # ### Train and score classifiers
 
 # %% [markdown]
-# I'm not ready to spend hours to check all algorithms in sklearn so I'll write a simple function that train and test passed classifer. After that I'll get the best perfroming classifiers.
+# I'm not prepared to spend hours checking all the algorithms in sklearn, so I'll write a simple function that trains and tests the classifier passed to it. Then, I'll identify the best performing classifiers based on the results.
 
 # %%
 def data_columns(data_frame: pl.DataFrame, exclude_columns: list[str]) -> list[str]:
@@ -248,7 +243,7 @@ def data_columns(data_frame: pl.DataFrame, exclude_columns: list[str]) -> list[s
 
 
 # %% [markdown]
-# The `clore_clf` function gets a classifer and dataframe, fits the classifer, and collects metrics for it. In case if the classifer could return probability than the function tries different thresholds. As a result the function returns an array with metrics for each threshold.
+# The `score_clf` function takes a classifier and a dataframe as input, fits the classifier, and collects metrics for it. If the classifier can return probabilities, the function tries different thresholds. Finally, the function returns an array with metrics for each threshold.
 
 # %%
 def score_clf(
@@ -315,7 +310,7 @@ def score_clf(
 
 
 # %% [markdown]
-# Below the code that helped me to train 25 different classifers on LaBSE-based dataset. Classifers are from default LogisticRegression to XGB and LGB boostings.
+# Below is the code that allowed me to train 25 different classifiers on the LaBSE-based dataset. The classifiers range from the default LogisticRegression to XGB and LGB boostings.
 
 # %%
 random_state = 42
@@ -378,7 +373,7 @@ clfs = [
 labse_metrics = []
 for clf in clfs:
     try:
-        labse_metrics.extend(score_clf(clf,ru_labse_ds))
+        labse_metrics.extend(score_clf(clf,ru_labse_ds))        
     except Exception as e:
         print(e)
 
@@ -387,18 +382,19 @@ metrics_df = pl.DataFrame(labse_metrics)
 metrics_df.shape
 
 # %% [markdown]
-# There are 1014 rows contains the dataframe with result metrics.
+# There are 1014 rows in the dataframe containing the result metrics.
 #
-# It would be hard to dive into all 1014 rows so lets take a look at the results for 410 episode &mdash; the first test episode:
+# It might be overwhelming to analyze all 1014 rows,
+# so let's focus on the results for the 410th episode—the first test episode:
 
 # %%
 episode_metrics = metrics_df.filter(pl.col('episode') == 410).sort(['episode', 'clf', 'threshold'])
 print(episode_metrics)
 
 # %% [markdown]
-# Interesting but not informative. Too noisy results.
+# Interesting, but not very informative. The results seem to be too noisy.
 #
-# The worst classifers couldn't find any boundary sentence. It means that `predicted_topics_count` for these classifers will be equal to 1:
+# The worst classifiers couldn't identify any boundary sentences. This means that the `predicted_topics_count` for these classifiers will be equal to 1:
 
 # %%
 worst_classifers = metrics_df.group_by([
@@ -410,20 +406,21 @@ worst_classifers = metrics_df.group_by([
 print(set(worst_classifers['clf']))
 
 # %% [markdown]
-# So I'll get rid off all classifers from future research which can't even find single boundary sentence: 
+# So, I'll remove all classifiers from future research that couldn't even identify a single boundary sentence:
+#
 # - DummyClassifier,
 # - RidgeClassifierCV,
 # - SGDClassifier,
 # - QuadraticDiscriminantAnalysis.
 #
-# The reason is that all provided episodes have at least 7 topics.
+# The reason for this is that all provided episodes have at least 7 topics.
 
 # %%
 metrics_df = metrics_df.filter(~pl.col('clf').is_in(set(worst_classifers['clf'])))
 metrics_df
 
 # %% [markdown]
-# Even if I remove worst classifers I have too many data. So the next step is to try to find the best classifers. The best classifer is the one that performs best (in terms of `windowdiff` score) for at least one test episode:
+# If I remove the worst classifiers, I'll still have a lot of data to analyze. The next step is to try to identify the best classifiers. The best classifier is the one that performs the best (in terms of the `windowdiff` score) for at least one test episode.
 
 # %%
 metrics_df = metrics_df.with_columns(
@@ -446,11 +443,11 @@ best_performing_clfs = metrics_df.group_by(
 best_performing_clfs
 
 # %% [markdown]
-# A table above represents the best performing classifer for each episode. For some episodes there are more than one best performing classifier &mdash; that's fine.
+# The table above shows the best-performing classifier for each episode. For some episodes, there may be more than one best-performing classifier, which is fine.
 #
-# Also I added `ratio` column as a ratio found topics count to the real topics count. This field will be used later.
+# Additionally, I added a `ratio` column, which represents the ratio of the found topics count to the real topics count. This field will be used later.
 #
-# The list below contains the best performed classifers. Let's deep dive into those models.
+# The list below contains the best-performing classifiers. Let's delve deeper into those models.
 
 # %%
 best_performing_clfs_names = sorted(list(best_performing_clfs['clf'].unique()))
@@ -461,12 +458,12 @@ best_performing_clfs_names
 # ### Best performing classifiers analysis
 
 # %% [markdown]
-# The best of the best classifers:
-# 1. should have small `windowdiff` score,
-# 2. should find topics for each test episode,
-# 3. should have ratio ~1.
+# The top-performing classifiers should meet the following criteria:
+# 1. They should have a small `windowdiff` score.
+# 2. They should be able to find topics for each test episode.
+# 3. They should have a ratio close to 1.
 #
-# The functions below will show me these classifiers:
+# The functions below will help me identify these classifiers:
 
 # %%
 def get_clf_best_metrics(clf_name: str) -> pl.DataFrame:
@@ -533,30 +530,32 @@ for wc in best_performing_clfs_names:
     print()
 
 # %% [markdown]
-# Each classifer has at least one threshold value that somehow works. Lets see which of these classifers and thresholds work better than others:
+# Each classifier has at least one threshold value that shows some promising performance.
+# Let's analyze which of these classifiers and thresholds perform better than others:
 
 # %%
 with pl.Config(fmt_str_lengths=100, tbl_width_chars=120):
     print(pl.DataFrame(best_results).sort([pl.col('avg_win_diff')]))
 
 # %% [markdown]
-# JFYI: null `threshold` means that classifer doesn't provide `predict_proba` method.
+# Just for your information: a null threshold means that the classifier doesn't provide the `predict_proba` method.
 #
-# There are three classifiers that showed `avg_ratio` near 1 but LinearDiscriminantAnalysis performs pretty well with thresholds 0.2 and 0.7:
-# 1. LinearDiscriminantAnalysis,
-# 2. PassiveAggressiveClassifier,
-# 3. LogisticRegression.
+# Among the classifiers that showed an average ratio near 1, LinearDiscriminantAnalysis performs particularly well with thresholds of 0.2 and 0.7. The top three classifiers in terms of average ratio are:
+#
+# 1. LinearDiscriminantAnalysis
+# 2. PassiveAggressiveClassifier
+# 3. LogisticRegression
 
 # %% [markdown]
-# Now I want to see two things:
-# 1. detailed metrics,
-# 2. sentences that were predicted as boundary sentence.
+# Now, I want to examine two things:
+# 1. Detailed metrics.
+# 2. Sentences that were predicted as boundary sentences.
 
 # %%
 final_clfs = {
-    'LinearDiscriminantAnalysis': [(lindis_clf, 0.2), (lindis_clf, 0.7)],
+    'LinearDiscriminantAnalysis': [(lindis_clf, 0.2), (lindis_clf, 0.9)],
     'PassiveAggressiveClassifier': [(pass_agg_clf, None)],
-    'LogisticRegression': [(logreg_clf, 0.1)]
+    'LogisticRegression': [(logreg_clf, 0.3)]
 }
 
 
@@ -589,3 +588,49 @@ for clf_name, vals in final_clfs.items():
                 title = f'{clf_name}.{ep}'
                 print(f'{title:-^130}')
                 print(episode_result_df)
+
+# %% [markdown]
+# ## Conclusion
+#
+# While the algorithms perform adequately, they don't exceed my expectations. The average `windowdiff` for each selected classifier is close to the best achieved by unsupervised methods, which was around 0.36.
+#
+# However, a significant drawback remains: this approach is specific to podcasts. The classifiers cannot be generalized to other podcasts because each podcast may have its own unique transition phrases or signals for changing topics.
+#
+# Unfortunately, I only realized this limitation halfway through the research, but I decided to continue for the sake of my curiosity.
+
+# %% [markdown]
+# ## PS
+#
+# Some of you might suggest considering hyperparameter optimization and trying to extend the dataset using augmentations. However, the problem I mentioned in the Conclusion section presents a significant challenge.
+#
+# If you want to try it for yourself, here are my thoughts on the next steps.
+#
+# ### Feature Engineering
+#
+# One idea is to extend each row with the next and previous rows to provide additional context.
+#
+# ### Augmentation
+#
+# You could add additional boundary sentences using [a model from HuggingFace](https://huggingface.co/humarin/chatgpt_paraphraser_on_T5_base) or ChatGPT. Here's an example using ChatGPT:
+#
+# ```python
+# from openai import OpenAI
+#
+# key = os.getenv('OPEN_AI_KEY')
+# client = OpenAI(api_key=key)
+#
+# client.chat.completions.create(
+#     model="gpt-3.5-turbo",
+#     messages=[
+#         {'role': 'system', 'content': 'You are a top-level copywriter algorithm. You have to rewrite sentences. For each sentence, write 5 different options. You have to answer in the same language as the sentence you received. Your response should be a JSON array.'},
+#         {'role': 'user', 'content': 'Well, okay, then let\'s follow the topics of our listeners.'}
+#     ],
+# )
+# ```
+#
+# ### Hyperparameter Optimization
+#
+# Optuna is a popular HPO framework that I recommend. It's easy to use and performs well, which could help you fine-tune your models.
+
+# %%
+# %watermark --iversions --machine --python
