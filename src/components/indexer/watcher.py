@@ -32,7 +32,7 @@ def main():
         daemon_wrapper = DaemonWrapper(
             module_name='src.components.indexer.daemon',
             args=daemon_args.forward(),
-            pidfile=Path('./daemon')
+            pidfile=Path(daemon_args.storage.directory) / 'indexer.pid'
         )
         shutdown_state = ShutdownState()
         try:
@@ -46,13 +46,6 @@ def main():
             pass
     finally:
         logger.info('Server stopped')
-
-
-@asyncio.coroutine
-def watch() -> None:
-    while True:
-        print(f'periodic: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
-        yield from asyncio.sleep(1)
 
 
 async def _run_server(

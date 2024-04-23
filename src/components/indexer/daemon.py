@@ -20,10 +20,13 @@ def main() -> None:
     daemon_args = DaemonArgs.parse(description=DAEMON_NAME)
     setup_logging(daemon_args.logging)
 
-    daemon_pidfile = Path('./daemon')
-    daemon_pidfile.write_text(str(os.getpid()))
-    logger.info('Begin loop')
     storage_dir = Path(daemon_args.storage.directory)
+    storage_dir.mkdir(parents=True, exist_ok=True)
+
+    daemon_pidfile = Path(storage_dir) / 'indexer.pid'
+    daemon_pidfile.write_text(str(os.getpid()))
+
+    logger.info('Begin loop')
     try:
         _loop(daemon_pidfile)
     except Exception as e:

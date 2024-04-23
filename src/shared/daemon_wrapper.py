@@ -53,7 +53,6 @@ class DaemonWrapper:
         pidfile = self._pidfile
 
         while not pidfile.exists() or pidfile.read_text() != str(self._process.pid):
-            print(f'{pidfile.exists()=}\t{self._process.pid=}')
             if self._process.returncode is not None:
                 raise ChildProcessError(f'Daemon process has died: {self._process.returncode}')
             if wait_counter >= timeout:
