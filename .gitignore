@@ -14,3 +14,5 @@ __pycache__/
 /data/
 envs39
 envs3918
+.log
+src/components/indexer/data

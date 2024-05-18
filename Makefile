@@ -102,6 +102,11 @@ env-delete: env-remove
 doc:
 	$(MAKE) -C ./docs html
 
+run-indexer:
+	$(CONDA_RUN) python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data
+#     python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data
+
+
 lab:
 	$(CONDA_RUN) python -m jupyter lab --no-browser
 
