@@ -7,7 +7,10 @@ from pathlib import Path
 from aiohttp import web
 import asyncio
 
-from shared.args import IndexerServerArgs, DaemonArgs
+from shared.args import (
+    IndexerServerArgs,
+    DaemonArgs,
+)
 from infrastructure.logging.setup import setup_logging
 from shared.daemon_wrapper import DaemonWrapper
 
@@ -37,7 +40,7 @@ def main():
 
         transcribe_daemon_wrapper = DaemonWrapper(
             module_name='src.components.indexer.transcriber_daemon',
-            args=daemon_args.forward(),
+            args=index_server_args.forward(),
             pidfile=Path(daemon_args.storage.directory) / 'transcriber.pid')
 
         shutdown_state = ShutdownState()

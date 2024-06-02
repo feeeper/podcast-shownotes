@@ -6,12 +6,9 @@ import time
 import signal
 from pathlib import Path
 
-import requests
-from shared.args import DaemonArgs
-
+from shared.args import IndexerServerArgs
 from infrastructure.logging.setup import setup_logging
 
-from .index_builder import IndexBuilder, EpisodeMetadata
 from .transcriber import Transcriber
 
 DAEMON_NAME = 'Watcher Service: transcriber daemon'
@@ -19,7 +16,7 @@ logger = getLogger('transcriber _daemon')
 
 
 def main() -> None:
-    daemon_args = DaemonArgs.parse(description=DAEMON_NAME)
+    daemon_args = IndexerServerArgs.parse(description=DAEMON_NAME)
     setup_logging(daemon_args.logging)
 
     storage_dir = Path(daemon_args.storage.directory)
@@ -28,7 +25,10 @@ def main() -> None:
     daemon_pidfile = Path(storage_dir) / 'transcriber.pid'
     daemon_pidfile.write_text(str(os.getpid()))
 
-    transcriber = Transcriber(storage_dir=storage_dir)
+    transcriber = Transcriber(
+        storage_dir=storage_dir,
+        api_key=daemon_args.transcription.api_key
+    )
 
     logger.info(f'Begin loop: {DAEMON_NAME}')
     try:

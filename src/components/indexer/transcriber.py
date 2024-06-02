@@ -26,7 +26,7 @@ class Transcriber:
                     language='ru',
                 )
 
-                with open(item / 'transcription-openai.json', 'w', encoding='utf-8') as transcription_file:
+                with open(item / 'transcription-openai.json', 'w', encoding='utf-8') as transcription_file:  # noqa E501
                     transcription_file.write(response.json())
 
     def pick_episodes(self) -> list[Path]:

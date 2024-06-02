@@ -34,6 +34,7 @@ class ArgsBase(Generic[TArgs]):
 class IndexerServerArgs(BaseModel, ArgsBase['IndexerServerArgs']):
     storage: StorageArgs
     logging: LoggingArgs
+    transcription: TranscriptionArgs
     port: int
 
     @validator('port')
@@ -45,6 +46,7 @@ class IndexerServerArgs(BaseModel, ArgsBase['IndexerServerArgs']):
     def setup(cls, parser: ArgumentParser) -> None:
         StorageArgs.setup(parser)
         LoggingArgs.setup(parser)
+        TranscriptionArgs.setup(parser)
         parser.add_argument('--port', type=int, default=8080)
 
     @classmethod
@@ -52,14 +54,16 @@ class IndexerServerArgs(BaseModel, ArgsBase['IndexerServerArgs']):
         return IndexerServerArgs(
             storage=StorageArgs.read(args),
             logging=LoggingArgs.read(args),
-            port=args.port
+            transcription=TranscriptionArgs.read(args),
+            port=args.port,
         )
 
     def forward(self) -> list[str]:
         return [
             *self.storage.forward(),
             *self.logging.forward(),
-            f'--port={self.port}'
+            f'--port={self.port}',
+            *self.transcription.forward(),
         ]
 
 
@@ -138,8 +142,32 @@ class DaemonArgs(BaseModel, ArgsBase['DaemonArgs']):
         ]
 
 
+class TranscriptionArgs(BaseModel, ArgsBase['TranscriptionArgs']):
+    api_key: str
+    debug: bool = False
+
+    @classmethod
+    def setup(cls, parser: ArgumentParser) -> None:
+        parser.add_argument('--api-key', type=str, required=True)
+        parser.add_argument('--debug', type=bool, default=True)
+
+    @classmethod
+    def read(cls, args: argparse.Namespace) -> TranscriptionArgs:
+        return TranscriptionArgs(
+            api_key=args.api_key,
+            debug=args.debug,
+        )
+
+    def forward(self) -> list[str]:
+        return [
+            f'--api-key={self.api_key}',
+            f'--debug={self.debug}'
+        ]
+
+
 __all__ = [
     'ArgsBase',
     'LoggingArgs',
     'DaemonArgs',
+    'TranscriptionArgs',
 ]
