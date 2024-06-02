@@ -1,5 +1,3 @@
-# export PYTHONPATH="${PWD}/src"
-
 from __future__ import annotations
 
 from logging import getLogger
@@ -13,10 +11,11 @@ from shared.args import DaemonArgs
 
 from infrastructure.logging.setup import setup_logging
 
-from .index_builder import IndexBuilder
+from .index_builder import IndexBuilder, EpisodeMetadata
+from .transcriber import Transcriber
 
-DAEMON_NAME = 'Watcher Service: indexer daemon'
-logger = getLogger('watcher_daemon')
+DAEMON_NAME = 'Watcher Service: transcriber daemon'
+logger = getLogger('transcriber _daemon')
 
 
 def main() -> None:
@@ -26,16 +25,16 @@ def main() -> None:
     storage_dir = Path(daemon_args.storage.directory)
     storage_dir.mkdir(parents=True, exist_ok=True)
 
-    daemon_pidfile = Path(storage_dir) / 'indexer.pid'
+    daemon_pidfile = Path(storage_dir) / 'transcriber.pid'
     daemon_pidfile.write_text(str(os.getpid()))
 
-    index_builder = IndexBuilder(storage_dir=storage_dir)
+    transcriber = Transcriber(storage_dir=storage_dir)
 
     logger.info(f'Begin loop: {DAEMON_NAME}')
     try:
         _loop(
             daemon_pidfile,
-            index_builder
+            transcriber
         )
     except Exception as e:
         if not isinstance(e, SystemExit) or e.code != 0:
@@ -47,7 +46,7 @@ def main() -> None:
 
 def _loop(
         pidfile: Path,
-        index_builder: IndexBuilder
+        transcriber: Transcriber
 ) -> None:
     def handle_interrupt(signum, frame) -> None:
         logger.info(f'Signal {signum} received')
@@ -58,21 +57,12 @@ def _loop(
     signal.signal(signal.SIGTERM, handle_interrupt)
 
     while True:
-        items = index_builder.pick_episodes()
+        items = transcriber.pick_episodes()
         if not items:
             time.sleep(1)
             continue
         for item in items:
-            print(f'Start downloading episode: {item.mp3_link}')
-            response = requests.get(item.mp3_link)
-            if response.status_code != 200:
-                logger.error(f'Failed to download episode: {item}')
-                continue
-
-            print(f'Save episode: {item}')
-            with open(item.path / 'episode.mp3', 'wb') as file:
-                file.write(response.content)
-
+            transcriber.transcribe(item)
             logger.info(f'Running item: {item}')
 
 
