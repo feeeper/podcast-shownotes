@@ -27,7 +27,7 @@ def main() -> None:
 
     transcriber = Transcriber(
         storage_dir=storage_dir,
-        api_key=daemon_args.transcription.api_key
+        api_key=daemon_args.transcription.api_key,
     )
 
     logger.info(f'Begin loop: {DAEMON_NAME}')

@@ -148,7 +148,7 @@ class TranscriptionArgs(BaseModel, ArgsBase['TranscriptionArgs']):
 
     @classmethod
     def setup(cls, parser: ArgumentParser) -> None:
-        parser.add_argument('--api-key', type=str, required=True)
+        parser.add_argument('--api-key', type=str, default='KEY_NOT_PASSED')
         parser.add_argument('--debug', type=bool, default=True)
 
     @classmethod

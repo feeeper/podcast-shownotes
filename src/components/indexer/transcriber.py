@@ -4,8 +4,12 @@ import openai
 
 
 class Transcriber:
-    def __init__(self, storage_dir: Path, api_key: str = None) -> None:
-        self.debug = True
+    def __init__(self,
+                 storage_dir: Path,
+                 api_key: str = None,
+                 debug: bool = False
+    ) -> None:
+        self.debug = debug
         self._storage_dir = storage_dir
 
         if self.debug:
