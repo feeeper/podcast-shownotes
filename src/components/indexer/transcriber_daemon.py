@@ -6,10 +6,12 @@ import time
 import signal
 from pathlib import Path
 
-from shared.args import IndexerServerArgs
+from shared.args import IndexerServerArgs, Provider
 from infrastructure.logging.setup import setup_logging
 
-from .transcriber import Transcriber
+from .transcriber_openai import TranscriberOpenAi
+from .transcriber_deepgram import TranscriberDeepgram
+from .transcriber_base import TranscriberBase
 
 DAEMON_NAME = 'Watcher Service: transcriber daemon'
 logger = getLogger('transcriber _daemon')
@@ -25,10 +27,16 @@ def main() -> None:
     daemon_pidfile = Path(storage_dir) / 'transcriber.pid'
     daemon_pidfile.write_text(str(os.getpid()))
 
-    transcriber = Transcriber(
-        storage_dir=storage_dir,
-        api_key=daemon_args.transcription.api_key,
-    )
+    if daemon_args.transcription.provider == Provider.DEEPGRAM:
+        transcriber = TranscriberDeepgram(
+            storage_dir=storage_dir,
+            api_key=daemon_args.transcription.api_key,
+        )
+    else:
+        transcriber = TranscriberOpenAi(
+            storage_dir=storage_dir,
+            api_key=daemon_args.transcription.api_key,
+        )
 
     logger.info(f'Begin loop: {DAEMON_NAME}')
     try:
@@ -46,7 +54,7 @@ def main() -> None:
 
 def _loop(
         pidfile: Path,
-        transcriber: Transcriber
+        transcriber: TranscriberBase
 ) -> None:
     def handle_interrupt(signum, frame) -> None:
         logger.info(f'Signal {signum} received')
