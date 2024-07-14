@@ -7,7 +7,10 @@ from pathlib import Path
 from aiohttp import web
 import asyncio
 
-from shared.args import IndexerServerArgs, DaemonArgs
+from shared.args import (
+    IndexerServerArgs,
+    DaemonArgs,
+)
 from infrastructure.logging.setup import setup_logging
 from shared.daemon_wrapper import DaemonWrapper
 
@@ -34,12 +37,19 @@ def main():
             args=daemon_args.forward(),
             pidfile=Path(daemon_args.storage.directory) / 'indexer.pid'
         )
+
+        transcribe_daemon_wrapper = DaemonWrapper(
+            module_name='src.components.indexer.transcriber_daemon',
+            args=index_server_args.forward(),
+            pidfile=Path(daemon_args.storage.directory) / 'transcriber.pid')
+
         shutdown_state = ShutdownState()
         try:
             loop.run_until_complete(
                 _run_server(
                     shutdown_state=shutdown_state,
-                    daemon=daemon_wrapper
+                    daemon=daemon_wrapper,
+                    transcribe_daemon=transcribe_daemon_wrapper,
                 )
             )
         except asyncio.CancelledError:
@@ -51,7 +61,8 @@ def main():
 async def _run_server(
         *,
         shutdown_state: ShutdownState,
-        daemon: DaemonWrapper
+        daemon: DaemonWrapper,
+        transcribe_daemon: DaemonWrapper,
 ) -> None:
     routes = web.RouteTableDef()
 
@@ -71,6 +82,7 @@ async def _run_server(
     app = web.Application(logger=logger)
     app.add_routes(routes)
     app.cleanup_ctx.append(_daemon_context(daemon))
+    app.cleanup_ctx.append(_daemon_context(transcribe_daemon))
 
     runner = web.AppRunner(
         app,
