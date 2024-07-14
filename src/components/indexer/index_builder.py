@@ -46,7 +46,11 @@ class IndexBuilder:
         for entry in feed.entries:
             try:
                 # entry with `themes` in the link is not an episode
-                if entry.link.startswith(('https://devzen.ru/themes', 'https://devzen.ru/no-themes')):
+                non_episode_link_prefixes = (
+                    'https://devzen.ru/themes',
+                    'https://devzen.ru/no-themes'
+                )
+                if entry.link.startswith(non_episode_link_prefixes):
                     continue
 
                 episode = EpisodeMetadata(
@@ -58,7 +62,7 @@ class IndexBuilder:
                     summary=entry.summary,
                     authors=[author.name for author in entry.authors],
                     html_content=entry.content[0].value,
-                    path=self._storage_dir / f'{int(entry.title.split(" ")[-1])}'
+                    path=self._storage_dir / f'{int(entry.title.split(" ")[-1])}'  # noqa E501
                 )
 
                 # already downloaded
@@ -71,7 +75,13 @@ class IndexBuilder:
                     file.write(episode.html_content)
 
                 with open(episode.path / 'episode.json', 'w') as file:
-                    json.dump(episode, file, indent=4, sort_keys=True, cls=EnhancedJSONEncoder, ensure_ascii=False)
+                    json.dump(
+                        episode,
+                        file,
+                        indent=4,
+                        sort_keys=True,
+                        cls=EnhancedJSONEncoder,
+                        ensure_ascii=False)
 
                 episodes.append(episode)
             except Exception as e:

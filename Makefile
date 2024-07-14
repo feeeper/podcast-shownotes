@@ -83,7 +83,7 @@ env-create-39:
 	mamba env create -p ./envs39 -f env.yml
 
 env-create-proper:
-	mamba env create -p ./envs -f environment.yml
+	mamba env create -p ./envs -f env.yml
 
 env-patch:
 	cp -r ./envs.patch/* ./envs
@@ -104,8 +104,15 @@ doc:
 
 run-indexer:
 	$(CONDA_RUN) python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data
-#     python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data
 
+run-indexer-%:
+	$(CONDA_RUN) python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data --debug false --api-key $*
+
+run-indexer-openai-%:
+	$(CONDA_RUN) python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data --debug false --provider openai --api-key $*
+
+run-indexer-deepgram-%:
+	$(CONDA_RUN) python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data --debug false --provider deepgram --api-key $*
 
 lab:
 	$(CONDA_RUN) python -m jupyter lab --no-browser

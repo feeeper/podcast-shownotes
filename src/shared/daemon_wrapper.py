@@ -35,7 +35,7 @@ class DaemonWrapper:
         self._pidfile = pidfile
 
     async def start(self) -> None:
-        logger.info('Starting daemon')
+        logger.info(f'Starting daemon {self._module_name}')
 
         self._process = await asyncio.create_subprocess_exec(
             sys.executable,
@@ -44,7 +44,7 @@ class DaemonWrapper:
             *self._args
         )
         await self._wait_daemon_startup()
-        logger.info('Daemon started')
+        logger.info(f'Daemon started {self._module_name}')
 
     async def _wait_daemon_startup(self):
         check_interval = 0.1
