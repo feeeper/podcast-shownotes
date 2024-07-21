@@ -1,16 +1,6 @@
 import pandas as pd
 import json
 
-import pytest
-
-from src.shownotes import (
-    get_shownotes_with_timestamps,
-    get_topic_texts,
-    get_sentences_with_timestamps,
-    get_sentences_with_timestamps_by_letter
-)
-from src.models import Transcription, Segment, Shownotes
-
 from src.components.segmentation.semantic_text_segmentation import SemanticTextSegmentationMultilingual
 
 from stanza import Pipeline
@@ -40,4 +30,3 @@ def test_basic():
 
     segments = segmenter.get_segments(0.8)
     assert len(segments) == 9
-
