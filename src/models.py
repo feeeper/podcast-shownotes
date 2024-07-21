@@ -43,3 +43,39 @@ class Shownotes:
 
     def __repr__(self):
         return str(self)
+
+
+class DeepgramSegment:
+    def __init__(
+            self,
+            start: float,
+            end: float,
+            text: str,
+            speaker: int
+    ) -> None:
+        self.start = start
+        self.end = end
+        self.text = text
+        self.speaker = speaker
+
+    def __str__(self):
+        return f'DeepgramSegment(start={self.start}, end={self.end}, text="{self.text}", speaker={self.speaker})'
+
+    def __repr__(self):
+        return str(self)
+
+
+class DeepgramTranscription:
+    def __init__(
+            self,
+            text: str,
+            segments: list[DeepgramSegment]
+    ):
+        self.text = text
+        self.segments = segments
+
+    def __str__(self):
+        return f'DeepgramTranscript(text="{self.text}", segments={self.segments})'
+
+    def __repr__(self):
+        return str(self)

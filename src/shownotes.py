@@ -9,8 +9,12 @@ import time
 from tqdm import tqdm
 import editdistance
 
-from models import Transcription, Shownotes
-
+from src.models import (
+    Transcription,
+    Shownotes,
+    DeepgramTranscription,
+    DeepgramSegment,
+)
 
 timestamp_regexp = re.compile('\[(?P<ts_hour>\d\d):(?P<ts_min>\d\d):?(?P<ts_sec>\d\d)?\]\s+(?P<title>.*)$')
 
@@ -231,3 +235,22 @@ def get_sentences_with_timestamps_by_letter(
                 Log.warn(f'Last timestamp: {sentence_timestamps[-1]}')
 
     return sentence_timestamps
+
+
+def get_deepgram_sentences(
+        transcript: DeepgramTranscription,
+        verbose: bool = False,
+) -> list[tuple[float, float, str, int]]:
+    result = []
+    for segment in transcript.segments:
+        result.append((
+            segment.start,
+            segment.end,
+            segment.text,
+            segment.speaker)
+        )
+
+    if verbose:
+        Log.info(f'total sentences: {len(result)}')
+
+    return result

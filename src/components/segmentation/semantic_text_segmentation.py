@@ -30,17 +30,20 @@ class SemanticTextSegmentationMultilingual:
             self,
             data,
             utterance,
-            model='sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'
+            model='sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2',
+            w=100,
+            k=5,
     ):
         self.data = data
         self.utterance = utterance
         self.model = SentenceTransformer(model)
         self._pipeline = Pipeline(lang='ru', processors='tokenize')
+        self.tt = TextTilingTokenizer(w=w, k=k, stopwords=get_stop_words('ru'))
 
     def __attrs_post_init__(self):
         columns = self.data.columns.tolist()
 
-    def get_segments(self, threshold=0.9):
+    def get_segments(self, threshold=0.9, verbose: bool = False):
         """
         returns the transcript segments computed with texttiling and sentence-transformer.
 
@@ -55,17 +58,19 @@ class SemanticTextSegmentationMultilingual:
             list of segments
         """
         segments = self._text_tilling()
-        merge_index = self._merge_segments(segments, threshold)
+        merge_index = self._merge_segments(segments, threshold, verbose=verbose)
         new_segments = []
         for i in merge_index:
             seg = ' '.join([segments[_] for _ in i])
             new_segments.append(seg)
         return new_segments
 
-    def _merge_segments(self, segments, threshold):
+    def _merge_segments(self, segments, threshold, verbose: bool = False):
         segment_map = [0]
         for index, (text1, text2) in enumerate(zip(segments[:-1], segments[1:])):
             sim = self._get_similarity(text1, text2)
+            if verbose:
+                print(f'{text1[:50]}\t{text2[:50]}\t{sim}')
             if sim >= threshold:
                 segment_map.append(0)
             else:
@@ -99,8 +104,7 @@ class SemanticTextSegmentationMultilingual:
         return sim
 
     def _text_tilling(self):
-        tt = TextTilingTokenizer(w=200, k=40, stopwords=get_stop_words('ru'))
         text = '\n\n\t'.join(self.data[self.utterance].tolist())
-        segment = tt.tokenize(text)
+        segment = self.tt.tokenize(text)
         segment = [i.replace("\n\n\t", ' ') for i in segment]
         return segment
