@@ -33,7 +33,6 @@ class TextTilingTokenizer(TokenizerI):
             self.stopwords = get_stop_words('ru')
         else:
             self.stopwords = stopwords
-        print(f'{self.stopwords = }')
 
         self.__dict__.update(locals())
         del self.__dict__['self']
