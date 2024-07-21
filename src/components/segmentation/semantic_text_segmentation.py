@@ -1,14 +1,13 @@
 # source based on the SemanticTextSegmentation class from pyconverse library:
 # https://github.com/maxent-ai/converse
 
-import spacy
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from stop_words import get_stop_words
 from stanza import Pipeline
 
 from sentence_transformers import SentenceTransformer
-from text_tiling_tokenizer import TextTilingTokenizer
+from src.components.segmentation.text_tiling_tokenizer import TextTilingTokenizer
 
 
 class SemanticTextSegmentationMultilingual:
