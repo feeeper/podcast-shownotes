@@ -1,14 +1,14 @@
-import pandas as pd
 import json
 
 from src.components.segmentation.semantic_text_segmentation import SemanticTextSegmentationMultilingual
+from src.components.segmentation.sentences import Sentence
 
 from stanza import Pipeline
 
 pipeline = Pipeline('ru', processors=['tokenize'])
 
 
-def test_basic():
+def test_get_segments():
     p = 'transcription-deepgram.json'
     with open(p, 'r') as f:
         data = json.load(f)
@@ -22,10 +22,8 @@ def test_basic():
                 'text': s['text'],
                 'speaker': p['speaker']
             })
-    data = pd.DataFrame(segments)
     segmenter = SemanticTextSegmentationMultilingual(
-        data,
-        'text',
+        [Sentence(**x) for x in segments],
         model='sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
 
     segments = segmenter.get_segments(0.8)

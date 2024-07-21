@@ -8,6 +8,7 @@ from stanza import Pipeline
 
 from sentence_transformers import SentenceTransformer
 from src.components.segmentation.text_tiling_tokenizer import TextTilingTokenizer
+from src.components.segmentation.sentences import Sentence
 
 
 class SemanticTextSegmentationMultilingual:
@@ -27,20 +28,15 @@ class SemanticTextSegmentationMultilingual:
 
     def __init__(
             self,
-            data,
-            utterance,
-            model='sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2',
-            w=100,
-            k=5,
+            sentences: list[Sentence],
+            model: str = 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2',
+            w: int = 100,
+            k: int = 5,
     ):
-        self.data = data
-        self.utterance = utterance
+        self._sentences = sentences
         self.model = SentenceTransformer(model)
         self._pipeline = Pipeline(lang='ru', processors='tokenize')
         self.tt = TextTilingTokenizer(w=w, k=k, stopwords=get_stop_words('ru'))
-
-    def __attrs_post_init__(self):
-        columns = self.data.columns.tolist()
 
     def get_segments(self, threshold=0.9, verbose: bool = False):
         """
@@ -103,7 +99,7 @@ class SemanticTextSegmentationMultilingual:
         return sim
 
     def _text_tilling(self):
-        text = '\n\n\t'.join(self.data[self.utterance].tolist())
+        text = '\n\n\t'.join([x.text for x in self._sentences])
         segment = self.tt.tokenize(text)
         segment = [i.replace("\n\n\t", ' ') for i in segment]
         return segment
