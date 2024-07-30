@@ -86,7 +86,7 @@ env-create-proper:
 	mamba env create -p ./envs -f env.yml
 
 env-patch:
-	cp -r ./envs.patch/* ./envs
+	cp -r ./envs.patch/* ./envs39
 
 env-update:
 	mamba env update -p ./envs -f environment.yml
