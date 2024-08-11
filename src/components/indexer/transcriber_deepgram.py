@@ -8,6 +8,7 @@ from deepgram import (
     FileSource,
     PrerecordedResponse,
 )
+import httpx
 
 from .transcriber_base import TranscriberBase
 
@@ -18,7 +19,7 @@ class TranscriberDeepgram(TranscriberBase):
             storage_dir: Path,
             api_key: str = None,
             debug: bool = False,
-            verbose: int = 0,
+            verbose: int = 2,
     ) -> None:
         self.verbose = verbose
         if debug:
@@ -70,16 +71,30 @@ class TranscriberDeepgram(TranscriberBase):
 
                 if self.verbose:
                     print(f'Sending request to Deepgram')
-                response: PrerecordedResponse = self.client.listen.prerecorded.v("1").transcribe_file(
-                    source=payload,
-                    options=options
-                )
+
+                try:
+                    response: PrerecordedResponse = self.client.listen.prerecorded.v("1").transcribe_file(
+                        source=payload,
+                        options=options,
+                        timeout=httpx.Timeout(300.0, connect=10.0)
+                    )
+                except Exception as e:
+                    print(f'transcribe_file exception: {e}', e)
+                    raise
 
                 if self.verbose:
                     print(f'Saving response to: {item / "transcription-deepgram.json"}')
                 with open(item / 'transcription-deepgram.json', 'w', encoding='utf-8') as transcription_file:  # noqa E501
                     transcription_file.write(response.to_json(ensure_ascii=False))
 
+                Path(item / 'in_progress').unlink()
+
             except Exception as e:
                 print(f'Exception: {e}', e)
                 Path(item / 'in_progress').unlink()
+
+    def interrupt(self):
+        for item in self._storage_dir.iterdir():
+            if item.is_dir() and (item / 'in_progress').exists():
+                (item / 'in_progress').unlink()
+                print(f'Interrupted item: {item}')
