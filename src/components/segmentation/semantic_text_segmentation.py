@@ -38,7 +38,12 @@ class SemanticTextSegmentationMultilingual:
         self._pipeline = Pipeline(lang='ru', processors='tokenize')
         self.tt = TextTilingTokenizer(w=w, k=k, stopwords=get_stop_words('ru'))
 
-    def get_segments(self, threshold=0.9, verbose: bool = False):
+    def get_segments(
+            self,
+            threshold=0.9,
+            verbose: bool = False,
+            as_sentences: bool = False
+    ) -> list[list[str]]:
         """
         returns the transcript segments computed with texttiling and sentence-transformer.
 
@@ -49,18 +54,23 @@ class SemanticTextSegmentationMultilingual:
 
         Return
         ------
-        new_segments: list
-            list of segments
+        new_segments: list[str] | list[list[str]]
+            list of segments or list of list of sentences for each segment
         """
         segments = self._text_tilling()
         merge_index = self._merge_segments(segments, threshold, verbose=verbose)
         new_segments = []
         for i in merge_index:
-            seg = ' '.join([segments[_] for _ in i])
-            new_segments.append(seg)
+            segment = [segments[_] for _ in i] if as_sentences else ' '.join([segments[_] for _ in i])
+            new_segments.append(segment)
         return new_segments
 
-    def _merge_segments(self, segments, threshold, verbose: bool = False):
+    def _merge_segments(
+            self,
+            segments,
+            threshold,
+            verbose: bool = False
+    ):
         segment_map = [0]
         for index, (text1, text2) in enumerate(zip(segments[:-1], segments[1:])):
             sim = self._get_similarity(text1, text2)
@@ -72,7 +82,10 @@ class SemanticTextSegmentationMultilingual:
                 segment_map.append(1)
         return self._index_mapping(segment_map)
 
-    def _index_mapping(self, segment_map):
+    def _index_mapping(
+            self,
+            segment_map: list[int]
+    ) -> list[list[int]]:
         index_list = []
         temp = []
         for index, i in enumerate(segment_map):

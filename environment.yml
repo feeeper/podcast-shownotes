@@ -27,6 +27,7 @@ dependencies:
       - sphinxcontrib-trio
       - yandex-taxi-testsuite
       - pyconverse
+      - tf-keras
   - polars=*
   - pyarrow=*
   - psutil=*
@@ -36,6 +37,7 @@ dependencies:
   - python-lsp-server[all]=
   - pytorch
   - pymorphy3=*
+  - sentence-transformers=*
   - stop-words=*
   - torchvision
   - torchaudio
