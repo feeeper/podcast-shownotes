@@ -17,3 +17,4 @@ envs3918
 .log
 src/components/indexer/data
 volumes
+tests/.jupyter
