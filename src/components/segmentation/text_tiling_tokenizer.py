@@ -15,6 +15,8 @@ from nltk.tokenize.api import TokenizerI
 from nltk.tokenize.texttiling import TokenSequence, TokenTableField, smooth
 nltk.download('stopwords')
 
+from src.components.segmentation.sentences import Sentence
+
 
 class TextTilingTokenizer(TokenizerI):
     def __init__(self,
@@ -27,8 +29,6 @@ class TextTilingTokenizer(TokenizerI):
                  smoothing_rounds=1,
                  cutoff_policy=HC,
                  demo_mode=False):
-
-        print(f'{stopwords is None = }')
         if stopwords is None:
             self.stopwords = get_stop_words('ru')
         else:
@@ -36,6 +36,24 @@ class TextTilingTokenizer(TokenizerI):
 
         self.__dict__.update(locals())
         del self.__dict__['self']
+
+    def tokenize_sentences(self, sentences: list[Sentence]) -> list[list[Sentence]]:
+        text = "\n\n\t".join([s.text for s in sentences])
+        segments = self.tokenize(text)
+        start_from = 0
+
+        result = []
+        for segment in segments:
+            segment_sentences = []
+            for i in range(start_from, len(sentences)):
+                if sentences[i].text in segment:
+                    segment_sentences.append(sentences[i])
+                    start_from += 1
+                else:
+                    break
+            result.append(segment_sentences)
+
+        return result
 
     def tokenize(self, text):
         """Return a tokenized copy of *text*, where each "token" represents

@@ -57,21 +57,34 @@ class SemanticTextSegmentationMultilingual:
         new_segments: list[str] | list[list[str]]
             list of segments or list of list of sentences for each segment
         """
-        segments = self._text_tilling()
-        merge_index = self._merge_segments(segments, threshold, verbose=verbose)
+        sentences_per_segment = self._text_tilling()
+        # segments = [x.text for x in self._sentences]
+        print(f'{len(sentences_per_segment)=}')
+
+        merge_indexes = self._merge_segments(sentences_per_segment, threshold, verbose=verbose)
         new_segments = []
-        for i in merge_index:
-            segment = [segments[_] for _ in i] if as_sentences else ' '.join([segments[_] for _ in i])
-            new_segments.append(segment)
+
+        print(f'{merge_indexes=}')
+        for mi in merge_indexes:
+            segment = []
+            for i in mi:
+                segment.extend(sentences_per_segment[i])
+
+            if as_sentences:
+                new_segments.append(segment)
+            else:
+                new_segments.append(' '.join([x.text for x in segment]))
+
         return new_segments
 
     def _merge_segments(
             self,
-            segments,
+            sentences_per_segment: list[list[Sentence]],
             threshold,
             verbose: bool = False
     ):
         segment_map = [0]
+        segments = [' '.join([x.text for x in i]) for i in sentences_per_segment]
         for index, (text1, text2) in enumerate(zip(segments[:-1], segments[1:])):
             sim = self._get_similarity(text1, text2)
             if verbose:
@@ -98,21 +111,30 @@ class SemanticTextSegmentationMultilingual:
         return index_list
 
     def _get_similarity(self, text1, text2):
-        sentence_1 = [i.text.strip() for i in self._pipeline(text1).sentences if len(i.text.split(' ')) > 1]
-        sentence_2 = [i.text.strip() for i in self._pipeline(text2).sentences if len(i.text.split(' ')) > 2]
-        embeding_1 = self.model.encode(sentence_1)
-        embeding_2 = self.model.encode(sentence_2)
-        embeding_1 = np.mean(embeding_1, axis=0).reshape(1, -1)
-        embeding_2 = np.mean(embeding_2, axis=0).reshape(1, -1)
+        try:
+            sentence_1 = [i.text.strip() for i in self._pipeline(text1).sentences if len(i.text.split(' ')) > 1]
+            sentence_2 = [i.text.strip() for i in self._pipeline(text2).sentences if len(i.text.split(' ')) > 1]
+            embeding_1 = self.model.encode(sentence_1)
+            embeding_2 = self.model.encode(sentence_2)
+            embeding_1 = np.mean(embeding_1, axis=0).reshape(1, -1)
+            embeding_2 = np.mean(embeding_2, axis=0).reshape(1, -1)
 
-        if np.any(np.isnan(embeding_1)) or np.any(np.isnan(embeding_2)):
-            return 1
+            if np.any(np.isnan(embeding_1)) or np.any(np.isnan(embeding_2)):
+                return 1
 
-        sim = cosine_similarity(embeding_1, embeding_2)
-        return sim
+            sim = cosine_similarity(embeding_1, embeding_2)
+            return sim
+        except Exception as e:
+            print(e)
+            print(f'{text1 = }')
+            print(f'{text2 = }\n')
+            print(f'{sentence_1 = }')
+            print(f'{sentence_2 = }')
+            raise
 
-    def _text_tilling(self):
+    def _text_tilling(self) -> list[list[Sentence]]:
         text = '\n\n\t'.join([x.text for x in self._sentences])
-        segment = self.tt.tokenize(text)
-        segment = [i.replace("\n\n\t", ' ') for i in segment]
-        return segment
+        segment2 = self.tt.tokenize_sentences(self._sentences)
+        # segment = self.tt.tokenize(text)
+        # segment = [i.replace("\n\n\t", ' ') for i in segment]
+        return segment2

@@ -30,6 +30,7 @@ def test_get_segments():
 
     segments = segmenter.get_segments(0.8)
     assert len(segments) == 9
+    assert isinstance(segments[0], str)
 
 
 def test_get_segments_as_sentences():
@@ -51,4 +52,7 @@ def test_get_segments_as_sentences():
         model='sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
 
     segments = segmenter.get_segments(0.8, as_sentences=True)
-    assert len(segments) == 9, len(segments[0]) > 0
+
+    assert len(segments) == 9
+    assert len(segments[0]) == 69
+    assert isinstance(segments[0][0], Sentence)
