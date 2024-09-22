@@ -1,5 +1,6 @@
 # source based on the SemanticTextSegmentation class from pyconverse library:
 # https://github.com/maxent-ai/converse
+from logging import getLogger
 
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
@@ -9,6 +10,9 @@ from stanza import Pipeline
 from sentence_transformers import SentenceTransformer
 from src.components.segmentation.text_tiling_tokenizer import TextTilingTokenizer
 from src.components.segmentation.sentences import Sentence
+
+
+logger = getLogger('segmentation_builder')
 
 
 class SemanticTextSegmentationMultilingual:
@@ -43,7 +47,7 @@ class SemanticTextSegmentationMultilingual:
             threshold=0.9,
             verbose: bool = False,
             as_sentences: bool = False
-    ) -> list[list[str]]:
+    ) -> list[list[str | Sentence]]:
         """
         returns the transcript segments computed with texttiling and sentence-transformer.
 
@@ -57,14 +61,10 @@ class SemanticTextSegmentationMultilingual:
         new_segments: list[str] | list[list[str]]
             list of segments or list of list of sentences for each segment
         """
-        sentences_per_segment = self._text_tilling()
-        # segments = [x.text for x in self._sentences]
-        print(f'{len(sentences_per_segment)=}')
-
+        sentences_per_segment = self.tt.tokenize_sentences(self._sentences)
         merge_indexes = self._merge_segments(sentences_per_segment, threshold, verbose=verbose)
         new_segments = []
 
-        print(f'{merge_indexes=}')
         for mi in merge_indexes:
             segment = []
             for i in mi:
@@ -125,16 +125,6 @@ class SemanticTextSegmentationMultilingual:
             sim = cosine_similarity(embeding_1, embeding_2)
             return sim
         except Exception as e:
-            print(e)
-            print(f'{text1 = }')
-            print(f'{text2 = }\n')
-            print(f'{sentence_1 = }')
-            print(f'{sentence_2 = }')
+            logger.error(e)
+            logger.debug(f'{text1 = }\t{text2 = }\t{sentence_1 = }\t{sentence_2 = }')
             raise
-
-    def _text_tilling(self) -> list[list[Sentence]]:
-        text = '\n\n\t'.join([x.text for x in self._sentences])
-        segment2 = self.tt.tokenize_sentences(self._sentences)
-        # segment = self.tt.tokenize(text)
-        # segment = [i.replace("\n\n\t", ' ') for i in segment]
-        return segment2
