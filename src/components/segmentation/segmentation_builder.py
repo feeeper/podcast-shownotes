@@ -1,24 +1,51 @@
 from __future__ import annotations
 
+import dataclasses
 from logging import getLogger
 from pathlib import Path
-from .sentences import get_sentences
-from .semantic_text_segmentation import SemanticTextSegmentationMultilingual
+
+# from src.components.segmentation.segmentation_repository import segments_collection_name
+from src.components.segmentation.sentences import get_sentences
+from src.components.segmentation.semantic_text_segmentation import SemanticTextSegmentationMultilingual
+from src.components.segmentation.sentences import Sentence
 
 
 logger = getLogger('segmentation_builder')
 
 
+@dataclasses.dataclass
+class Segment:
+    text: str  # plain text
+    start_at: float  # timestamp
+    end_at: float  # timestamp
+    episode: int  # episode that contains this segment
+    num: int  # number of the segment in the episode
+
+
+@dataclasses.dataclass
+class SegmentSentence:
+    text: str  # plain text
+    start_at: float  # timestamp
+    end_at: float  # timestamp
+    speaker_id: int | None  # speaker id (could differ for different episodes) if exists
+    segment_num: int  # number of the segment in the episode
+    num: int  # number of the sentence in the segment
+
+
 class SegmentationResult:
+    item: Path
+    segments: list[Segment]
+    sentences_by_segment: list[list[SegmentSentence]]
+
     def __init__(
             self,
             item: Path,
-            segments_text: list[str],
-            segments: list[list[str]]
+            segments: list[Segment],
+            sentences_by_segment: list[list[SegmentSentence]]
     ) -> None:
         self.item = item
-        self.segment_text = segments_text
         self.segments = segments
+        self.sentences_by_segment = sentences_by_segment
 
 
 class SegmentationBuilder:
@@ -64,8 +91,36 @@ class SegmentationBuilder:
         return to_process
 
     @staticmethod
-    def get_segments(item: Path) -> list[list[str]]:
+    def get_segments(item: Path) -> SegmentationResult:
         sentences = get_sentences(item)
         _segmentation = SemanticTextSegmentationMultilingual(sentences)
-        segments_sentences = _segmentation.get_segments(as_sentences=True)
-        return segments_sentences
+        segments_sentences: list[list[Sentence]] = _segmentation.get_segments(threshold=0.8, as_sentences=True)
+        segments = [Segment(
+            text=' '.join([s.text for s in ss]),
+            start_at=ss[0].start,
+            end_at=ss[-1].end,
+            episode=int(item.parent.name),
+            num=n
+        ) for (n, ss) in enumerate(segments_sentences)]
+
+        sentences_by_segment = [[SegmentSentence(
+            text=s.text,
+            start_at=s.start,
+            end_at=s.end,
+            speaker_id=s.speaker,
+            segment_num=n,
+            num=-1
+        ) for s in ss] for (n, ss) in enumerate(segments_sentences)]
+
+        i = 0
+        for n, ss in enumerate(sentences_by_segment):
+            for sn, s in enumerate(ss):
+                s.num = i
+                i += 1
+
+        result = SegmentationResult(
+            item=item,
+            segments=segments,
+            sentences_by_segment=sentences_by_segment)
+
+        return result
