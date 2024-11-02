@@ -1,18 +1,17 @@
 # source based on the SemanticTextSegmentation class from pyconverse library:
 # https://github.com/maxent-ai/converse
 from logging import getLogger
-
 import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
+
 from stop_words import get_stop_words
-from stanza import Pipeline
+from stanza import Pipeline, DownloadMethod
 
 from sentence_transformers import SentenceTransformer
 from src.components.segmentation.text_tiling_tokenizer import TextTilingTokenizer
 from src.components.segmentation.sentences import Sentence
 
 
-logger = getLogger('segmentation_builder')
+logger = getLogger('semantic_text_segmentation')
 
 
 class SemanticTextSegmentationMultilingual:
@@ -39,7 +38,7 @@ class SemanticTextSegmentationMultilingual:
     ):
         self._sentences = sentences
         self.model = SentenceTransformer(model)
-        self._pipeline = Pipeline(lang='ru', processors='tokenize')
+        self._pipeline = Pipeline(lang='ru', processors='tokenize', download_method=DownloadMethod.REUSE_RESOURCES)
         self.tt = TextTilingTokenizer(w=w, k=k, stopwords=get_stop_words('ru'))
 
     def get_segments(
@@ -111,6 +110,7 @@ class SemanticTextSegmentationMultilingual:
         return index_list
 
     def _get_similarity(self, text1, text2):
+        from sklearn.metrics.pairwise import cosine_similarity
         try:
             sentence_1 = [i.text.strip() for i in self._pipeline(text1).sentences if len(i.text.split(' ')) > 1]
             sentence_2 = [i.text.strip() for i in self._pipeline(text2).sentences if len(i.text.split(' ')) > 1]

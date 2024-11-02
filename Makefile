@@ -77,22 +77,14 @@ check: format lint test
 # install conda:
 # https://docs.conda.io/en/latest/miniconda.html#latest-miniconda-installer-links
 # install mamba: conda install mamba -n base -c conda-forge
-env-create: env-create-proper env-patch
-
-env-create-39:
-	mamba env create -p ./envs39 -f env.yml
-
-env-create-proper:
+env-create:
 	mamba env create -p ./envs -f env.yml
 
 env-patch:
-	cp -r ./envs.patch/* ./envs39
+	cp -r ./envs.patch/* ./envs
 
 env-update:
-	mamba env update -p ./envs -f environment.yml
-
-env-update-39:
-	mamba env update -p ./envs39 -f env.yml
+	mamba env update -p ./envs -f env.yml
 
 env-remove:
 	conda env remove -p ./envs
@@ -127,4 +119,4 @@ SHELL := $(shell which bash)
 # https://stackoverflow.com/a/71548453/6656775
 .ONESHELL:
 CONDA_ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate
-CONDA_RUN = $(CONDA_ACTIVATE) ./envs39;
+CONDA_RUN = $(CONDA_ACTIVATE) ./envs;

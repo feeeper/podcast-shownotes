@@ -181,6 +181,7 @@ class TranscriptionArgs(BaseModel, ArgsBase['TranscriptionArgs']):
 
 __all__ = [
     'ArgsBase',
+    'IndexerServerArgs',
     'LoggingArgs',
     'DaemonArgs',
     'TranscriptionArgs',

@@ -1,10 +1,7 @@
 from __future__ import annotations
-
 import dataclasses
 from logging import getLogger
 from pathlib import Path
-
-# from src.components.segmentation.segmentation_repository import segments_collection_name
 from src.components.segmentation.sentences import get_sentences
 from src.components.segmentation.semantic_text_segmentation import SemanticTextSegmentationMultilingual
 from src.components.segmentation.sentences import Sentence
@@ -56,14 +53,14 @@ class SegmentationBuilder:
         def _is_transcription_exists(directory_: Path) -> bool:
             for file in directory_.iterdir():
                 if file.name.startswith('transcription-'):
-                    logger.info(f'Transcription exists: {directory_}')
+                    logger.debug(f'Transcription exists: {directory_}')
                     return True
             return False
 
         def _is_segmentation_completed(directory_: Path) -> bool:
             for file in directory_.iterdir():
                 if file.name.startswith('segmentation_completed'):
-                    logger.info(f'Segmentation exists: {directory_}')
+                    logger.debug(f'Segmentation exists: {directory_}')
                     return True
             return False
 
@@ -90,16 +87,16 @@ class SegmentationBuilder:
 
         return to_process
 
-    @staticmethod
-    def get_segments(item: Path) -> SegmentationResult:
-        sentences = get_sentences(item)
+    def get_segments(self, item: Path) -> SegmentationResult:
+        transcript_file = self._get_transcript_file(item)
+        sentences = get_sentences(transcript_file)
         _segmentation = SemanticTextSegmentationMultilingual(sentences)
         segments_sentences: list[list[Sentence]] = _segmentation.get_segments(threshold=0.8, as_sentences=True)
         segments = [Segment(
             text=' '.join([s.text for s in ss]),
             start_at=ss[0].start,
             end_at=ss[-1].end,
-            episode=int(item.parent.name),
+            episode=int(item.name),
             num=n
         ) for (n, ss) in enumerate(segments_sentences)]
 
@@ -124,3 +121,10 @@ class SegmentationBuilder:
             sentences_by_segment=sentences_by_segment)
 
         return result
+
+    @staticmethod
+    def _get_transcript_file(item: Path) -> Path:
+        for file in item.iterdir():
+            if file.name.startswith('transcription-'):
+                return file
+        raise FileNotFoundError(f'Transcription file not found: {item}')
