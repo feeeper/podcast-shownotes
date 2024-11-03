@@ -67,7 +67,7 @@ def test_get_segments_as_sentences():
 
 def test_get_segmentation_result():
     segmentation_builder = SegmentationBuilder(Path('data'))
-    item_path = Path(__file__).resolve().parent / '472/transcription-deepgram.json'
+    item_path = Path(__file__).resolve().parent / '472'
     result = segmentation_builder.get_segments(item_path)
 
     assert isinstance(result, SegmentationResult)

@@ -7,7 +7,7 @@ from src.components.segmentation.segmentation_builder import SegmentationResult,
 from src.components.segmentation.segmentation_repository import SegmentationRepository
 
 
-@pytest.skip('requires database connection')
+@pytest.mark.skip('requires database connection')
 def test_insert_segmentation():
     segmentation_repository = SegmentationRepository()
     item_path = Path(__file__).resolve().parent / '472'

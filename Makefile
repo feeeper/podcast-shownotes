@@ -77,7 +77,9 @@ check: format lint test
 # install conda:
 # https://docs.conda.io/en/latest/miniconda.html#latest-miniconda-installer-links
 # install mamba: conda install mamba -n base -c conda-forge
-env-create:
+env-create: env-create-proper env-patch
+
+env-create-proper:
 	mamba env create -p ./envs -f env.yml
 
 env-patch:
