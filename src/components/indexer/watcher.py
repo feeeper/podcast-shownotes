@@ -43,11 +43,11 @@ def main():
             args=index_server_args.forward(),
             pidfile=Path(daemon_args.storage.directory) / 'transcriber.pid')
 
-        # segmentation_daemon_wrapper = DaemonWrapper(
-        #     module_name='src.components.segmentation.daemon',
-        #     args=index_server_args.forward(),
-        #     pidfile=Path(daemon_args.storage.directory) / 'segmentation.pid'
-        # )
+        segmentation_daemon_wrapper = DaemonWrapper(
+            module_name='src.components.segmentation.daemon',
+            args=index_server_args.forward(),
+            pidfile=Path(daemon_args.storage.directory) / 'segmentation.pid'
+        )
 
         shutdown_state = ShutdownState()
         try:
@@ -56,7 +56,7 @@ def main():
                     shutdown_state=shutdown_state,
                     daemon=daemon_wrapper,
                     transcribe_daemon=transcribe_daemon_wrapper,
-                    # segmentation_daemon=segmentation_daemon_wrapper,
+                    segmentation_daemon=segmentation_daemon_wrapper,
                 )
             )
         except asyncio.CancelledError:
@@ -70,7 +70,7 @@ async def _run_server(
         shutdown_state: ShutdownState,
         daemon: DaemonWrapper,
         transcribe_daemon: DaemonWrapper,
-        # segmentation_daemon: DaemonWrapper,
+        segmentation_daemon: DaemonWrapper,
 ) -> None:
     routes = web.RouteTableDef()
 
@@ -91,7 +91,7 @@ async def _run_server(
     app.add_routes(routes)
     app.cleanup_ctx.append(_daemon_context(daemon))
     app.cleanup_ctx.append(_daemon_context(transcribe_daemon))
-    # app.cleanup_ctx.append(_daemon_context(segmentation_daemon))
+    app.cleanup_ctx.append(_daemon_context(segmentation_daemon))
 
     runner = web.AppRunner(
         app,

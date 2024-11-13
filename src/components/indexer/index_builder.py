@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 import dataclasses
 from pathlib import Path
@@ -84,20 +85,30 @@ class IndexBuilder:
                 if entry.link.startswith(non_episode_link_prefixes):
                     continue
 
+                matches = re.findall('/episode-(\\d+)', entry.link)
+                if len(matches) > 0:
+                    episode_num = int(matches[0])
+                else:
+                    # print(f'Episode {entry.link} skipped: ca\'t parse number.')
+                    # unknown episode number
+                    continue
+
                 episode = EpisodeMetadata(
                     title=entry.title,
                     episode_link=entry.link,
                     mp3_link=entry.enclosures[0].href,
-                    episode=int(entry.title.split(' ')[-1]),
+                    episode=episode_num,
                     published=datetime(*entry.published_parsed[:6]),
                     summary=entry.summary,
                     authors=[author.name for author in entry.authors],
                     html_content=entry.content[0].value,
-                    path=self._storage_dir / f'{int(entry.title.split(" ")[-1])}'  # noqa E501
+                    path=self._storage_dir / f'{episode_num}'  # noqa E501
                 )
 
                 # already downloaded
                 if episode.path.exists():
+                    if 'episode.mp3' not in [x.name for x in episode.path.iterdir()]:
+                        episodes.append(episode)
                     continue
                 else:
                     episode.path.mkdir(parents=True)

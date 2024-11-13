@@ -4,10 +4,10 @@ import os
 import time
 import signal
 from pathlib import Path
-from src.shared.args import IndexerServerArgs
+from src.shared.args import IndexerServerArgs, DbConnectionArgs
 from src.infrastructure.logging.setup import setup_logging
 from src.components.segmentation.segmentation_builder import SegmentationBuilder
-from src.components.segmentation.segmentation_repository import SegmentationRepository
+from src.components.segmentation.pgvector_repository import DB
 
 DAEMON_NAME = 'Watcher Service: segmentation daemon'
 logger = getLogger('segmentation_daemon')
@@ -24,7 +24,15 @@ def main() -> None:
     daemon_pidfile.write_text(str(os.getpid()))
 
     segmentation_builder = SegmentationBuilder(storage_dir=storage_dir)
-    segmentation_repository = SegmentationRepository()
+    db_connection_args: DbConnectionArgs = daemon_args.database_connection
+    segmentation_repository = DB(
+        host=db_connection_args.host,
+        port=db_connection_args.port,
+        dbname=db_connection_args.dbname,
+        user=db_connection_args.user,
+        password=db_connection_args.password,
+        logging_args=daemon_args.logging,
+    )
 
     logger.info(f'Begin loop: {DAEMON_NAME}')
     try:
@@ -55,8 +63,8 @@ def chunk_segments(
 
 def _loop(
         pidfile: Path,
-        segmentation_builder,  # : SegmentationBuilder,
-        segmentation_repository  #: SegmentationRepository
+        segmentation_builder: SegmentationBuilder,
+        segmentation_repository: DB
 ) -> None:
     def handle_interrupt(signum, frame) -> None:
         logger.info(f'Signal {signum} received')
@@ -67,17 +75,24 @@ def _loop(
     signal.signal(signal.SIGTERM, handle_interrupt)
 
     while True:
-        time.sleep(1)  # 1 hour
+        time.sleep(60)  # 1 hour
         items = segmentation_builder.pick_episodes()
         for item in items:
+            if segmentation_repository.find_episode(int(item.stem)) is not None:
+                Path(item / 'segmentation_completed').touch()
+                Path(item / 'segmentation_in_progress').unlink(missing_ok=True)
+                continue
+
             try:
                 segmentation_result = segmentation_builder.get_segments(item)
                 logger.info(f'Segmentation built for {item}')
                 Path(item / 'segmentation_in_progress').touch()
                 if segmentation_result:
-                    episode_id = segmentation_repository.save(segmentation_result)
-                    logger.info(f'Segmentation saved for {item}')
-                    Path(item / 'segmentation_completed').touch()
+                    episode_id = segmentation_repository.insert(segmentation_result)
+                    if episode_id is not None:
+                        logger.info(f'Segmentation saved for {item}')
+                        Path(item / 'segmentation_completed').touch()
+                        Path(item / 'segmentation_in_progress').unlink(missing_ok=True)
             except Exception as e:
                 logger.error(f'Error processing {item}', exc_info=True)
                 Path(item / 'segmentation_in_progress').unlink()
