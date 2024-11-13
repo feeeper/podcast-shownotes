@@ -79,9 +79,6 @@ check: format lint test
 # install mamba: conda install mamba -n base -c conda-forge
 env-create: env-create-proper env-patch
 
-env-create-39:
-	mamba env create -p ./envs39 -f env.yml
-
 env-create-proper:
 	mamba env create -p ./envs -f env.yml
 
@@ -89,10 +86,7 @@ env-patch:
 	cp -r ./envs.patch/* ./envs
 
 env-update:
-	mamba env update -p ./envs -f environment.yml
-
-env-update-39:
-	mamba env update -p ./envs39 -f env.yml
+	mamba env update -p ./envs -f env.yml
 
 env-remove:
 	conda env remove -p ./envs
@@ -112,7 +106,7 @@ run-indexer-openai-%:
 	$(CONDA_RUN) python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data --debug false --provider openai --api-key $*
 
 run-indexer-deepgram-%:
-	$(CONDA_RUN) python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data --debug false --provider deepgram --api-key $*
+	$(CONDA_RUN) python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data --debug false --provider deepgram --dbname podcast_shownotes --dbpassword password --api-key $*
 
 lab:
 	$(CONDA_RUN) python -m jupyter lab --no-browser
@@ -127,4 +121,4 @@ SHELL := $(shell which bash)
 # https://stackoverflow.com/a/71548453/6656775
 .ONESHELL:
 CONDA_ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate
-CONDA_RUN = $(CONDA_ACTIVATE) ./envs39;
+CONDA_RUN = $(CONDA_ACTIVATE) ./envs;

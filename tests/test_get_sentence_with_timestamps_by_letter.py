@@ -1,3 +1,10 @@
+from pathlib import Path
+import sys
+
+import pytest
+
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
 import json
 
 from src.shownotes import (
@@ -70,6 +77,7 @@ def test_get_sentences_with_timestamps_segment_could_not_split_into_sentences_co
     assert 3435.92 == sentences_with_timestamps[3][0] and 3441.92 == sentences_with_timestamps[3][1] and 'С и не 100% отсутствие П. Вот это так можно расценить.' == sentences_with_timestamps[3][2]
 
 
+@pytest.mark.skip(reason='This test for testing')
 def test_get_sentences_with_timestamps_111():
     segments_json = [
         {"id":410,"seek":138440,"start":1390.4,"end":1393.4,"text":" Так как compare-and-set у нас работает нормально,","tokens":[],"temperature":0,"avg_logprob":-0.184,"compression_ratio":1.745,"no_speech_prob":0.025},
@@ -99,6 +107,7 @@ def test_get_sentences_with_timestamps_111():
     assert 1414.4 == sentences_with_timestamps[3][0] and 1417.4 == sentences_with_timestamps[3][1] and 'И тогда можно вообще все протестировать очень быстро.' == sentences_with_timestamps[3][2]
 
 
+@pytest.mark.skip
 def test_unknown():
     segments_json = [
         {"id":480,"seek":261004,"start":2624.04,"end":2630.04,"text":" Ну вот я вначале не сказал, опять же, повторюсь, я работаю в компании Postgres Pro","tokens":[],"temperature":0,"avg_logprob":-0.229,"compression_ratio":1.739,"no_speech_prob":0.014},

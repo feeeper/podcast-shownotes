@@ -45,6 +45,7 @@ class IndexerServerArgs(BaseModel, ArgsBase['IndexerServerArgs']):
     storage: StorageArgs
     logging: LoggingArgs
     transcription: TranscriptionArgs
+    database_connection: DbConnectionArgs
     port: int
 
     @validator('port')
@@ -57,6 +58,7 @@ class IndexerServerArgs(BaseModel, ArgsBase['IndexerServerArgs']):
         StorageArgs.setup(parser)
         LoggingArgs.setup(parser)
         TranscriptionArgs.setup(parser)
+        DbConnectionArgs.setup(parser)
         parser.add_argument('--port', type=int, default=8080)
 
     @classmethod
@@ -65,6 +67,7 @@ class IndexerServerArgs(BaseModel, ArgsBase['IndexerServerArgs']):
             storage=StorageArgs.read(args),
             logging=LoggingArgs.read(args),
             transcription=TranscriptionArgs.read(args),
+            database_connection=DbConnectionArgs.read(args),
             port=args.port,
         )
 
@@ -73,6 +76,7 @@ class IndexerServerArgs(BaseModel, ArgsBase['IndexerServerArgs']):
             *self.storage.forward(),
             *self.logging.forward(),
             f'--port={self.port}',
+            *self.database_connection.forward(),
             *self.transcription.forward(),
         ]
 
@@ -179,10 +183,46 @@ class TranscriptionArgs(BaseModel, ArgsBase['TranscriptionArgs']):
         ]
 
 
+class DbConnectionArgs(BaseModel, ArgsBase['DbConnectionArgs']):
+    host: str
+    port: int
+    dbname: str
+    user: str
+    password: str
+
+    @classmethod
+    def setup(cls, parser: ArgumentParser) -> None:
+        parser.add_argument('--dbhost', type=str, default='localhost')
+        parser.add_argument('--dbport', type=int, default=5432)
+        parser.add_argument('--dbname', type=str, default='podcast_shownotes')
+        parser.add_argument('--dbuser', type=str, default='postgres')
+        parser.add_argument('--dbpassword', type=str, default='postgres')
+
+    @classmethod
+    def read(cls, args: argparse.Namespace) -> DbConnectionArgs:
+        return DbConnectionArgs(
+            host=args.dbhost,
+            port=args.dbport,
+            dbname=args.dbname,
+            user=args.dbuser,
+            password=args.dbpassword,
+        )
+
+    def forward(self: TArgs) -> list[str]:
+        return [
+            f'--dbhost={self.host}',
+            f'--dbport={self.port}',
+            f'--dbname={self.dbname}',
+            f'--dbuser={self.user}',
+            f'--dbpassword={self.password}',
+        ]
+
 __all__ = [
     'ArgsBase',
+    'IndexerServerArgs',
     'LoggingArgs',
     'DaemonArgs',
     'TranscriptionArgs',
+    'DbConnectionArgs',
     'Provider',
 ]

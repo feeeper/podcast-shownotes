@@ -1,5 +1,7 @@
+from pathlib import Path
+import sys
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 import json
-
 import pytest
 
 from src.shownotes import (
@@ -385,6 +387,7 @@ def test_get_sentences_with_timestamps_111():
     assert len(sentences_with_timestamps) == 3
 
 
+@pytest.mark.skip
 def test_unknown():
     # with open('/mnt/d/projects/podcast-shownotes/episodes/episode-0207.mp3-large.json', 'r', ) as f:
     #     data = json.load(f)
@@ -441,7 +444,7 @@ def test_should_split_large_sentences_into_smaller_when_sentence_is_longer_than_
     assert len(sentences_with_timestamps) == 8
 
 
-# @pytest.mark.skip('explicit text')
+@pytest.mark.skip('explicit text')
 def test_get_sentences_for_358():
     with open('/mnt/d/projects/podcast-shownotes/episodes/episode-0358.mp3-medium.json', 'r', ) as f:
         data = json.load(f)

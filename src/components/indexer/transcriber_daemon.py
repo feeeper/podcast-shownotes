@@ -14,7 +14,7 @@ from .transcriber_deepgram import TranscriberDeepgram
 from .transcriber_base import TranscriberBase
 
 DAEMON_NAME = 'Watcher Service: transcriber daemon'
-logger = getLogger('transcriber _daemon')
+logger = getLogger('transcriber_daemon')
 
 
 def main() -> None:
@@ -59,6 +59,7 @@ def _loop(
     def handle_interrupt(signum, frame) -> None:
         logger.info(f'Signal {signum} received')
         pidfile.unlink()
+        transcriber.interrupt()
         exit(0)
 
     signal.signal(signal.SIGINT, handle_interrupt)
@@ -67,7 +68,7 @@ def _loop(
     while True:
         items = transcriber.pick_episodes()
         if not items:
-            time.sleep(1)
+            time.sleep(60)  # 1 hour
             continue
         for item in items:
             transcriber.transcribe(item)

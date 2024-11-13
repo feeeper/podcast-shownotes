@@ -26,12 +26,15 @@ class TranscriberBase:
         def _transcription_exists(directory_: Path) -> bool:
             for file in directory_.iterdir():
                 if file.name.startswith('transcription-'):
+                    if self.debug:
+                        print(f'Transcription exists: {directory_}')
                     return True
             return False
 
         def _in_progress(directory_: Path) -> bool:
             for file in directory_.iterdir():
                 if file.name == 'in_progress':
+                    print(f'In progress: {directory_}')
                     return True
             return False
 
@@ -41,6 +44,8 @@ class TranscriberBase:
                 continue
 
             if not (directory / 'episode.mp3').exists():
+                if self.debug:
+                    print(f'Episode not found: {directory}/episode.mp3')
                 continue
 
             if _transcription_exists(directory) or _in_progress(directory):
@@ -49,3 +54,6 @@ class TranscriberBase:
             to_process.append(directory)
 
         return to_process
+
+    def interrupt(self):
+        pass

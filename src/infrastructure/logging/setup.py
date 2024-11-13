@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-import pathlib
+from pathlib import Path
 
 import logging
 from logging.handlers import TimedRotatingFileHandler
@@ -9,6 +9,9 @@ from shared.args import LoggingArgs
 
 
 def setup_logging(args: LoggingArgs) -> None:
+    if isinstance(args.log_dir, Path) and not args.log_dir.exists():
+        args.log_dir.mkdir(parents=True)
+
     rotation_logging_handler = TimedRotatingFileHandler(
         args.log_dir / 'watcher_error.log' if args.log_dir else '.log/watcher_error.log',
         when='m',
@@ -28,6 +31,23 @@ def setup_logging(args: LoggingArgs) -> None:
 
     logger = logging.getLogger('watcher')
 
+    logger.addHandler(rotation_logging_handler)
+
+
+def setup_logger(logger: logging.Logger, log_dir: Path) -> None:
+    rotation_logging_handler = TimedRotatingFileHandler(
+        log_dir / f'{logger.name}.log' if log_dir else f'.log/{logger.name}.log',
+        when='m',
+        interval=1,
+        backupCount=5)
+    rotation_logging_handler.suffix = '%Y%m%d'
+    rotation_logging_handler.namer = _get_filename
+    rotation_logging_handler.setLevel(logging.ERROR)
+    rotation_logging_handler.setFormatter(
+        logging.Formatter(
+            '{asctime} {levelname} {name} {message}', style='{'
+        )
+    )
     logger.addHandler(rotation_logging_handler)
 
 
