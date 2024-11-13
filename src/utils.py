@@ -7,7 +7,9 @@ from src.components.segmentation.embedding_builder import EmbeddingBuilder
 from src.components.segmentation.segmentation_builder import SegmentationBuilder
 from logging import getLogger
 from datetime import datetime
-
+import psycopg2.extras
+import numpy as np
+from dataclasses import dataclass
 
 import logging
 
@@ -24,6 +26,14 @@ logger = getLogger('utils')
 logger.setLevel(logging.DEBUG)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
+
+
+@dataclass
+class SearchResult:
+    episode: int
+    sentence: str
+    segment: str
+    distance: float
 
 
 def insert_not_presented_episodes(
@@ -108,7 +118,6 @@ def insert_episodes(
         password: str = 'postgres',
         dbname: str = 'podcast_shownotes'
 ) -> None:
-    import psycopg2
     import psycopg2.extras
 
     embedding_builder = EmbeddingBuilder()
@@ -137,7 +146,6 @@ def insert_episode(
         cur: t.Any = None,
         embedding_builder: t.Any = None,
     ) -> None:
-    import psycopg2
     import psycopg2.extras
     import json
     from datetime import datetime
@@ -213,7 +221,7 @@ def insert_episode(
             sentences_batch = segment_sentences[j:j + batch_size]
             texts = [x.text for x in sentences_batch]
             start = datetime.now()
-            sentence_embeddings_ =  [x.tolist() for x in embedding_builder.get_embeddings(texts)]
+            sentence_embeddings_ = [x.tolist() for x in embedding_builder.get_embeddings(texts)]
             sentence_embeddings_time = (datetime.now() - start).total_seconds()
             
             data = [
@@ -438,3 +446,47 @@ def sync_cache(from_: Path, to_: Path) -> None:
             ep_to = sync_to_dir / f'transcription-{size}.json'
             shutil.copy(ep_from, ep_to)
             break
+
+
+def find(query: str, conn: t.Any, limit: int = 5) -> list[t.Any]:
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    embedding_builder = EmbeddingBuilder()
+    embedding = embedding_builder.get_embeddings(query)
+    cursor.execute(
+        f"SELECT * FROM sentences s ORDER BY s.sentence_embedding <=> %s LIMIT {limit}", (np.array(embedding.tolist()),)
+    )
+    results = cursor.fetchall()
+    return results
+
+
+def find_segment(query: str, conn: t.Any, limit: int = 5) -> list[t.Any]:
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    embedding_builder = EmbeddingBuilder()
+    embedding = embedding_builder.get_embeddings(query)
+    cursor.execute(
+        f"SELECT * FROM segments s ORDER BY s.segment_embedding <=> %s LIMIT {limit}", (np.array(embedding.tolist()),)
+    )
+    results = cursor.fetchall()
+    return results
+
+
+def find2(query: str, conn: t.Any, limit: int = 5) -> list[t.Any]:
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    embedding_builder = EmbeddingBuilder()
+    embedding = embedding_builder.get_embeddings(query)
+    cursor.execute(
+        f'''SELECT 
+        	e.episode_number as episode,
+        	s.text as sentence,
+        	seg.text as segment,
+        	s.sentence_embedding <=> %s as distance
+        FROM sentences s
+        left join segments seg on s.segment_id = seg.id
+        left join episodes e on e.id = seg.episode_id 
+        ORDER by
+        	s.sentence_embedding <=> %s
+        LIMIT {limit}''',
+        (np.array(embedding.tolist()), np.array(embedding.tolist()), )
+    )
+    results = cursor.fetchall()
+    return [SearchResult(**x) for x in results]
