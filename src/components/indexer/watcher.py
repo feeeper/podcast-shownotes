@@ -120,7 +120,13 @@ async def _run_server(
     @routes.post('/search')
     async def handle_search(request: web.Request) -> web.Response:
         jdata = await request.json()
-        text = jdata['query']
+        text = jdata.get('query', None)
+        if text is None:
+            return web.Response(status=400, reason='Empty query')
+
+        limit = jdata.get('limit', 10)
+        offset = jdata.get('offset', 0)
+
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
         embedding = embedding_builder.get_embeddings(text)
         cursor.execute(
@@ -136,7 +142,8 @@ async def _run_server(
                 left join episodes e on e.id = seg.episode_id 
                 ORDER by
                 	s.sentence_embedding <=> %s
-                LIMIT 5''',
+                OFFSET {offset}
+                LIMIT {limit}''',
             (np.array(embedding.tolist()), np.array(embedding.tolist()),)
         )
         records = cursor.fetchall()
