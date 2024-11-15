@@ -161,7 +161,7 @@ async def _run_server(
         access_log_format='%a %t "%r" %s %b "%{Referer}i" "%{User-Agent}i"'
     )
     await runner.setup()
-    site = web.TCPSite(runner, 'localhost', 8080)
+    site = web.TCPSite(runner, '0.0.0.0', 8080)
     await site.start()
     logger.info(f'Listening {site.name}')
 

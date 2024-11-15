@@ -59,7 +59,6 @@ def _loop(
 
     while True:
         items = index_builder.pick_episodes()
-        print(f'{len(items)=}')
         if not items:
             time.sleep(60)  # 1 hour
             continue
