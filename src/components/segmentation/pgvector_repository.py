@@ -80,7 +80,7 @@ class DB:
                 else:
                     self.cursor.execute('INSERT INTO speakers (name, link) VALUES (%s, %s) RETURNING id',
                                    (speaker['name'], speaker['href']))
-                    logger.info(f'Inserted speaker {speaker["name"]}')
+                    self.logger.info(f'Inserted speaker {speaker["name"]}')
                     speaker_id = self.cursor.fetchone()[0]
 
                 self.cursor.execute('INSERT INTO speaker_episode (speaker_id, episode_id) VALUES (%s, %s)',
@@ -171,8 +171,6 @@ class DB:
         return episode_id
 
     def find_episode(self, episode_num: int) -> UUID:
-        self.logger.info(f'Find episode {episode_num =}')
-        self.logger.error(f'TEST')
         self.cursor.execute('SELECT id FROM episodes WHERE episode_number = %s', (episode_num, ))
         episode_id = self.cursor.fetchone()
         return None if episode_id is None else episode_id[0]

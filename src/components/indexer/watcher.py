@@ -119,8 +119,13 @@ async def _run_server(
 
     @routes.post('/search')
     async def handle_search(request: web.Request) -> web.Response:
-        jdata = await request.json()
-        text = jdata.get('query', None)
+        try:
+            jdata = await request.json()
+            text = jdata.get('query', None)
+        except Exception as e:
+            logger.error(e)
+            return web.Response(status=400, reason='Bad Request')
+
         if text is None:
             return web.Response(status=400, reason='Empty query')
 
