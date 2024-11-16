@@ -5,33 +5,31 @@ from pathlib import Path
 
 import logging
 from logging.handlers import TimedRotatingFileHandler
+
+import json_logging
+from .file_handler import FileHandler
+from .json_formatter import JsonFormatter
 from shared.args import LoggingArgs
 
 
+
 def setup_logging(args: LoggingArgs) -> None:
-    if isinstance(args.log_dir, Path) and not args.log_dir.exists():
-        args.log_dir.mkdir(parents=True)
+    assert not logging.root.hasHandlers()
 
-    rotation_logging_handler = TimedRotatingFileHandler(
-        args.log_dir / 'watcher_error.log' if args.log_dir else '.log/watcher_error.log',
-        when='m',
-        interval=1,
-        backupCount=5)
-    rotation_logging_handler.suffix = '%Y%m%d'
-    rotation_logging_handler.namer = _get_filename
-    rotation_logging_handler.setLevel(logging.ERROR)
-    rotation_logging_handler.setFormatter(
-        logging.Formatter(
-            '{asctime} {levelname} {name} {message}', style='{'
-        )
-    )
-
-    logging.basicConfig(filename=args.log_dir / 'watcher.log', level=args.log_min_level)
+    logging.root.setLevel(args.log_min_level)
     logging.root.addHandler(logging.StreamHandler())
 
-    logger = logging.getLogger('watcher')
+    if args.log_dir is not None:
+        file_handler = FileHandler(
+            args.log_dir,
+            '{date}.log',
+            log_rotation_num_days=1,
+        )
+        logging.root.addHandler(file_handler)
 
-    logger.addHandler(rotation_logging_handler)
+    json_logging.init_non_web(
+        enable_json=True, custom_formatter=JsonFormatter
+    )
 
 
 def setup_logger(logger: logging.Logger, log_dir: Path) -> None:

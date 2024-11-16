@@ -15,7 +15,7 @@ from nltk.tokenize.api import TokenizerI
 from nltk.tokenize.texttiling import TokenSequence, TokenTableField, smooth
 nltk.download('stopwords')
 
-from src.components.segmentation.sentences import Sentence
+from .sentences import Sentence
 
 
 class TextTilingTokenizer(TokenizerI):

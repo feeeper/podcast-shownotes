@@ -7,8 +7,8 @@ from stop_words import get_stop_words
 from stanza import Pipeline, DownloadMethod
 
 from sentence_transformers import SentenceTransformer
-from src.components.segmentation.text_tiling_tokenizer import TextTilingTokenizer
-from src.components.segmentation.sentences import Sentence
+from .text_tiling_tokenizer import TextTilingTokenizer
+from .sentences import Sentence
 
 
 logger = getLogger('semantic_text_segmentation')

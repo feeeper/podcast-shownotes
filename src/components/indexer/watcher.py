@@ -2,7 +2,6 @@ import datetime
 import logging
 import typing
 from dataclasses import dataclass, field
-import dataclasses
 from pathlib import Path
 
 from aiohttp import web
@@ -16,25 +15,13 @@ from shared.args import (
 from infrastructure.logging.setup import setup_logging
 from shared.daemon_wrapper import DaemonWrapper
 from components.segmentation.embedding_builder import EmbeddingBuilder
-import psycopg2
-import psycopg2.extras
-from pgvector.psycopg2 import register_vector
-import numpy as np
+
+from components.segmentation.pgvector_repository import DB
 
 
 @dataclass
 class ShutdownState:
     is_shutdown_requested: bool = field(init=False, default=False)
-
-
-@dataclass
-class SearchResult:
-    episode: int
-    sentence: str
-    segment: str
-    distance: float
-    starts_at: float
-    ends_at: float
 
 
 logger = logging.getLogger('watcher')
@@ -68,14 +55,13 @@ def main():
         )
 
         db_connection_args: DbConnectionArgs = index_server_args.database_connection
-        conn = psycopg2.connect(
+        repository = DB(
             host=db_connection_args.host,
             port=db_connection_args.port,
             dbname=db_connection_args.dbname,
             user=db_connection_args.user,
-            password=db_connection_args.password
+            password=db_connection_args.password,
         )
-        register_vector(conn)
 
         shutdown_state = ShutdownState()
         try:
@@ -85,7 +71,7 @@ def main():
                     daemon=daemon_wrapper,
                     transcribe_daemon=transcribe_daemon_wrapper,
                     segmentation_daemon=segmentation_daemon_wrapper,
-                    connection=conn,
+                    repository=repository,
                 )
             )
         except asyncio.CancelledError:
@@ -100,7 +86,7 @@ async def _run_server(
         daemon: DaemonWrapper,
         transcribe_daemon: DaemonWrapper,
         segmentation_daemon: DaemonWrapper,
-        connection
+        repository: DB
 ) -> None:
     routes = web.RouteTableDef()
 
@@ -131,29 +117,25 @@ async def _run_server(
 
         limit = jdata.get('limit', 10)
         offset = jdata.get('offset', 0)
+        results = repository.find_similar(text, limit=limit, offset=offset)
+        return web.json_response(data=[x.dict() for x in results.results])
 
-        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        embedding = embedding_builder.get_embeddings(text)
-        cursor.execute(
-            f'''SELECT 
-                	e.episode_number as episode,
-                	s.text as sentence,
-                	s.start_at as starts_at,
-                	s.end_at as ends_at,
-                	seg.text as segment,
-                	s.sentence_embedding <=> %s as distance
-                FROM sentences s
-                left join segments seg on s.segment_id = seg.id
-                left join episodes e on e.id = seg.episode_id 
-                ORDER by
-                	s.sentence_embedding <=> %s
-                OFFSET {offset}
-                LIMIT {limit}''',
-            (np.array(embedding.tolist()), np.array(embedding.tolist()),)
-        )
-        records = cursor.fetchall()
-        results = [SearchResult(**x) for x in records]
-        return web.json_response(data=[dataclasses.asdict(r) for r in results])
+    @routes.get('/episodes/{episode_num}')
+    async def handle_episodes(request: web.Request) -> web.Response:
+        try:
+            episode_num = request.match_info.get('episode_num', None)
+            if episode_num is None:
+                return web.Response(status=400, reason='Bad Request')
+        except Exception as e:
+            logger.error(e)
+            return web.Response(status=400, reason='Bad Request')
+
+        episode = repository.find_episode(episode_num)
+        if episode is None:
+            logger.warn(f'Episode {episode_num} not found')
+            return web.json_response(status=404, reason=f'Episode {episode_num} not found')
+
+        return web.json_response(data=episode, dumps=lambda e: e.json())
 
     app = web.Application(logger=logger)
     app.add_routes(routes)

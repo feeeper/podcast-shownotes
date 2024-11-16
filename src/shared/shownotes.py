@@ -9,7 +9,7 @@ import time
 from tqdm import tqdm
 import editdistance
 
-from src.models import (
+from .models import (
     Transcription,
     Shownotes,
     DeepgramTranscription,

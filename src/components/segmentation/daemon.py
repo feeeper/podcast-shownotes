@@ -30,8 +30,7 @@ def main() -> None:
         port=db_connection_args.port,
         dbname=db_connection_args.dbname,
         user=db_connection_args.user,
-        password=db_connection_args.password,
-        logging_args=daemon_args.logging,
+        password=db_connection_args.password
     )
 
     logger.info(f'Begin loop: {DAEMON_NAME}')

@@ -2,9 +2,9 @@ from __future__ import annotations
 import dataclasses
 from logging import getLogger
 from pathlib import Path
-from src.components.segmentation.sentences import get_sentences
-from src.components.segmentation.semantic_text_segmentation import SemanticTextSegmentationMultilingual
-from src.components.segmentation.sentences import Sentence
+from .sentences import get_sentences
+from .semantic_text_segmentation import SemanticTextSegmentationMultilingual
+from .sentences import Sentence
 
 
 logger = getLogger('segmentation_builder')

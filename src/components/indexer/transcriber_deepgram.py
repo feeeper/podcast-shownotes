@@ -9,8 +9,11 @@ from deepgram import (
     PrerecordedResponse,
 )
 import httpx
-
+from logging import getLogger
 from .transcriber_base import TranscriberBase
+
+
+logger = getLogger(__name__)
 
 
 class TranscriberDeepgram(TranscriberBase):
@@ -26,24 +29,23 @@ class TranscriberDeepgram(TranscriberBase):
             self.verbose = 2
 
         if self.verbose:
-            print('TranscriberDeepgram: __init__')
+            logger.debug('__init__ called')
 
         super().__init__(storage_dir, api_key, debug)
 
     def get_client(self, api_key: str) -> Any:
         if self.verbose:
-            print('TranscriberDeepgram: get_client')
+            logger.debug('get_client called')
         client = DeepgramClient(api_key)
         return client
 
     def transcribe(self, item: Path) -> None:
         if self.debug:
-            print(f'Transcribing: {item}')
+            logger.debug(f'Transcribing: {item}')
             time.sleep(3)
         else:
             try:
-                if self.verbose:
-                    print(f'Transcribing: {item}')
+                logger.info(f'Transcribing: {item}')
                 options = PrerecordedOptions(
                     model="nova-2",
                     language="ru",
@@ -51,27 +53,21 @@ class TranscriberDeepgram(TranscriberBase):
                     diarize=True,
                 )
 
-                if self.verbose:
-                    print(f'Processing: {item / "episode.mp3"}')
+                logger.info(f'Processing: {item / "episode.mp3"}')
                 with open(item / 'episode.mp3', 'rb') as file:
-                    if self.verbose:
-                        print(f'Reading: {item / "episode.mp3"}')
+                    logger.debug(f'Reading: {item / "episode.mp3"}')
                     buffer_data = file.read()
-                    if self.verbose:
-                        print(f'Size: {len(buffer_data)} bytes')
+                    logger.debug(f'Size: {len(buffer_data)} bytes')
 
                 payload: FileSource = {
                     'buffer': buffer_data,
                 }
 
                 # mark as processing episode
-                if self.verbose:
-                    print(f'Marking as in_progress: {item}')
+                logger.info(f'Marking as in_progress: {item}')
                 Path(item / 'in_progress').touch()
 
-                if self.verbose:
-                    print(f'Sending request to Deepgram')
-
+                logger.info(f'Sending request to Deepgram {item}')
                 try:
                     response: PrerecordedResponse = self.client.listen.prerecorded.v("1").transcribe_file(
                         source=payload,
@@ -80,17 +76,17 @@ class TranscriberDeepgram(TranscriberBase):
                     )
                 except Exception as e:
                     print(f'transcribe_file exception: {e}', e)
+                    logger.error(f'{e} (episode={item})')
                     raise
 
-                if self.verbose:
-                    print(f'Saving response to: {item / "transcription-deepgram.json"}')
+                logger.info(f'Saving response to: {item / "transcription-deepgram.json"}')
                 with open(item / 'transcription-deepgram.json', 'w', encoding='utf-8') as transcription_file:  # noqa E501
                     transcription_file.write(response.to_json(ensure_ascii=False))
 
                 Path(item / 'in_progress').unlink()
 
             except Exception as e:
-                print(f'Exception: {e}', e)
+                logger.error(f'{e} (episode={item})')
                 Path(item / 'in_progress').unlink()
 
     def interrupt(self):
