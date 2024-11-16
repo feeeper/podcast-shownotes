@@ -68,7 +68,7 @@ def _loop(
     while True:
         items = transcriber.pick_episodes()
         if not items:
-            time.sleep(60)  # 1 hour
+            time.sleep(60 * 60)  # 1 hour
             continue
         for item in items:
             transcriber.transcribe(item)

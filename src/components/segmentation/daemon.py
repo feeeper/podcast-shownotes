@@ -75,7 +75,7 @@ def _loop(
     signal.signal(signal.SIGTERM, handle_interrupt)
 
     while True:
-        time.sleep(60)  # 1 hour
+        time.sleep(60 * 60)  # 1 hour
         items = segmentation_builder.pick_episodes()
         for item in items:
             if segmentation_repository.find_episode(int(item.stem)) is not None:
