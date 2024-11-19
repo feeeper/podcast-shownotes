@@ -74,8 +74,8 @@ def _loop(
     signal.signal(signal.SIGTERM, handle_interrupt)
 
     while True:
-        time.sleep(60 * 60)  # 1 hour
         items = segmentation_builder.pick_episodes()
+        logger.info(f'Episodes to processes: {items}')
         for item in items:
             if segmentation_repository.find_episode(int(item.stem)) is not None:
                 Path(item / 'segmentation_completed').touch()
@@ -98,6 +98,7 @@ def _loop(
                 if 'episode_id' in locals():
                     segmentation_repository.delete(episode_id)
                     Path(item / 'segmentation_completed').unlink()
+        time.sleep(60 * 60)  # 1 hour
 
 
 if __name__ == '__main__':
