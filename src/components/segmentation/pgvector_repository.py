@@ -181,7 +181,7 @@ class DB:
         where episode_number = %s
         ''', (episode_num,))
         episode_data = self.cursor.fetchall()
-        if episode_data is None:
+        if episode_data is None or len(episode_data) == 0:
             return None
 
         data = {
