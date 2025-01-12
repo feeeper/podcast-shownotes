@@ -15,6 +15,7 @@ __pycache__/
 envs39
 envs3918
 .log
+.env
 src/components/indexer/data
 volumes
 tests/.jupyter
