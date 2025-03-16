@@ -1,11 +1,13 @@
 # ---
 # jupyter:
 #   jupytext:
+#     cell_metadata_filter: -all
+#     notebook_metadata_filter: jupytext,text_representation
 #     text_representation:
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.16.1
+#       jupytext_version: 1.16.7
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -89,8 +91,13 @@ memory = Memory('../.cache')
 # I'll use the same dataset I've used earlier: an automatic transcript of some DevZen podcast episodes. The same dataset I used in the previous article in this series.
 
 # %%
-csv_path = '../data/400-415-with-target.csv'
+csv_path = '../data/400-415-episodes-ground-truth.csv'
 df = pl.read_csv(csv_path)
+df = df.rename({'ground_truth': 'target'})
+df = df.with_columns(
+    ((df["target"] != df["target"].shift(1)).cast(pl.Int8())).alias("target")
+).fill_null(1)
+
 df.head()
 
 
@@ -222,7 +229,7 @@ def window_diff(gt: str, pred: str, boundary='|') -> float:
 # I have to admit that dataset is dramatically disbalanced:
 
 # %%
-df['target'].value_counts().with_columns(pl.col('count').apply(lambda x: f'{x/df.shape[0] * 100:.2f}%'))
+df['target'].value_counts().with_columns(pl.col('count').map_elements(lambda x: f'{x/df.shape[0] * 100:.2f}%'))
 
 
 # %% [markdown]
@@ -269,7 +276,7 @@ def score_clf(
     windows_diffs = []
 
     metrics = []
-    for g in sorted(test[['episode', 'target', 'prediction']].groupby('episode')):
+    for g in sorted(test[['episode', 'target', 'prediction']].group_by('episode')):
         ground_truth_seg = ''.join([str(x) for x in g[1]['target']])
         if hasattr(clf, 'predict_proba'):
             best_ts = None
@@ -278,6 +285,11 @@ def score_clf(
             # score classifier for different thresholds
             for threshold in [x/10 for x in range(1, 10)]:
                 predicred_seg = ''.join([str(int(x > threshold)) for x in g[1]['prediction']])
+                if verbose:
+                    print(f'{len(ground_truth_seg)}\t{len(predicred_seg)}')
+                    print(f'{ground_truth_seg=}')
+                    print(f'{predicred_seg=}')
+
                 wd = window_diff(ground_truth_seg, predicred_seg, boundary='1')
                 min_wd = min(min_wd, wd)
                 best_ts = threshold if min_wd == wd else best_ts
@@ -371,11 +383,15 @@ clfs = [
 ]
 
 labse_metrics = []
-for clf in clfs:
+for i, clf in enumerate(clfs, 1):
     try:
-        labse_metrics.extend(score_clf(clf,ru_labse_ds))        
+        labse_metrics.extend(score_clf(clf,ru_labse_ds, verbose=0))
+        print(f'{i}/{len(clfs)}', end='\r')
     except Exception as e:
-        print(e)
+        print(i, clf, e)
+
+# %%
+pl.DataFrame(labse_metrics).sort('window_diff')
 
 # %%
 metrics_df = pl.DataFrame(labse_metrics)
