@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 from logging import getLogger
 import numpy as np
@@ -25,11 +27,11 @@ class LlmTextSegmentation:
         )
 
     def _find_nearest(
-            self,
-            actual: list[int],
-            expected: int,
-            previous: int
-        ) -> int:
+        self,
+        actual: list[int],
+        expected: int,
+        previous: int
+    ) -> int:
         if expected in actual:
             return expected
         
@@ -43,7 +45,11 @@ class LlmTextSegmentation:
             return None
         return min(candidates, key=lambda num: abs(num - expected))
     
-    def _adjust_delimiters(predicted_delimiters: list[int], min_length: int = 5) -> list[int]:
+    def _adjust_delimiters(
+        self,
+        predicted_delimiters: list[int],
+        min_length: int = 5
+    ) -> list[int]:
         if not predicted_delimiters:
             return []
 
@@ -78,7 +84,7 @@ class LlmTextSegmentation:
                     continue
 
                 if len(actual_index) > 1:
-                    actual_index = self.find_nearest(actual_index, expected_index, previous_index)
+                    actual_index = self._find_nearest(actual_index, expected_index, previous_index)
                 else:
                     try:
                         actual_index = actual_index[0]
@@ -202,7 +208,7 @@ Output:
             logger.exception(e, exc_info=True, stack_info=True, extra={'response': response})
             raise
 
-    def get_segments(self, sentences: list[str], delimiters: list[int]) -> list[list[str]]:
+    def _get_segments(self, sentences: list[Sentence], delimiters: list[int]) -> list[list[Sentence]]:
         if len(delimiters) > 1:
             borders = [{'start': delimiters[i], 'end': delimiters[i+1]} for i in range(0, len(delimiters)-1)]
             borders.append({'start': borders[-1]['end'], 'end': len(sentences)})
@@ -210,3 +216,17 @@ Output:
             borders = [{'start': 0, 'end': len(sentences)}]
         result = [sentences[x['start']:x['end']] for x in borders]
         return result
+    
+    def get_segments(self,
+        threshold: float = 0.9,
+        verbose: bool = False,
+        as_sentences: bool = False
+    ) -> list[list[str | Sentence]]:
+        sentences = [x.text for x in self._sentences]
+        llm_response = self._call_llm(sentences)
+        delimiters = self._get_delimiters(llm_response, sentences)
+        segments = self._get_segments(self._sentences, delimiters)
+        if as_sentences:
+            return segments
+        
+        return [list(map(lambda x: x.text, segment)) for segment in segments]
