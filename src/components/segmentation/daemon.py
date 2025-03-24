@@ -23,7 +23,13 @@ def main() -> None:
     daemon_pidfile = Path(storage_dir) / 'segmentation.pid'
     daemon_pidfile.write_text(str(os.getpid()))
 
-    segmentation_builder = SegmentationBuilder(storage_dir=storage_dir)
+    segmentation_args = daemon_args.segmentation
+    segmentation_builder = SegmentationBuilder(
+        storage_dir=storage_dir,
+        api_key=segmentation_args.api_key,
+        base_url=segmentation_args.base_url,
+    )
+
     db_connection_args: DbConnectionArgs = daemon_args.database_connection
     segmentation_repository = DB(
         host=db_connection_args.host,

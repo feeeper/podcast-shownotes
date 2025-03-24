@@ -1,22 +1,21 @@
-from dataclasses import dataclass
-from logging import getLogger
-import psycopg2
-import psycopg2.extras
-from pgvector.psycopg2 import register_vector
+from __future__ import annotations
 import json
 from datetime import datetime
+from logging import getLogger
 from uuid import UUID
-import numpy as np
 
+import numpy as np
+import psycopg2
+import psycopg2.extras
 from components.segmentation.embedding_builder import EmbeddingBuilder
 from components.segmentation.segmentation_builder import SegmentationResult, SegmentationBuilder
+from pgvector.psycopg2 import register_vector
 
 from .models import (
     SearchResult,
     SearchResults,
     Episode,
 )
-
 
 logger = getLogger('pgvector_repository')
 
@@ -29,7 +28,6 @@ class DB:
             user: str = 'postgres',
             password: str = 'postgres'
     ) -> None:
-        logger.debug('1')
         self.conn = psycopg2.connect(
             host=host,
             port=port,
@@ -81,10 +79,6 @@ class DB:
                                (speaker_id, episode_id))
                 logger.info(f'Linked speaker {speaker["name"]} to episode "{episode["title"]}"')
 
-            start = datetime.now()
-            sb = SegmentationBuilder(storage_dir=path.parent)
-            segmentation_result = sb.get_segments(path)
-            logger.info(f'Segmentation took {(datetime.now() - start).total_seconds()}s')
             total_segments_count = len(segmentation_result.segments)
             total_sentences_count = sum([len(x) for x in segmentation_result.sentences_by_segment])
             total_inserted_sentences = 0

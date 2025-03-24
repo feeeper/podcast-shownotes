@@ -105,8 +105,8 @@ run-indexer-%:
 run-indexer-openai-%:
 	$(CONDA_RUN) python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data --debug false --provider openai --api-key $*
 
-run-indexer-deepgram-%:
-	$(CONDA_RUN) python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data --debug false --provider deepgram --dbname podcast_shownotes --dbpassword password --api-key $*
+run-indexer-deepgram:
+	$(CONDA_RUN) python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data --debug false --provider deepgram --dbname podcast_shownotes --dbpassword password --segmentation-api-key $(SEGMENTATION_API_KEY) --segmentation-base-url $(SEGMENTATION_API_URL) --api-key $(DEEPGRAM_API_KEY)
 
 lab:
 	$(CONDA_RUN) python -m jupyter lab --no-browser

@@ -2,8 +2,9 @@ from __future__ import annotations
 import dataclasses
 from logging import getLogger
 from pathlib import Path
+
+from .llm_segmetation import LlmTextSegmentation
 from .sentences import get_sentences
-from .semantic_text_segmentation import SemanticTextSegmentationMultilingual
 from .sentences import Sentence
 
 
@@ -46,8 +47,15 @@ class SegmentationResult:
 
 
 class SegmentationBuilder:
-    def __init__(self, storage_dir: Path) -> None:
+    def __init__(
+        self,
+        storage_dir: Path,
+        api_key: str,
+        base_url: str
+    ) -> None:
         self._storage_dir = storage_dir
+        self._api_key = api_key
+        self._base_url = base_url
 
     def pick_episodes(self) -> list[Path]:
         def _is_transcription_exists(directory_: Path) -> bool:
@@ -90,7 +98,7 @@ class SegmentationBuilder:
     def get_segments(self, item: Path) -> SegmentationResult:
         transcript_file = self._get_transcript_file(item)
         sentences = get_sentences(transcript_file)
-        _segmentation = SemanticTextSegmentationMultilingual(sentences)
+        _segmentation = LlmTextSegmentation(sentences, self._api_key, self._base_url)
         segments_sentences: list[list[Sentence]] = _segmentation.get_segments(threshold=0.8, as_sentences=True)
         segments = [Segment(
             text=' '.join([s.text for s in ss]),
