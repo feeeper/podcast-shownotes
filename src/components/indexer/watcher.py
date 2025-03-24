@@ -139,18 +139,30 @@ async def _run_server(
 
     app = web.Application(logger=logger)
     app.add_routes(routes)
-    app.cleanup_ctx.append(_daemon_context(daemon))
-    app.cleanup_ctx.append(_daemon_context(transcribe_daemon))
-    app.cleanup_ctx.append(_daemon_context(segmentation_daemon))
+    
+    # Add error handling for daemon startup
+    try:
+        app.cleanup_ctx.append(_daemon_context(daemon))
+        app.cleanup_ctx.append(_daemon_context(transcribe_daemon))
+        app.cleanup_ctx.append(_daemon_context(segmentation_daemon))
+    except Exception as e:
+        logger.error(f"Failed to initialize daemon contexts: {str(e)}")
+        raise
 
     runner = web.AppRunner(
         app,
         access_log_format='%a %t "%r" %s %b "%{Referer}i" "%{User-Agent}i"'
     )
-    await runner.setup()
-    site = web.TCPSite(runner, '0.0.0.0', 8080)
-    await site.start()
-    logger.info(f'Listening {site.name}')
+    
+    try:
+        await runner.setup()
+        site = web.TCPSite(runner, '0.0.0.0', 8080)
+        await site.start()
+        logger.info(f'Listening {site.name}')
+    except Exception as e:
+        logger.error(f"Failed to start server: {str(e)}")
+        await runner.cleanup()
+        raise
 
     while not shutdown_state.is_shutdown_requested:
         await asyncio.sleep(0.1)
@@ -161,10 +173,24 @@ async def _run_server(
 def _daemon_context(
         daemon: DaemonWrapper
 ) -> typing.Callable[[web.Application], typing.AsyncIterator[None]]:
-    async def _context(_: web.Application):
-        await daemon.start()
-        yield
-        await daemon.shutdown()
+    async def _context(app: web.Application):
+        try:
+            logger.info(f"Starting daemon: {daemon._module_name}")
+            await daemon.start()
+            logger.info(f"Daemon started successfully: {daemon._module_name}")
+            yield
+        except TimeoutError as e:
+            logger.error(f"Timeout starting daemon {daemon._module_name}: {str(e)}")
+            raise
+        except Exception as e:
+            logger.error(f"Error in daemon {daemon._module_name}: {str(e)}")
+            raise
+        finally:
+            try:
+                await daemon.shutdown()
+                logger.info(f"Daemon shut down: {daemon._module_name}")
+            except Exception as e:
+                logger.error(f"Error shutting down daemon {daemon._module_name}: {str(e)}")
 
     return _context
 
