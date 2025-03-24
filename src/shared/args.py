@@ -46,6 +46,7 @@ class IndexerServerArgs(BaseModel, ArgsBase['IndexerServerArgs']):
     logging: LoggingArgs
     transcription: TranscriptionArgs
     database_connection: DbConnectionArgs
+    segmentation: SegmentationArgs
     port: int
 
     @validator('port')
@@ -59,6 +60,7 @@ class IndexerServerArgs(BaseModel, ArgsBase['IndexerServerArgs']):
         LoggingArgs.setup(parser)
         TranscriptionArgs.setup(parser)
         DbConnectionArgs.setup(parser)
+        SegmentationArgs.setup(parser)
         parser.add_argument('--port', type=int, default=8080)
 
     @classmethod
@@ -68,6 +70,7 @@ class IndexerServerArgs(BaseModel, ArgsBase['IndexerServerArgs']):
             logging=LoggingArgs.read(args),
             transcription=TranscriptionArgs.read(args),
             database_connection=DbConnectionArgs.read(args),
+            segmentation=SegmentationArgs.read(args),
             port=args.port,
         )
 
@@ -78,6 +81,7 @@ class IndexerServerArgs(BaseModel, ArgsBase['IndexerServerArgs']):
             f'--port={self.port}',
             *self.database_connection.forward(),
             *self.transcription.forward(),
+            *self.segmentation.forward(),
         ]
 
 
@@ -216,6 +220,29 @@ class DbConnectionArgs(BaseModel, ArgsBase['DbConnectionArgs']):
             f'--dbuser={self.user}',
             f'--dbpassword={self.password}',
         ]
+    
+class SegmentationArgs(BaseModel, ArgsBase['SegmentationArgs']):
+    api_key: str
+    base_url: str
+
+    @classmethod
+    def setup(cls, parser: ArgumentParser) -> None:
+        parser.add_argument('--segmentation-api-key', type=str, default='KEY_NOT_PASSED')
+        parser.add_argument('--segmentation-base-url', type=str, default='https://openrouter.ai/api/v1')
+
+    @classmethod
+    def read(cls, args: argparse.Namespace) -> SegmentationArgs:
+        return SegmentationArgs(
+            api_key=args.segmentation_api_key,
+            base_url=args.segmentation_base_url
+        )
+    
+    def forward(self: TArgs) -> list[str]:
+        return [
+            f'--segmentation-api-key={self.api_key}',
+            f'--segmentation-base-url={self.base_url}'
+        ]
+
 
 __all__ = [
     'ArgsBase',

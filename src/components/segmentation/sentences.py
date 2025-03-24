@@ -27,6 +27,16 @@ class Sentence:
 
     def __repr__(self):
         return str(self)
+    
+    def __eq__(self, value):
+        if not isinstance(value, Sentence):
+            return False
+        return (
+            self.text == value.text and
+            self.start == value.start and
+            self.end == value.end and
+            self.speaker == value.speaker
+        )
 
 
 def get_sentences(path_to_transcript: Path, verbose: bool = False) -> list[Sentence]:
