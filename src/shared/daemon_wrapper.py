@@ -47,7 +47,7 @@ class DaemonWrapper:
         logger.info(f'Daemon started {self._module_name}')
 
     async def _wait_daemon_startup(self):
-        check_interval = 0.1
+        check_interval = 0.5
         timeout = 10
         wait_counter = 0.0
         pidfile = self._pidfile
@@ -58,6 +58,7 @@ class DaemonWrapper:
             if wait_counter >= timeout:
                 raise TimeoutError(f'Daemon startup timeout: {timeout}s')
             wait_counter += check_interval
+            logger.info(f'Waiting for daemon to start: {wait_counter:.1f}s ({self._module_name} / {pidfile})')
             await asyncio.sleep(check_interval)
 
     async def shutdown(self) -> None:
