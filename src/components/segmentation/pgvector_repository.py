@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from logging import getLogger
 from uuid import UUID
+import re
 
 import numpy as np
 import psycopg2
@@ -213,6 +214,41 @@ class DB:
             LIMIT {limit}''',
             (np.array(embedding.tolist()), np.array(embedding.tolist()),)
         )
+        records = self.cursor.fetchall()
+        results = SearchResults(results=[SearchResult(**x) for x in records])
+        return results
+    
+    def find_similar_complex(self, query: str, limit: int = 10, offset: int = 0) -> SearchResults:
+        embedding = self.embedder.get_embeddings(query)
+        fts_lang = 'english' if re.match(r'^[a-zA-Z0-9]+$', query) else 'russian'
+
+        exectution_result = self.cursor.execute(f"""select 
+            episode_number as episode,
+            n.text as sentence,
+            starts_at,
+            ends_at,
+            segment,
+            (n.word_similarity + n.cosine_distance + n.fts_distance) as distance
+        from (
+            select 
+                s.text,
+                (1-ts_rank(to_tsvector(%s, s."text"), plainto_tsquery(%s))) as fts_distance,
+                (1-word_similarity(lower(s."text"), lower(%s))) as word_similarity, -- чем больше, тем лучше => (1-word_similarity) - чем меньше, тем лучше
+                s.sentence_embedding <=> %s as cosine_distance,
+                e.episode_number,
+                s.start_at as starts_at,
+                s.end_at as ends_at,
+                seg.text as segment
+            from sentences s
+            left join segments seg on seg.id = s.segment_id
+            left join episodes e on e.id = seg.episode_id
+            where (1-word_similarity(lower(s."text"), lower(%s))) <= 0.9 and (s.sentence_embedding <=> %s) <= 0.5
+        ) as n
+        order by distance
+        OFFSET {offset}
+        LIMIT {limit}""",
+        (fts_lang, query, query, np.array(embedding.tolist()), query, np.array(embedding.tolist()),)) 
+
         records = self.cursor.fetchall()
         results = SearchResults(results=[SearchResult(**x) for x in records])
         return results
