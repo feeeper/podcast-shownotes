@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from uuid import UUID
 
 
-class SearchResult(BaseModel):
+class SearchResultDto(BaseModel):
     episode: int
     sentence: str
     segment: str
@@ -12,8 +12,12 @@ class SearchResult(BaseModel):
     ends_at: float
 
 
+class SearchResult(SearchResultDto):
+    id: UUID
+
+
 class SearchResults(BaseModel):
-    results: list[SearchResult]
+    results: list[SearchResultDto]
 
 
 class Episode(BaseModel):

@@ -118,7 +118,26 @@ async def _run_server(
         limit = jdata.get('limit', 10)
         offset = jdata.get('offset', 0)
         results = repository.find_similar(text, limit=limit, offset=offset)
-        return web.json_response(data=[x.dict() for x in results.results])
+        return web.json_response(data=[x.model_dump() for x in results.results])
+    
+    @routes.get('/v2/search')
+    async def handle_search_v2(request: web.Request) -> web.Response:
+        try:
+            text = request.query.get('query', None)
+            if text is None:
+                return web.Response(status=400, reason='Empty query')
+
+            limit = int(request.query.get('limit', 10))
+            offset = int(request.query.get('offset', 0))
+        except Exception as e:
+            logger.error(e)
+            return web.Response(status=400, reason='Bad Request')
+        
+        if text is None:
+            return web.Response(status=400, reason='Empty query')
+        
+        results = repository.find_similar_complex(text, limit=limit, offset=offset)
+        return web.json_response(data=[x.model_dump() for x in results.results])
 
     @routes.get('/episodes/{episode_num}')
     async def handle_episodes(request: web.Request) -> web.Response:

@@ -3,17 +3,19 @@ import json
 from datetime import datetime
 from logging import getLogger
 from uuid import UUID
+import re
 
 import numpy as np
 import psycopg2
 import psycopg2.extras
 from components.segmentation.embedding_builder import EmbeddingBuilder
-from components.segmentation.segmentation_builder import SegmentationResult, SegmentationBuilder
+from components.segmentation.segmentation_builder import SegmentationResult
 from pgvector.psycopg2 import register_vector
 
 from .models import (
-    SearchResult,
+    SearchResultDto,
     SearchResults,
+    SearchResult,
     Episode,
 )
 
@@ -37,6 +39,7 @@ class DB:
         )
         register_vector(self.conn)
 
+        psycopg2.extras.register_uuid()
         self.cursor = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         self.embedder = EmbeddingBuilder()
 
@@ -198,6 +201,7 @@ class DB:
         embedding = self.embedder.get_embeddings(query)
         self.cursor.execute(
             f'''SELECT
+                s.id,
                 e.episode_number as episode,
                 s.text as sentence,
                 s.start_at as starts_at,
@@ -214,8 +218,85 @@ class DB:
             (np.array(embedding.tolist()), np.array(embedding.tolist()),)
         )
         records = self.cursor.fetchall()
-        results = SearchResults(results=[SearchResult(**x) for x in records])
+        results = SearchResults(results=[SearchResultDto(**x) for x in records])
+
+        self._log_query_with_results(query, [SearchResult(**x) for x in records[:10]], comment='search_v1')
+
+        return results
+
+    def find_similar_complex(self, query: str, limit: int = 10, offset: int = 0) -> SearchResults:
+        embedding = self.embedder.get_embeddings(query)
+        fts_lang = 'english' if re.match(r'^[a-zA-Z0-9]+$', query) else 'russian'
+
+        self.cursor.execute(f"""select
+            id,
+            episode_number as episode,
+            n.text as sentence,
+            starts_at,
+            ends_at,
+            segment,
+            (n.word_similarity + n.cosine_distance + n.fts_distance) as distance
+        from (
+            select 
+                s.id,
+                s.text,
+                (1-ts_rank(to_tsvector(%s, s."text"), plainto_tsquery(%s))) as fts_distance,
+                (1-word_similarity(lower(s."text"), lower(%s))) as word_similarity, -- чем больше, тем лучше => (1-word_similarity) - чем меньше, тем лучше
+                s.sentence_embedding <=> %s as cosine_distance,
+                e.episode_number,
+                s.start_at as starts_at,
+                s.end_at as ends_at,
+                seg.text as segment
+            from sentences s
+            left join segments seg on seg.id = s.segment_id
+            left join episodes e on e.id = seg.episode_id
+            where (1-word_similarity(lower(s."text"), lower(%s))) <= 0.9 and (s.sentence_embedding <=> %s) <= 0.5
+        ) as n
+        order by distance
+        OFFSET {offset}
+        LIMIT {limit}""",
+        (fts_lang, query, query, np.array(embedding.tolist()), query, np.array(embedding.tolist()),)) 
+
+        records = self.cursor.fetchall()
+        results = SearchResults(results=[SearchResultDto(**x) for x in records])
+
+        self._log_query_with_results(query, [SearchResult(**x) for x in records[:10]], comment='search_v2')
+
         return results
 
     def delete(self, episode_id: UUID) -> None:
         raise NotImplementedError
+
+    def _log_query_with_results(self, query: str, results: list[SearchResultDto], comment: str = None) -> None:
+        """
+        Logs a search query and its results into the database.
+
+        Parameters:
+        - query (str): The search query string.
+        - results (SearchResult): The search results to be logged.
+        - comment (str, optional): An optional comment to associate with the query.
+
+        This method inserts the query and its results into the `search_history` and `search_results` tables, respectively.
+        """
+        try:
+            self.cursor.execute(
+                'INSERT INTO search_history (query, comment) VALUES (%s, %s) RETURNING id',
+                (query, comment)
+            )
+            search_history_id = self.cursor.fetchone()[0]
+            
+            # Prepare data for batch insert
+            result_data = [
+                (search_history_id, str(result.id), result.distance) for result in results
+            ]
+            
+            psycopg2.extras.execute_values(
+                self.cursor,
+                'INSERT INTO search_results (search_history_id, sentence_id, similarity) VALUES %s',
+                result_data,
+                template='(%s, %s::uuid, %s)'  # Explicitly cast to UUID
+            )            
+            self.conn.commit()
+        except Exception as e:
+            logger.error(f"Error logging query with results: {e}")
+            self.conn.rollback()
