@@ -118,7 +118,7 @@ async def _run_server(
         limit = jdata.get('limit', 10)
         offset = jdata.get('offset', 0)
         results = repository.find_similar(text, limit=limit, offset=offset)
-        return web.json_response(data=[x.model_dump_json() for x in results.results])
+        return web.json_response(data=[x.model_dump() for x in results.results])
     
     @routes.get('/v2/search')
     async def handle_search_v2(request: web.Request) -> web.Response:
