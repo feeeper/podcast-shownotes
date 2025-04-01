@@ -120,11 +120,15 @@ async def _run_server(
         results = repository.find_similar(text, limit=limit, offset=offset)
         return web.json_response(data=[x.model_dump_json() for x in results.results])
     
-    @routes.post('/search_2')
-    async def handle_search_2(request: web.Request) -> web.Response:
+    @routes.get('/v2/search')
+    async def handle_search_v2(request: web.Request) -> web.Response:
         try:
-            jdata = await request.json()
-            text = jdata.get('query', None)
+            text = request.query.get('query', None)
+            if text is None:
+                return web.Response(status=400, reason='Empty query')
+
+            limit = int(request.query.get('limit', 10))
+            offset = int(request.query.get('offset', 0))
         except Exception as e:
             logger.error(e)
             return web.Response(status=400, reason='Bad Request')
@@ -132,8 +136,6 @@ async def _run_server(
         if text is None:
             return web.Response(status=400, reason='Empty query')
         
-        limit = jdata.get('limit', 10)
-        offset = jdata.get('offset', 0)
         results = repository.find_similar_complex(text, limit=limit, offset=offset)
         return web.json_response(data=[x.model_dump() for x in results.results])
 
