@@ -15,8 +15,9 @@ from shared.args import (
 from infrastructure.logging.setup import setup_logging
 from shared.daemon_wrapper import DaemonWrapper
 from components.segmentation.embedding_builder import EmbeddingBuilder
-
 from components.segmentation.pgvector_repository import DB
+
+from components.segmentation.models import SearchResultComplexDto
 
 
 @dataclass
@@ -129,6 +130,7 @@ async def _run_server(
 
             limit = int(request.query.get('limit', 10))
             offset = int(request.query.get('offset', 0))
+            need_episode = request.query.get('include_episode', False)
         except Exception as e:
             logger.error(e)
             return web.Response(status=400, reason='Bad Request')
@@ -137,7 +139,22 @@ async def _run_server(
             return web.Response(status=400, reason='Empty query')
         
         results = repository.find_similar_complex(text, limit=limit, offset=offset)
-        return web.json_response(data=[x.model_dump() for x in results.results])
+        if need_episode:
+            episode_nums = {x.episode for x in results.results}
+            episodes = {x: repository.find_episode(x) for x in episode_nums}
+
+            extended_results = [SearchResultComplexDto(
+                episode=episodes[x.episode],
+                sentence=x.sentence,
+                segment=x.segment,
+                distance=x.distance,
+                starts_at=x.starts_at,
+                ends_at=x.ends_at
+            ) for x in results.results]
+
+            return web.json_response(data=[x.model_dump(mode='json') for x in extended_results])
+        else:
+            return web.json_response(data=[x.model_dump(mode='json') for x in results.results])
 
     @routes.get('/episodes/{episode_num}')
     async def handle_episodes(request: web.Request) -> web.Response:
