@@ -16,7 +16,7 @@ from .models import (
     SearchResultDto,
     SearchResults,
     SearchResult,
-    Episode,
+    EpisodeDto
 )
 
 logger = getLogger('pgvector_repository')
@@ -161,7 +161,7 @@ class DB:
 
         return episode_id
 
-    def find_episode(self, episode_num: int) -> Episode | None:
+    def find_episode(self, episode_num: int) -> EpisodeDto | None:
         logger.info(f'Find episode {episode_num}')
         self.cursor.execute('''
         select
@@ -189,7 +189,7 @@ class DB:
             'shownotes': episode_data[0]['shownotes'],
             'hosts': [{'name': x['name'], 'link': x['link']} for x in episode_data]
         }
-        episode = Episode(**data)
+        episode = EpisodeDto(**data)
         return episode
 
     def find_similar(
