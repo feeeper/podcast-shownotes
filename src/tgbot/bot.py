@@ -4,17 +4,32 @@ import os
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import InlineQuery, InlineQueryResultArticle, InputTextMessageContent
+from aiogram.types import (
+    InlineQuery,
+    InlineQueryResultArticle,
+    InputTextMessageContent
+)
+from aiogram.filters import CommandStart
 import requests
 import hashlib
+from functools import partial
+import asyncio
 
 API_TOKEN = os.getenv("TG_BOT_API_TOKEN")
 SEARCH_API_URL = "http://localhost:8080/v2/search"
+
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
+
+
+_search_tasks: dict[str, asyncio.Task] = {}
+DEBOUNCE_TIME = 2  # seconds
+MIN_QUERY_LENGTH = 3
+NO_RESULTS = "There are no results for your query 😔"
+TOO_SHORT_REQUEST = f"Your query is too short. Minimum length is {MIN_QUERY_LENGTH+1}"
 
 
 @dataclass
@@ -107,6 +122,20 @@ def get_single_search_result_text(
     return f"""{sentence}\n\n{expandable_description}"""
 
 
+@dp.message(CommandStart())
+async def start_handler(message: types.Message) -> None:
+    await message.answer("""👋 Welcome to DevZen Podcast Search Bot!
+
+🎙 Search through <a href="https://devzen.ru/">DevZen podcast</a> transcripts with ease.
+
+How to use:
+• Simply type any word or phrase to search
+• Use inline mode (@DZenSearchBot query) in any chat
+• Results include timestamps and context
+
+Try searching for topics like "kubernetes", "python", or any tech topic you're interested in!""", parse_mode="HTML")
+
+
 @dp.message()
 async def search(message: types.Message):
     def _get_grouped_by_episode_message(
@@ -117,19 +146,25 @@ async def search(message: types.Message):
         parts = [episode_link] + episode_results
         return "\n\n".join(parts)
 
+    if len(message.text) <= MIN_QUERY_LENGTH:
+        await message.answer(TOO_SHORT_REQUEST)
+        return
+
     results = await execute_search(
         message.text,
         limit=10,
         offset=0
     )
+
     if not results:
-        await message.answer('No results found')
+        await message.answer(NO_RESULTS)
         return
     
     results_by_episode = defaultdict(list)
     for item in results:        
         results_by_episode[item["episode"]["num"]].append(item)
     
+    at_least_one_result_was_sent = False
     for _, episode_items in results_by_episode.items():
         episode_results = []
         seen_segments = set()
@@ -158,6 +193,10 @@ async def search(message: types.Message):
             )
             await message.answer(episode_message, parse_mode="HTML")
             await asyncio.sleep(0.5)
+            at_least_one_result_was_sent = True
+    
+    if not at_least_one_result_was_sent:
+        await message.answer(NO_RESULTS)
 
 
 @dp.inline_query()
@@ -166,31 +205,50 @@ async def inline_search(inline_query: InlineQuery):
     if not query:
         return
 
-    results = await execute_search(query)
-    articles = []
-    for idx, item in enumerate(results):
-        description = get_description(item, query)
-        start, end = get_sentence_borders(item)
-        message_text = get_message_text(
-            item["episode"],
-            item["sentence"],
-            f"<blockquote expandable>{description}</blockquote>",
-            (start, end)
-        )
-        articles.append(
-            InlineQueryResultArticle(
-                id=hashlib.md5(f"{query}-{idx}".encode()).hexdigest(),
-                title=item["sentence"],
-                description=description,
-                input_message_content=InputTextMessageContent(
-                    message_text=message_text,
-                    parse_mode="HTML"
-                ),
-                parse_mode="HTML"
-            )
-        )
+    if len(query) <= MIN_QUERY_LENGTH:
+        await inline_query.answer([], cache_time=300)
+        return
 
-    await inline_query.answer(articles, cache_time=15)
+    # Cancel previous search task for this user if exists
+    user_id = inline_query.from_user.id
+    if user_id in _search_tasks and not _search_tasks[user_id].done():
+        _search_tasks[user_id].cancel()
+    
+    # Create a new debounced search task
+    async def debounced_search():
+        try:
+            await asyncio.sleep(DEBOUNCE_TIME)
+            results = await execute_search(query)
+            articles = []
+            for idx, item in enumerate(results):
+                description = get_description(item, query)
+                start, end = get_sentence_borders(item)
+                message_text = get_message_text(
+                    item["episode"],
+                    item["sentence"],
+                    f"<blockquote expandable>{description}</blockquote>",
+                    (start, end)
+                )
+                articles.append(
+                    InlineQueryResultArticle(
+                        id=hashlib.md5(f"{query}-{idx}".encode()).hexdigest(),
+                        title=item["sentence"],
+                        description=description,
+                        input_message_content=InputTextMessageContent(
+                            message_text=message_text,
+                            parse_mode="HTML"
+                        ),
+                        parse_mode="HTML"
+                    )
+                )
+            await inline_query.answer(articles, cache_time=15)
+        except asyncio.CancelledError:
+            pass  # Task was cancelled, ignore
+        finally:
+            _search_tasks.pop(user_id, None)
+
+    # Store and start the new task
+    _search_tasks[user_id] = asyncio.create_task(debounced_search())
 
 
 if __name__ == "__main__":
