@@ -4,7 +4,12 @@ import os
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import InlineQuery, InlineQueryResultArticle, InputTextMessageContent
+from aiogram.types import (
+    InlineQuery,
+    InlineQueryResultArticle,
+    InputTextMessageContent
+)
+from aiogram.filters import CommandStart
 import requests
 import hashlib
 
@@ -105,6 +110,20 @@ def get_single_search_result_text(
     sentence = f"[{sentence_borders[0]}] <i>{sentence}</i>"
     expandable_description = f"<blockquote expandable>{description}</blockquote>"
     return f"""{sentence}\n\n{expandable_description}"""
+
+
+@dp.message(CommandStart())
+async def start_handler(message: types.Message) -> None:
+    await message.answer("""👋 Welcome to DevZen Podcast Search Bot!
+
+🎙 Search through <a href="https://devzen.ru/">DevZen podcast</a> transcripts with ease.
+
+How to use:
+• Simply type any word or phrase to search
+• Use inline mode (@DZenSearchBot query) in any chat
+• Results include timestamps and context
+
+Try searching for topics like "kubernetes", "python", or any tech topic you're interested in!""", parse_mode="HTML")
 
 
 @dp.message()
