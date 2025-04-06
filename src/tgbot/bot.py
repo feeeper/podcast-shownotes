@@ -1,3 +1,4 @@
+from collections import defaultdict
 from dataclasses import dataclass
 import os
 import asyncio
@@ -23,7 +24,7 @@ class Timestamp:
     second: int
 
     def __str__(self):
-        return f"{self.hour:0<2}:{self.minute:0<2}:{self.second:0<2}"
+        return f"{self.hour:0>2}:{self.minute:0>2}:{self.second:0>2}"
 
 
 async def execute_search(
@@ -89,15 +90,33 @@ def get_message_text(
     episode: dict,
     sentence: str,
     description: str,
-    sentense_borders: tuple[Timestamp, Timestamp]
+    sentence_borders: tuple[Timestamp, Timestamp]
 ) -> str:
     episode_link = f'<a href=\"{episode["link"]}\">{episode["title"]}</a>'
-    sentence = f'[{sentense_borders[0]}] <i>{sentence}</i>'
+    sentence = f'[{sentence_borders[0]}] <i>{sentence}</i>'
     return f"""{episode_link}\n\n{sentence}\n\n{description}"""
+
+
+def get_single_search_result_text(
+    sentence: str,
+    description: str,
+    sentence_borders: tuple[Timestamp, Timestamp]
+) -> str:
+    sentence = f"[{sentence_borders[0]}] <i>{sentence}</i>"
+    expandable_description = f"<blockquote expandable>{description}</blockquote>"
+    return f"""{sentence}\n\n{expandable_description}"""
 
 
 @dp.message()
 async def search(message: types.Message):
+    def _get_grouped_by_episode_message(
+        episode: dict,
+        episode_results: list[str]
+    ) -> str:
+        episode_link = f"<a href=\"{episode["link"]}\">{episode["title"]}</a>"
+        parts = [episode_link] + episode_results
+        return "\n\n".join(parts)
+
     results = await execute_search(
         message.text,
         limit=10,
@@ -107,17 +126,38 @@ async def search(message: types.Message):
         await message.answer('No results found')
         return
     
-    for item in results:
-        if len(item["sentence"]) > 10:
-            description = get_description(item, message.text)
-            start, end = get_sentence_borders(item)
-            message_text = get_message_text(
-                item["episode"],
-                item["sentence"],
-                f"<blockquote expandable>{description}</blockquote>",
-                (start, end)
+    results_by_episode = defaultdict(list)
+    for item in results:        
+        results_by_episode[item["episode"]["num"]].append(item)
+    
+    for _, episode_items in results_by_episode.items():
+        episode_results = []
+        seen_segments = set()
+        for item in sorted(episode_items, key=lambda x: x["starts_at"]):
+            segment = item["segment"]
+            if segment in seen_segments:
+                continue
+
+            sentence = item["sentence"]
+            if len(sentence) > 10:
+                description = get_description(item, message.text)
+                start, end = get_sentence_borders(item)
+                message_text = get_single_search_result_text(
+                    sentence=sentence,
+                    description=description,
+                    sentence_borders=(start, end)
+                )
+                episode_results.append(message_text)
+            seen_segments.add(segment)
+
+        if len(episode_results) > 0:
+            episode = episode_items[0]["episode"]
+            episode_message = _get_grouped_by_episode_message(
+                episode,
+                episode_results=episode_results
             )
-            await message.answer(message_text, parse_mode="HTML")
+            await message.answer(episode_message, parse_mode="HTML")
+            await asyncio.sleep(0.5)
 
 
 @dp.inline_query()
