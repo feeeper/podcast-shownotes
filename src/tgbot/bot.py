@@ -17,7 +17,7 @@ import asyncio
 
 API_TOKEN = os.getenv("TG_BOT_API_TOKEN")
 SEARCH_API_URL = "http://localhost:8080/v2/search"
-NO_RESULTS = "There are no results for your query 😔"
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -28,6 +28,8 @@ dp = Dispatcher()
 _search_tasks: dict[str, asyncio.Task] = {}
 DEBOUNCE_TIME = 2  # seconds
 MIN_QUERY_LENGTH = 3
+NO_RESULTS = "There are no results for your query 😔"
+TOO_SHORT_REQUEST = f"Your query is too short. Minimum length is {MIN_QUERY_LENGTH+1}"
 
 
 @dataclass
@@ -144,13 +146,18 @@ async def search(message: types.Message):
         parts = [episode_link] + episode_results
         return "\n\n".join(parts)
 
+    if len(message.text) <= MIN_QUERY_LENGTH:
+        await message.answer(TOO_SHORT_REQUEST)
+        return
+
     results = await execute_search(
         message.text,
         limit=10,
         offset=0
     )
+
     if not results:
-        await message.answer('No results found')
+        await message.answer(NO_RESULTS)
         return
     
     results_by_episode = defaultdict(list)
@@ -198,7 +205,7 @@ async def inline_search(inline_query: InlineQuery):
     if not query:
         return
 
-    if len(query) < MIN_QUERY_LENGTH:
+    if len(query) <= MIN_QUERY_LENGTH:
         await inline_query.answer([], cache_time=300)
         return
 
