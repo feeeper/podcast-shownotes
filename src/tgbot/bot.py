@@ -12,14 +12,22 @@ from aiogram.types import (
 from aiogram.filters import CommandStart
 import requests
 import hashlib
+from functools import partial
+import asyncio
 
 API_TOKEN = os.getenv("TG_BOT_API_TOKEN")
 SEARCH_API_URL = "http://localhost:8080/v2/search"
+NO_RESULTS = "There are no results for your query 😔"
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
+
+
+_search_tasks: dict[str, asyncio.Task] = {}
+DEBOUNCE_TIME = 2  # seconds
+MIN_QUERY_LENGTH = 3
 
 
 @dataclass
@@ -149,6 +157,7 @@ async def search(message: types.Message):
     for item in results:        
         results_by_episode[item["episode"]["num"]].append(item)
     
+    at_least_one_result_was_sent = False
     for _, episode_items in results_by_episode.items():
         episode_results = []
         seen_segments = set()
@@ -177,6 +186,10 @@ async def search(message: types.Message):
             )
             await message.answer(episode_message, parse_mode="HTML")
             await asyncio.sleep(0.5)
+            at_least_one_result_was_sent = True
+    
+    if not at_least_one_result_was_sent:
+        await message.answer(NO_RESULTS)
 
 
 @dp.inline_query()
@@ -185,31 +198,50 @@ async def inline_search(inline_query: InlineQuery):
     if not query:
         return
 
-    results = await execute_search(query)
-    articles = []
-    for idx, item in enumerate(results):
-        description = get_description(item, query)
-        start, end = get_sentence_borders(item)
-        message_text = get_message_text(
-            item["episode"],
-            item["sentence"],
-            f"<blockquote expandable>{description}</blockquote>",
-            (start, end)
-        )
-        articles.append(
-            InlineQueryResultArticle(
-                id=hashlib.md5(f"{query}-{idx}".encode()).hexdigest(),
-                title=item["sentence"],
-                description=description,
-                input_message_content=InputTextMessageContent(
-                    message_text=message_text,
-                    parse_mode="HTML"
-                ),
-                parse_mode="HTML"
-            )
-        )
+    if len(query) < MIN_QUERY_LENGTH:
+        await inline_query.answer([], cache_time=300)
+        return
 
-    await inline_query.answer(articles, cache_time=15)
+    # Cancel previous search task for this user if exists
+    user_id = inline_query.from_user.id
+    if user_id in _search_tasks and not _search_tasks[user_id].done():
+        _search_tasks[user_id].cancel()
+    
+    # Create a new debounced search task
+    async def debounced_search():
+        try:
+            await asyncio.sleep(DEBOUNCE_TIME)
+            results = await execute_search(query)
+            articles = []
+            for idx, item in enumerate(results):
+                description = get_description(item, query)
+                start, end = get_sentence_borders(item)
+                message_text = get_message_text(
+                    item["episode"],
+                    item["sentence"],
+                    f"<blockquote expandable>{description}</blockquote>",
+                    (start, end)
+                )
+                articles.append(
+                    InlineQueryResultArticle(
+                        id=hashlib.md5(f"{query}-{idx}".encode()).hexdigest(),
+                        title=item["sentence"],
+                        description=description,
+                        input_message_content=InputTextMessageContent(
+                            message_text=message_text,
+                            parse_mode="HTML"
+                        ),
+                        parse_mode="HTML"
+                    )
+                )
+            await inline_query.answer(articles, cache_time=15)
+        except asyncio.CancelledError:
+            pass  # Task was cancelled, ignore
+        finally:
+            _search_tasks.pop(user_id, None)
+
+    # Store and start the new task
+    _search_tasks[user_id] = asyncio.create_task(debounced_search())
 
 
 if __name__ == "__main__":
