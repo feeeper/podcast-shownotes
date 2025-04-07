@@ -228,6 +228,7 @@ class DB:
         embedding = self.embedder.get_embeddings(query)
         fts_lang = 'english' if re.match(r'^[a-zA-Z0-9]+$', query) else 'russian'
 
+        self.cursor.execute("SET hnsw.ef_search = 200;")
         self.cursor.execute(f"""select
             id,
             episode_number as episode,
@@ -236,12 +237,13 @@ class DB:
             ends_at,
             segment,
             (n.word_similarity + n.cosine_distance + n.fts_distance) as distance
-        from (
+        from
+        (
             select 
                 s.id,
                 s.text,
                 (1-ts_rank(to_tsvector(%s, s."text"), plainto_tsquery(%s))) as fts_distance,
-                (1-word_similarity(lower(s."text"), lower(%s))) as word_similarity, -- чем больше, тем лучше => (1-word_similarity) - чем меньше, тем лучше
+                (1-word_similarity(lower(s."text"), lower(%s))) as word_similarity,
                 s.sentence_embedding <=> %s as cosine_distance,
                 e.episode_number,
                 s.start_at as starts_at,
@@ -250,11 +252,12 @@ class DB:
             from sentences s
             left join segments seg on seg.id = s.segment_id
             left join episodes e on e.id = seg.episode_id
-            where (1-word_similarity(lower(s."text"), lower(%s))) <= 0.9 and (s.sentence_embedding <=> %s) <= 0.5
+            order by
+                s.sentence_embedding <=> %s asc
+            limit 100
         ) as n
-        order by distance
-        OFFSET {offset}
-        LIMIT {limit}""",
+        limit {limit}
+        offset {offset}""",
         (fts_lang, query, query, np.array(embedding.tolist()), query, np.array(embedding.tolist()),)) 
 
         records = self.cursor.fetchall()
