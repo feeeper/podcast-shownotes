@@ -228,6 +228,7 @@ class DB:
         embedding = self.embedder.get_embeddings(query)
         fts_lang = 'english' if re.match(r'^[a-zA-Z0-9]+$', query) else 'russian'
 
+        self.cursor.execute("SET hnsw.ef_search = 200;")
         self.cursor.execute(f"""select
             id,
             episode_number as episode,
