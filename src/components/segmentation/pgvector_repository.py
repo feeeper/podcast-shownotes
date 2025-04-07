@@ -256,9 +256,9 @@ class DB:
                 s.sentence_embedding <=> %s asc
             limit 100
         ) as n
-        limit {limit}
-        offset {offset}""",
-        (fts_lang, query, query, np.array(embedding.tolist()), query, np.array(embedding.tolist()),)) 
+        limit %s
+        offset %s""",
+        (fts_lang, query, query, np.array(embedding.tolist()), np.array(embedding.tolist()), limit, offset)) 
 
         records = self.cursor.fetchall()
         results = SearchResults(results=[SearchResultDto(**x) for x in records])
