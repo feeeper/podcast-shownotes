@@ -12,6 +12,19 @@ from .json_formatter import JsonFormatter
 from shared.args import LoggingArgs
 
 
+class CustomFormatter(logging.Formatter):
+    def format(self, record):
+        # Add custom fields if present
+        if hasattr(record, 'response'):
+            record.response = record.response
+        else:
+            record.response = None
+        if hasattr(record, 'item'):
+            record.item = record.item
+        else:
+            record.item = None
+        return super().format(record)
+
 
 def setup_logging(args: LoggingArgs) -> None:
     assert not logging.root.hasHandlers()
@@ -42,8 +55,8 @@ def setup_logger(logger: logging.Logger, log_dir: Path) -> None:
     rotation_logging_handler.namer = _get_filename
     rotation_logging_handler.setLevel(logging.ERROR)
     rotation_logging_handler.setFormatter(
-        logging.Formatter(
-            '{asctime} {levelname} {name} {message}', style='{'
+        CustomFormatter(
+            '{asctime} {levelname} {name} {message} {prompt_tokens} {completion_tokens}', style='{'
         )
     )
     logger.addHandler(rotation_logging_handler)
