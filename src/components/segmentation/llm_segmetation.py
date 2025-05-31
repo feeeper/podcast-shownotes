@@ -205,6 +205,7 @@ Output:
             jcontent = json.loads(content)
             return jcontent.get('sentences', {})
         except Exception as e:
+            open('error_response.json', 'w', encoding='utf8').write(response.choices[0].message.content)
             logger.exception(e, exc_info=True, stack_info=True, extra={'response': response})
             raise
 
