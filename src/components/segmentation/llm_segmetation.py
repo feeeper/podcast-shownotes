@@ -109,7 +109,7 @@ class LlmTextSegmentation:
     def _call_llm(
         self,
         sentences: list[str],
-        model: str = 'google/gemini-2.0-flash-lite-001',
+        model: str = 'google/gemini-2.5-flash-preview-05-20',
         max_tokens: int = 8_000
     ) -> dict:
         prompt = """You are a podcast host, and you have recorded an episode that you want to split into distinct topic-based segments.
