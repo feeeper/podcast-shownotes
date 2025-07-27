@@ -4,6 +4,7 @@ from logging import getLogger
 from pathlib import Path
 
 from .llm_segmetation import LlmTextSegmentation
+from .semantic_text_segmentation import SemanticTextSegmentationMultilingual
 from .sentences import get_sentences
 from .sentences import Sentence
 
@@ -99,7 +100,14 @@ class SegmentationBuilder:
         transcript_file = self._get_transcript_file(item)
         sentences = get_sentences(transcript_file)
         _segmentation = LlmTextSegmentation(sentences, self._api_key, self._base_url)
-        segments_sentences: list[list[Sentence]] = _segmentation.get_segments(threshold=0.8, as_sentences=True)
+        try:
+            segments_sentences: list[list[Sentence]] = _segmentation.get_segments(threshold=0.8, as_sentences=True)
+        except Exception as e:
+            logger.error(f'Error getting segments: {e}')
+            _segmentation = SemanticTextSegmentationMultilingual(sentences)
+            logger.info(f'Fallback to old segmentation: {type(_segmentation)}')
+            segments_sentences = _segmentation.get_segments(threshold=0.8, as_sentences=True)
+
         segments = [Segment(
             text=' '.join([s.text for s in ss]),
             start_at=ss[0].start,

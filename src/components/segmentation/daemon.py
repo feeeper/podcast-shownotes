@@ -100,7 +100,7 @@ def _loop(
                         Path(item / 'segmentation_in_progress').unlink(missing_ok=True)
             except Exception as e:
                 logger.error(f'Error processing {item}', exc_info=True)
-                Path(item / 'segmentation_in_progress').unlink()
+                Path(item / 'segmentation_in_progress').unlink(missing_ok=True)
                 if 'episode_id' in locals():
                     segmentation_repository.delete(episode_id)
                     Path(item / 'segmentation_completed').unlink()
