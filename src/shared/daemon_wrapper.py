@@ -48,7 +48,7 @@ class DaemonWrapper:
 
     async def _wait_daemon_startup(self):
         check_interval = 0.5
-        timeout = 10
+        timeout = 20
         wait_counter = 0.0
         pidfile = self._pidfile
 
