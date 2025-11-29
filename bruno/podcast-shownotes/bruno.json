@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "podcast-shownotes",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
