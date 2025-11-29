@@ -1,0 +1,7773 @@
+{
+  "комитет Haskell принятие решений": [
+    {
+      "episode": 22,
+      "segment": 604,
+      "score": 0.5381318541318388
+    },
+    {
+      "episode": 416,
+      "segment": 738,
+      "score": 0.5713813837097519
+    }
+  ],
+  "Deathloop matchmaking review": [
+    {
+      "episode": 290,
+      "segment": 102,
+      "score": 0.3624077224922424
+    }
+  ],
+  "Vertica storage architecture": [
+    {
+      "episode": 39,
+      "segment": 365,
+      "score": 0.4748831667974751
+    }
+  ],
+  "UK same-sex marriage legalization": [
+    {
+      "episode": 123,
+      "segment": 325,
+      "score": 0.4354451603302114
+    },
+    {
+      "episode": 129,
+      "segment": 383,
+      "score": 0.38001677104432685
+    }
+  ],
+  "GPL vs permissive licenses": [
+    {
+      "episode": 173,
+      "segment": 545,
+      "score": 0.767352233743497
+    },
+    {
+      "episode": 84,
+      "segment": 418,
+      "score": 0.7140003395602246
+    }
+  ],
+  "zero dependency libraries benefits": [
+    {
+      "episode": 48,
+      "segment": 502,
+      "score": 0.9985875071478715
+    },
+    {
+      "episode": 263,
+      "segment": 484,
+      "score": 0.5852485750079892
+    }
+  ],
+  "лучший бинокль для астрономии": [
+    {
+      "episode": 357,
+      "segment": 994,
+      "score": 0.4270981913995221
+    }
+  ],
+  "skip level meetings benefits": [
+    {
+      "episode": 179,
+      "segment": 110,
+      "score": 0.9271159863907751
+    },
+    {
+      "episode": 383,
+      "segment": 627,
+      "score": 0.9115211577280466
+    }
+  ],
+  "WebAssembly functions Postgres extension": [
+    {
+      "episode": 284,
+      "segment": 724,
+      "score": 0.4312774457962617
+    },
+    {
+      "episode": 334,
+      "segment": 618,
+      "score": 0.6763766821192878
+    }
+  ],
+  "Rust vs C++ in gamedev": [
+    {
+      "episode": 199,
+      "segment": 314,
+      "score": 0.6863063055235835
+    },
+    {
+      "episode": 502,
+      "segment": 643,
+      "score": 0.4194685386299194
+    }
+  ],
+  "как измерять эффективность изменений": [
+    {
+      "episode": 398,
+      "segment": 982,
+      "score": 0.958093150575816
+    },
+    {
+      "episode": 410,
+      "segment": 520,
+      "score": 0.6940123960028726
+    }
+  ],
+  "office monitor setup examples": [
+    {
+      "episode": 26,
+      "segment": 748,
+      "score": 0.23966127716159114
+    }
+  ],
+  "Rust generators RFC": [
+    {
+      "episode": 328,
+      "segment": 998,
+      "score": 0.20270236011005038
+    }
+  ],
+  "лучший первый язык программирования": [
+    {
+      "episode": 75,
+      "segment": 699,
+      "score": 0.7593339059212558
+    }
+  ],
+  "JetBrains мероприятие Казань апрель": [
+    {
+      "episode": 171,
+      "segment": 953,
+      "score": 0.6959452465189019
+    }
+  ],
+  "climate refugees projections 2050": [
+    {
+      "episode": 390,
+      "segment": 450,
+      "score": 0.23343117553251502
+    },
+    {
+      "episode": 143,
+      "segment": 130,
+      "score": 0.8371241180277139
+    }
+  ],
+  "Pixel 7A опыт использования": [
+    {
+      "episode": 261,
+      "segment": 510,
+      "score": 0.3610829782303109
+    },
+    {
+      "episode": 73,
+      "segment": 551,
+      "score": 0.6126998748488837
+    }
+  ],
+  "современная почтовая бюрократия": [
+    {
+      "episode": 283,
+      "segment": 237,
+      "score": 0.9762575346650247
+    },
+    {
+      "episode": 431,
+      "segment": 958,
+      "score": 0.14964676897699491
+    }
+  ],
+  "стартап vs корпорация плюсы минусы": [
+    {
+      "episode": 200,
+      "segment": 207,
+      "score": 0.7305587911359498
+    }
+  ],
+  "Forecasting Principles and Practice": [
+    {
+      "episode": 18,
+      "segment": 784,
+      "score": 0.27373216712906745
+    }
+  ],
+  "разница интервью Россия США": [
+    {
+      "episode": 254,
+      "segment": 572,
+      "score": 0.5558701241841699
+    },
+    {
+      "episode": 204,
+      "segment": 838,
+      "score": 0.7829646436301209
+    }
+  ],
+  "LLVM query compilation benefits": [
+    {
+      "episode": 131,
+      "segment": 963,
+      "score": 0.6601234733506206
+    },
+    {
+      "episode": 183,
+      "segment": 615,
+      "score": 0.6735053807508004
+    }
+  ],
+  "TSDB сравнение InfluxDB Graphite": [
+    {
+      "episode": 285,
+      "segment": 274,
+      "score": 0.30908093255891544
+    }
+  ],
+  "SRE в Google кратко": [
+    {
+      "episode": 48,
+      "segment": 744,
+      "score": 0.845317285930351
+    },
+    {
+      "episode": 303,
+      "segment": 513,
+      "score": 0.6941645730118158
+    }
+  ],
+  "пассивный Wi-Fi радар ESP32": [
+    {
+      "episode": 373,
+      "segment": 461,
+      "score": 0.13954695489661306
+    },
+    {
+      "episode": 179,
+      "segment": 880,
+      "score": 0.14120895860566807
+    }
+  ],
+  "Ubiquity Unify network setup": [
+    {
+      "episode": 171,
+      "segment": 858,
+      "score": 0.28919069155638943
+    }
+  ],
+  "Byzantine fault tolerance explained": [
+    {
+      "episode": 275,
+      "segment": 20,
+      "score": 0.4152519292509679
+    },
+    {
+      "episode": 65,
+      "segment": 624,
+      "score": 0.9920258198936641
+    }
+  ],
+  "cron file system access mac": [
+    {
+      "episode": 60,
+      "segment": 768,
+      "score": 0.9011546813887162
+    },
+    {
+      "episode": 442,
+      "segment": 821,
+      "score": 0.5853004220344235
+    }
+  ],
+  "Valve company structure issues": [
+    {
+      "episode": 62,
+      "segment": 256,
+      "score": 0.16284349481597293
+    }
+  ],
+  "Linux microkernel vs monolithic": [
+    {
+      "episode": 315,
+      "segment": 223,
+      "score": 0.21711547387405383
+    }
+  ],
+  "перплексити ai vs deepseek": [
+    {
+      "episode": 439,
+      "segment": 877,
+      "score": 0.1823889227587392
+    }
+  ],
+  "Go generics error handling": [
+    {
+      "episode": 287,
+      "segment": 982,
+      "score": 0.8751541454892933
+    }
+  ],
+  "Django medical library project": [
+    {
+      "episode": 336,
+      "segment": 396,
+      "score": 0.9729927837716607
+    }
+  ],
+  "Эстония электронное резидентство": [
+    {
+      "episode": 23,
+      "segment": 641,
+      "score": 0.33137529612458383
+    },
+    {
+      "episode": 111,
+      "segment": 114,
+      "score": 0.3839180154499142
+    }
+  ],
+  "уменьшение слоев печатной платы": [
+    {
+      "episode": 94,
+      "segment": 400,
+      "score": 0.3781778710339594
+    },
+    {
+      "episode": 50,
+      "segment": 450,
+      "score": 0.6354768178800273
+    }
+  ],
+  "Snowflake architecture computing storage separation": [
+    {
+      "episode": 431,
+      "segment": 875,
+      "score": 0.45244506857875244
+    },
+    {
+      "episode": 430,
+      "segment": 131,
+      "score": 0.11000842224512264
+    }
+  ],
+  "способы справиться со стрессом": [
+    {
+      "episode": 280,
+      "segment": 963,
+      "score": 0.209049564649049
+    }
+  ],
+  "DigitalOcean vs AWS podcast hosting": [
+    {
+      "episode": 13,
+      "segment": 649,
+      "score": 0.44003428047681725
+    }
+  ],
+  "load balancer troubleshooting tips": [
+    {
+      "episode": 89,
+      "segment": 265,
+      "score": 0.0009689777992647475
+    },
+    {
+      "episode": 425,
+      "segment": 868,
+      "score": 0.5072175781161233
+    }
+  ],
+  "Google software development practices": [
+    {
+      "episode": 374,
+      "segment": 673,
+      "score": 0.21709860131118996
+    },
+    {
+      "episode": 15,
+      "segment": 846,
+      "score": 0.19411882364034694
+    }
+  ],
+  "parquet vs orc differences": [
+    {
+      "episode": 342,
+      "segment": 884,
+      "score": 0.695979645377207
+    }
+  ],
+  "RAM vs SSD power consumption": [
+    {
+      "episode": 476,
+      "segment": 879,
+      "score": 0.9780692953950384
+    },
+    {
+      "episode": 445,
+      "segment": 729,
+      "score": 0.08805235712747705
+    }
+  ],
+  "новый декрет о ПВТ Беларусь": [
+    {
+      "episode": 211,
+      "segment": 435,
+      "score": 0.7380973108487
+    }
+  ],
+  "Spectre vulnerabilities in processors": [
+    {
+      "episode": 431,
+      "segment": 836,
+      "score": 0.4955275851701585
+    }
+  ],
+  "нововведения в C++17": [
+    {
+      "episode": 309,
+      "segment": 534,
+      "score": 0.517318825379238
+    }
+  ],
+  "Twitter и YouTube проблемы": [
+    {
+      "episode": 314,
+      "segment": 70,
+      "score": 0.5340319114014813
+    }
+  ],
+  "Java drops x86-32 support": [
+    {
+      "episode": 351,
+      "segment": 848,
+      "score": 0.0641399965272671
+    }
+  ],
+  "лучшие 3d принтеры 2024": [
+    {
+      "episode": 51,
+      "segment": 484,
+      "score": 0.327995705446125
+    },
+    {
+      "episode": 405,
+      "segment": 674,
+      "score": 0.1341124336767554
+    }
+  ],
+  "Kubernetes аналог в России": [
+    {
+      "episode": 122,
+      "segment": 387,
+      "score": 0.03473069816826335
+    }
+  ],
+  "Slack браузерная панелька ChromeOS": [
+    {
+      "episode": 458,
+      "segment": 375,
+      "score": 0.7212428880211021
+    },
+    {
+      "episode": 299,
+      "segment": 421,
+      "score": 0.917503535736424
+    }
+  ],
+  "новое в Python CPython HTOP": [
+    {
+      "episode": 36,
+      "segment": 647,
+      "score": 0.5014318376245311
+    },
+    {
+      "episode": 243,
+      "segment": 703,
+      "score": 0.9996241245093919
+    }
+  ],
+  "planuml vs mermaid diagrams": [
+    {
+      "episode": 375,
+      "segment": 726,
+      "score": 0.17716768635598967
+    }
+  ],
+  "JIR hashing algorithm efficiency": [
+    {
+      "episode": 363,
+      "segment": 799,
+      "score": 0.28982326552610027
+    }
+  ],
+  "language impact on incident investigations": [
+    {
+      "episode": 162,
+      "segment": 36,
+      "score": 0.9831999716125667
+    },
+    {
+      "episode": 147,
+      "segment": 504,
+      "score": 0.5591032220938258
+    }
+  ],
+  "open source remote development Russia": [
+    {
+      "episode": 329,
+      "segment": 123,
+      "score": 0.5312266534134122
+    }
+  ],
+  "Arch Linux vs Gentoo": [
+    {
+      "episode": 165,
+      "segment": 68,
+      "score": 0.9816118582959213
+    },
+    {
+      "episode": 382,
+      "segment": 420,
+      "score": 0.0011550809455491695
+    }
+  ],
+  "PostgreSQL full text search": [
+    {
+      "episode": 106,
+      "segment": 314,
+      "score": 0.23186660533884462
+    }
+  ],
+  "Apple TV инновации обсуждение": [
+    {
+      "episode": 410,
+      "segment": 699,
+      "score": 0.14191290567122894
+    },
+    {
+      "episode": 34,
+      "segment": 782,
+      "score": 0.29538010275788573
+    }
+  ],
+  "SPO новая платформа хостинг": [
+    {
+      "episode": 202,
+      "segment": 55,
+      "score": 0.2297112631360685
+    }
+  ],
+  "growth hacking инструменты LinkedIn": [
+    {
+      "episode": 178,
+      "segment": 4,
+      "score": 0.05407523900468891
+    }
+  ],
+  "how Postgres executes SQL queries": [
+    {
+      "episode": 148,
+      "segment": 662,
+      "score": 0.8914502613946895
+    }
+  ],
+  "Rust release date roadmap": [
+    {
+      "episode": 348,
+      "segment": 771,
+      "score": 0.11013169204235584
+    }
+  ],
+  "Oracle Java EE support news": [
+    {
+      "episode": 474,
+      "segment": 984,
+      "score": 0.6832675531021791
+    },
+    {
+      "episode": 487,
+      "segment": 749,
+      "score": 0.8438536624126359
+    }
+  ],
+  "Slack memory usage issues": [
+    {
+      "episode": 58,
+      "segment": 216,
+      "score": 0.8187885006422754
+    },
+    {
+      "episode": 130,
+      "segment": 253,
+      "score": 0.058312789328540005
+    }
+  ],
+  "NLP language diversity problem": [
+    {
+      "episode": 66,
+      "segment": 120,
+      "score": 0.4373789754856253
+    },
+    {
+      "episode": 9,
+      "segment": 447,
+      "score": 0.7976485138239112
+    }
+  ],
+  "лучшие легковесные веб фреймворки скала": [
+    {
+      "episode": 366,
+      "segment": 231,
+      "score": 0.046344828581786346
+    }
+  ],
+  "Erlang vs Elixir for databases": [
+    {
+      "episode": 144,
+      "segment": 469,
+      "score": 0.6621719830357671
+    },
+    {
+      "episode": 165,
+      "segment": 335,
+      "score": 0.6964817535874683
+    }
+  ],
+  "query planning and optimization": [
+    {
+      "episode": 193,
+      "segment": 814,
+      "score": 0.48779124140932995
+    },
+    {
+      "episode": 74,
+      "segment": 917,
+      "score": 0.9802851191954437
+    }
+  ],
+  "Postgres 12 MongoDB style queries": [
+    {
+      "episode": 487,
+      "segment": 286,
+      "score": 0.44300837565084417
+    },
+    {
+      "episode": 137,
+      "segment": 118,
+      "score": 0.7617904279695473
+    }
+  ],
+  "американский рынок криптовалют regulation": [
+    {
+      "episode": 393,
+      "segment": 778,
+      "score": 0.7820472692355417
+    },
+    {
+      "episode": 39,
+      "segment": 20,
+      "score": 0.2694410562785149
+    }
+  ],
+  "KiCad 50 threads reason": [
+    {
+      "episode": 38,
+      "segment": 346,
+      "score": 0.6747582821953377
+    },
+    {
+      "episode": 151,
+      "segment": 716,
+      "score": 0.33614705279306656
+    }
+  ],
+  "лучшие современные игры 2024": [
+    {
+      "episode": 20,
+      "segment": 931,
+      "score": 0.4338291629859595
+    }
+  ],
+  "PostgreSQL replication conference experience": [
+    {
+      "episode": 229,
+      "segment": 373,
+      "score": 0.5695135435210273
+    },
+    {
+      "episode": 462,
+      "segment": 365,
+      "score": 0.3286199188086749
+    }
+  ],
+  "career framework engineering evaluation": [
+    {
+      "episode": 317,
+      "segment": 884,
+      "score": 0.5366991055246384
+    }
+  ],
+  "Terraform vs CloudFormation migration": [
+    {
+      "episode": 332,
+      "segment": 802,
+      "score": 0.3692910979474924
+    },
+    {
+      "episode": 42,
+      "segment": 542,
+      "score": 0.05311643047060055
+    }
+  ],
+  "docker и docker-compose проблемы": [
+    {
+      "episode": 484,
+      "segment": 382,
+      "score": 0.8753979136651657
+    },
+    {
+      "episode": 414,
+      "segment": 358,
+      "score": 0.7737969436727216
+    }
+  ],
+  "Postgres transaction ID wraparound": [
+    {
+      "episode": 101,
+      "segment": 728,
+      "score": 0.8269522559121546
+    }
+  ],
+  "что такое ESPHome": [
+    {
+      "episode": 461,
+      "segment": 78,
+      "score": 0.13716994860763565
+    },
+    {
+      "episode": 10,
+      "segment": 627,
+      "score": 0.7710718541784032
+    }
+  ],
+  "best technical podcasts": [
+    {
+      "episode": 229,
+      "segment": 159,
+      "score": 0.7241766145604285
+    }
+  ],
+  "Paxos vs Raft comparison": [
+    {
+      "episode": 380,
+      "segment": 703,
+      "score": 0.37788284825446705
+    }
+  ],
+  "институционализация воспитание детей": [
+    {
+      "episode": 150,
+      "segment": 983,
+      "score": 0.9537631502693765
+    },
+    {
+      "episode": 55,
+      "segment": 234,
+      "score": 0.6243304831562951
+    }
+  ],
+  "customer support cultural differences": [
+    {
+      "episode": 252,
+      "segment": 597,
+      "score": 0.4626787145156881
+    },
+    {
+      "episode": 350,
+      "segment": 610,
+      "score": 0.034096141956763026
+    }
+  ],
+  "почтовый перевод Беларусь инструкция": [
+    {
+      "episode": 166,
+      "segment": 448,
+      "score": 0.24464625789677763
+    }
+  ],
+  "скачать старую версию игры": [
+    {
+      "episode": 95,
+      "segment": 820,
+      "score": 0.2523040812367868
+    }
+  ],
+  "технологические vs продуктовые команды": [
+    {
+      "episode": 114,
+      "segment": 362,
+      "score": 0.6803796405596082
+    },
+    {
+      "episode": 218,
+      "segment": 587,
+      "score": 0.18690473218750925
+    }
+  ],
+  "unconscious competence examples": [
+    {
+      "episode": 335,
+      "segment": 224,
+      "score": 0.7957004431566337
+    },
+    {
+      "episode": 331,
+      "segment": 21,
+      "score": 0.23606735558794445
+    }
+  ],
+  "Postgres JSONB unique constraint": [
+    {
+      "episode": 317,
+      "segment": 488,
+      "score": 0.24540867482207784
+    }
+  ],
+  "distributed storage verification methods": [
+    {
+      "episode": 365,
+      "segment": 33,
+      "score": 0.6225477167095665
+    }
+  ],
+  "CreateDB distributed SQL database": [
+    {
+      "episode": 461,
+      "segment": 394,
+      "score": 0.4639095456515928
+    }
+  ],
+  "reverse engineering 433 MHz devices": [
+    {
+      "episode": 138,
+      "segment": 897,
+      "score": 0.922200132317078
+    }
+  ],
+  "code review best practices": [
+    {
+      "episode": 453,
+      "segment": 625,
+      "score": 0.9118106906439457
+    },
+    {
+      "episode": 317,
+      "segment": 346,
+      "score": 0.8052590043858701
+    }
+  ],
+  "требования инвесторов к стартапам": [
+    {
+      "episode": 264,
+      "segment": 452,
+      "score": 0.6619939742299253
+    }
+  ],
+  "Google payment systems Europe regulations": [
+    {
+      "episode": 86,
+      "segment": 500,
+      "score": 0.6450411133634251
+    },
+    {
+      "episode": 451,
+      "segment": 754,
+      "score": 0.8470154285881223
+    }
+  ],
+  "B450 BIOS update Nvidia issues": [
+    {
+      "episode": 473,
+      "segment": 540,
+      "score": 0.3857936268327288
+    }
+  ],
+  "Agora vs Twilio comparison": [
+    {
+      "episode": 118,
+      "segment": 275,
+      "score": 0.6293615059607117
+    }
+  ],
+  "Twitter data access for researchers": [
+    {
+      "episode": 410,
+      "segment": 890,
+      "score": 0.4376023043734756
+    }
+  ],
+  "QGIS histogram parameter selection issues": [
+    {
+      "episode": 208,
+      "segment": 702,
+      "score": 0.19243712506777189
+    }
+  ],
+  "ZSTD vs LZ4 compression Postgres": [
+    {
+      "episode": 306,
+      "segment": 823,
+      "score": 0.6339987355483038
+    },
+    {
+      "episode": 398,
+      "segment": 641,
+      "score": 0.5890275594293144
+    }
+  ],
+  "новое в кубернетес 1.3": [
+    {
+      "episode": 111,
+      "segment": 266,
+      "score": 0.7471454833795163
+    },
+    {
+      "episode": 347,
+      "segment": 584,
+      "score": 0.524676136546184
+    }
+  ],
+  "how to be productive engineer": [
+    {
+      "episode": 102,
+      "segment": 608,
+      "score": 0.768341397098148
+    }
+  ],
+  "стартап продажа идеи до продукта": [
+    {
+      "episode": 45,
+      "segment": 368,
+      "score": 0.8653158021312499
+    }
+  ],
+  "observability 1.0 vs 2.0": [
+    {
+      "episode": 169,
+      "segment": 704,
+      "score": 0.27412929906649675
+    }
+  ],
+  "альтернатива disqus для комментариев": [
+    {
+      "episode": 46,
+      "segment": 423,
+      "score": 0.14772921942633022
+    },
+    {
+      "episode": 57,
+      "segment": 769,
+      "score": 0.9434753875550111
+    }
+  ],
+  "Go 2 update and features": [
+    {
+      "episode": 398,
+      "segment": 634,
+      "score": 0.6185622752050594
+    }
+  ],
+  "лучшие IT издательства книг": [
+    {
+      "episode": 363,
+      "segment": 483,
+      "score": 0.8681509622130074
+    },
+    {
+      "episode": 480,
+      "segment": 109,
+      "score": 0.2057611655868712
+    }
+  ],
+  "Postgres transaction ID wrap around": [
+    {
+      "episode": 325,
+      "segment": 133,
+      "score": 0.808582462174313
+    },
+    {
+      "episode": 78,
+      "segment": 217,
+      "score": 0.30970691353872193
+    }
+  ],
+  "ретро ноутбук резервное копирование": [
+    {
+      "episode": 208,
+      "segment": 437,
+      "score": 0.4254424189438123
+    }
+  ],
+  "применение приватных блокчейнов": [
+    {
+      "episode": 414,
+      "segment": 673,
+      "score": 0.6757119974073394
+    },
+    {
+      "episode": 152,
+      "segment": 26,
+      "score": 0.8537038531070613
+    }
+  ],
+  "Wrike vs Trello vs Jira": [
+    {
+      "episode": 418,
+      "segment": 555,
+      "score": 0.06830982458974377
+    },
+    {
+      "episode": 127,
+      "segment": 440,
+      "score": 0.20695584652370214
+    }
+  ],
+  "DataGrip vs MySQL Workbench": [
+    {
+      "episode": 68,
+      "segment": 221,
+      "score": 0.14721887517171217
+    },
+    {
+      "episode": 448,
+      "segment": 666,
+      "score": 0.9798837456015458
+    }
+  ],
+  "ночные дежурства и хаос манки": [
+    {
+      "episode": 386,
+      "segment": 722,
+      "score": 0.9342173156807041
+    },
+    {
+      "episode": 414,
+      "segment": 745,
+      "score": 0.12399763681613019
+    }
+  ],
+  "современные CRDT преимущества": [
+    {
+      "episode": 309,
+      "segment": 905,
+      "score": 0.9739429410596162
+    },
+    {
+      "episode": 401,
+      "segment": 738,
+      "score": 0.5091791273762314
+    }
+  ],
+  "развитие сотрудников ожидания компании": [
+    {
+      "episode": 48,
+      "segment": 188,
+      "score": 0.908466106853292
+    },
+    {
+      "episode": 284,
+      "segment": 812,
+      "score": 0.9297305122108489
+    }
+  ],
+  "работа в стартапе vs корпорация": [
+    {
+      "episode": 45,
+      "segment": 203,
+      "score": 0.5574128873746418
+    },
+    {
+      "episode": 337,
+      "segment": 60,
+      "score": 0.5810114632646021
+    }
+  ],
+  "университет распределение после выпуска": [
+    {
+      "episode": 349,
+      "segment": 967,
+      "score": 0.5908570548131494
+    },
+    {
+      "episode": 140,
+      "segment": 259,
+      "score": 0.6621434864561464
+    }
+  ],
+  "Fujifilm 100mp medium format camera": [
+    {
+      "episode": 200,
+      "segment": 295,
+      "score": 0.5412973312441387
+    },
+    {
+      "episode": 39,
+      "segment": 532,
+      "score": 0.5945646098995631
+    }
+  ],
+  "Ruby vs Perl vs Python": [
+    {
+      "episode": 274,
+      "segment": 542,
+      "score": 0.42415362493738695
+    }
+  ],
+  "Line Array sound engineering": [
+    {
+      "episode": 392,
+      "segment": 785,
+      "score": 0.07082888813701871
+    },
+    {
+      "episode": 386,
+      "segment": 703,
+      "score": 0.747689784236104
+    }
+  ],
+  "work as imagined vs done": [
+    {
+      "episode": 139,
+      "segment": 500,
+      "score": 0.9205276207104058
+    }
+  ],
+  "Zero Knowledge Proof криптография": [
+    {
+      "episode": 45,
+      "segment": 702,
+      "score": 0.6487214511709786
+    }
+  ],
+  "Bronze Rust garbage collection library": [
+    {
+      "episode": 505,
+      "segment": 427,
+      "score": 0.16008279556145244
+    }
+  ],
+  "OCI Container Registry поддерживаемые артефакты": [
+    {
+      "episode": 251,
+      "segment": 890,
+      "score": 0.7300052770529079
+    },
+    {
+      "episode": 97,
+      "segment": 641,
+      "score": 0.13178116390594607
+    }
+  ],
+  "ChatGPT находит ошибки в коде": [
+    {
+      "episode": 474,
+      "segment": 692,
+      "score": 0.685365773205409
+    }
+  ],
+  "NVMe для Raspberry Pi": [
+    {
+      "episode": 326,
+      "segment": 743,
+      "score": 0.7643199290927557
+    }
+  ],
+  "information bottleneck deep learning": [
+    {
+      "episode": 61,
+      "segment": 345,
+      "score": 0.19097303833397838
+    },
+    {
+      "episode": 221,
+      "segment": 238,
+      "score": 0.02161225447454973
+    }
+  ],
+  "советы начинающим программистам": [
+    {
+      "episode": 441,
+      "segment": 709,
+      "score": 0.953211882716194
+    }
+  ],
+  "различия Make Shake Bazel": [
+    {
+      "episode": 228,
+      "segment": 107,
+      "score": 0.21389765352511758
+    }
+  ],
+  "open source проект сложности": [
+    {
+      "episode": 118,
+      "segment": 120,
+      "score": 0.21583446091659353
+    }
+  ],
+  "UK software developer salaries": [
+    {
+      "episode": 417,
+      "segment": 947,
+      "score": 0.9978511067176119
+    }
+  ],
+  "макросы в функциональном программировании": [
+    {
+      "episode": 374,
+      "segment": 869,
+      "score": 0.8877934529593899
+    },
+    {
+      "episode": 482,
+      "segment": 889,
+      "score": 0.8856597816304731
+    }
+  ],
+  "Ethereum proof of stake delays": [
+    {
+      "episode": 73,
+      "segment": 978,
+      "score": 0.4755605470716101
+    },
+    {
+      "episode": 455,
+      "segment": 607,
+      "score": 0.3908596394173154
+    }
+  ],
+  "архитектура костыль в разработке": [
+    {
+      "episode": 192,
+      "segment": 329,
+      "score": 0.05038813915044882
+    }
+  ],
+  "Command Conquer исходники на GitHub": [
+    {
+      "episode": 400,
+      "segment": 262,
+      "score": 0.6174775607244943
+    },
+    {
+      "episode": 129,
+      "segment": 138,
+      "score": 0.29029318270659743
+    }
+  ],
+  "on-call best practices": [
+    {
+      "episode": 329,
+      "segment": 867,
+      "score": 0.24264852010597526
+    },
+    {
+      "episode": 415,
+      "segment": 481,
+      "score": 0.678695791154575
+    }
+  ],
+  "мобильные сети ненадежность причины": [
+    {
+      "episode": 209,
+      "segment": 864,
+      "score": 0.6590906369218875
+    },
+    {
+      "episode": 20,
+      "segment": 206,
+      "score": 0.10985446964212253
+    }
+  ],
+  "docker networking setup issues": [
+    {
+      "episode": 228,
+      "segment": 715,
+      "score": 0.1863374586315233
+    },
+    {
+      "episode": 296,
+      "segment": 853,
+      "score": 0.7760534834188776
+    }
+  ],
+  "дихлорметан свойства применение": [
+    {
+      "episode": 339,
+      "segment": 221,
+      "score": 0.5095426642181757
+    }
+  ],
+  "React 2.0 новые фичи": [
+    {
+      "episode": 78,
+      "segment": 812,
+      "score": 0.7802732813982683
+    },
+    {
+      "episode": 180,
+      "segment": 208,
+      "score": 0.6949645292508461
+    }
+  ],
+  "key value storage comparison": [
+    {
+      "episode": 116,
+      "segment": 960,
+      "score": 0.9208900789703504
+    },
+    {
+      "episode": 163,
+      "segment": 259,
+      "score": 0.07762827559541385
+    }
+  ],
+  "Travis CI layoffs process": [
+    {
+      "episode": 321,
+      "segment": 209,
+      "score": 0.8486215513075608
+    },
+    {
+      "episode": 171,
+      "segment": 655,
+      "score": 0.4534952977203198
+    }
+  ],
+  "machine learning for operations": [
+    {
+      "episode": 472,
+      "segment": 108,
+      "score": 0.5526204245264853
+    }
+  ],
+  "лучшие книги по архитектуре процессоров": [
+    {
+      "episode": 476,
+      "segment": 26,
+      "score": 0.2773145460454166
+    }
+  ],
+  "монго в продакшене плюсы минусы": [
+    {
+      "episode": 96,
+      "segment": 655,
+      "score": 0.936543309509067
+    }
+  ],
+  "OCaml vs Rust comparison": [
+    {
+      "episode": 42,
+      "segment": 323,
+      "score": 0.19530838192189115
+    },
+    {
+      "episode": 270,
+      "segment": 1000,
+      "score": 0.622661557765864
+    }
+  ],
+  "My Little Pony нейронки фейлы": [
+    {
+      "episode": 260,
+      "segment": 948,
+      "score": 0.8277535341994218
+    }
+  ],
+  "Node.js 21 Client WebSocket": [
+    {
+      "episode": 480,
+      "segment": 658,
+      "score": 0.5370795704679022
+    }
+  ],
+  "Tier 1 и Tier 2 различия": [
+    {
+      "episode": 164,
+      "segment": 836,
+      "score": 0.5415569783536668
+    }
+  ],
+  "CedarDB Umbra Munich database": [
+    {
+      "episode": 67,
+      "segment": 69,
+      "score": 0.4080152173496293
+    }
+  ],
+  "новая книга Linux Internals": [
+    {
+      "episode": 95,
+      "segment": 778,
+      "score": 0.9301612753976188
+    }
+  ],
+  "Slack новый интерфейс изменения": [
+    {
+      "episode": 227,
+      "segment": 258,
+      "score": 0.32676693859788963
+    },
+    {
+      "episode": 476,
+      "segment": 239,
+      "score": 0.6422685817788524
+    }
+  ],
+  "Intel TSX instruction bug": [
+    {
+      "episode": 485,
+      "segment": 15,
+      "score": 0.9192620919637203
+    }
+  ],
+  "светофоры MIRT уязвимость": [
+    {
+      "episode": 433,
+      "segment": 210,
+      "score": 0.6872968344451607
+    }
+  ],
+  "Go language criticisms": [
+    {
+      "episode": 248,
+      "segment": 894,
+      "score": 0.8652827429527683
+    }
+  ],
+  "логи high cardinality хранение": [
+    {
+      "episode": 87,
+      "segment": 525,
+      "score": 0.611193654853244
+    }
+  ],
+  "OpenStack conference Yandex summary": [
+    {
+      "episode": 67,
+      "segment": 42,
+      "score": 0.02271052376026017
+    },
+    {
+      "episode": 13,
+      "segment": 967,
+      "score": 0.43564372327557743
+    }
+  ],
+  "DevOps внедрение Альфа-банк": [
+    {
+      "episode": 73,
+      "segment": 99,
+      "score": 0.2779671228870314
+    }
+  ],
+  "почему компании не дают фидбэк": [
+    {
+      "episode": 58,
+      "segment": 390,
+      "score": 0.9252596588664369
+    },
+    {
+      "episode": 468,
+      "segment": 629,
+      "score": 0.2671983940496877
+    }
+  ],
+  "Rust Future trait poll method": [
+    {
+      "episode": 255,
+      "segment": 70,
+      "score": 0.5615572684290446
+    },
+    {
+      "episode": 33,
+      "segment": 121,
+      "score": 0.7647725230534871
+    }
+  ],
+  "интернатура в Лондоне зарплаты": [
+    {
+      "episode": 307,
+      "segment": 265,
+      "score": 0.006680497755689019
+    },
+    {
+      "episode": 113,
+      "segment": 313,
+      "score": 0.2952895181698302
+    }
+  ],
+  "Postgres custom index methods": [
+    {
+      "episode": 152,
+      "segment": 823,
+      "score": 0.49115275667425107
+    }
+  ],
+  "message queue scalability challenges": [
+    {
+      "episode": 92,
+      "segment": 890,
+      "score": 0.18806425186151177
+    }
+  ],
+  "RampLid vulnerability memory attack": [
+    {
+      "episode": 293,
+      "segment": 205,
+      "score": 0.45620928540537464
+    }
+  ],
+  "Habrahabr vs Medium toxicity": [
+    {
+      "episode": 74,
+      "segment": 579,
+      "score": 0.7511684656959232
+    },
+    {
+      "episode": 187,
+      "segment": 449,
+      "score": 0.4456976868170869
+    }
+  ],
+  "Erlang Elixir production use cases": [
+    {
+      "episode": 171,
+      "segment": 319,
+      "score": 0.05413355066810466
+    },
+    {
+      "episode": 241,
+      "segment": 667,
+      "score": 0.7901453038444552
+    }
+  ],
+  "ClickHouse 22.3 LTS features": [
+    {
+      "episode": 289,
+      "segment": 792,
+      "score": 0.8878146952557556
+    }
+  ],
+  "разработка процессов в IT-командах": [
+    {
+      "episode": 23,
+      "segment": 406,
+      "score": 0.6493517821224183
+    }
+  ],
+  "DynamoDB transactions history": [
+    {
+      "episode": 46,
+      "segment": 859,
+      "score": 0.5917239997821335
+    }
+  ],
+  "разница сериализуемости и линеаризуемости": [
+    {
+      "episode": 361,
+      "segment": 135,
+      "score": 0.602447150512301
+    }
+  ],
+  "air gapped computer data theft": [
+    {
+      "episode": 66,
+      "segment": 805,
+      "score": 0.7391575028339809
+    },
+    {
+      "episode": 393,
+      "segment": 493,
+      "score": 0.6944005435385101
+    }
+  ],
+  "Mac PCIe NVMe compatibility": [
+    {
+      "episode": 104,
+      "segment": 670,
+      "score": 0.33823434687060094
+    },
+    {
+      "episode": 424,
+      "segment": 29,
+      "score": 0.29302440259666374
+    }
+  ],
+  "лучшие игровые ноутбуки 2023": [
+    {
+      "episode": 403,
+      "segment": 218,
+      "score": 0.602602108904232
+    }
+  ],
+  "EU Blue Card Germany rules": [
+    {
+      "episode": 229,
+      "segment": 479,
+      "score": 0.8339337408785628
+    },
+    {
+      "episode": 86,
+      "segment": 937,
+      "score": 0.24106094541761647
+    }
+  ],
+  "property based testing techniques": [
+    {
+      "episode": 372,
+      "segment": 654,
+      "score": 0.4590005040313847
+    }
+  ],
+  "фарм транзакционная система Microsoft": [
+    {
+      "episode": 34,
+      "segment": 811,
+      "score": 0.7425062717931942
+    }
+  ],
+  "PostgreSQL transaction wraparound problem": [
+    {
+      "episode": 5,
+      "segment": 144,
+      "score": 0.054859941566025916
+    },
+    {
+      "episode": 9,
+      "segment": 699,
+      "score": 0.624624553294741
+    }
+  ],
+  "Nvidia Vulkan C++ open source": [
+    {
+      "episode": 231,
+      "segment": 488,
+      "score": 0.9671723132924384
+    },
+    {
+      "episode": 500,
+      "segment": 869,
+      "score": 0.6204331735226042
+    }
+  ],
+  "Go асинхронный дисковый IO": [
+    {
+      "episode": 227,
+      "segment": 221,
+      "score": 0.4428196600369898
+    },
+    {
+      "episode": 118,
+      "segment": 802,
+      "score": 0.24991906532588215
+    }
+  ],
+  "зачем нужны часовые пояса": [
+    {
+      "episode": 368,
+      "segment": 197,
+      "score": 0.18365641739630145
+    }
+  ],
+  "open source alternatives comparison culture": [
+    {
+      "episode": 152,
+      "segment": 288,
+      "score": 0.11339470702275145
+    }
+  ],
+  "влияние увольнений на работу сервисов": [
+    {
+      "episode": 479,
+      "segment": 790,
+      "score": 0.5142549530041218
+    }
+  ],
+  "rasterization vs ray tracing": [
+    {
+      "episode": 351,
+      "segment": 338,
+      "score": 0.4239905810526359
+    },
+    {
+      "episode": 118,
+      "segment": 587,
+      "score": 0.09061766762621526
+    }
+  ],
+  "web server usage statistics": [
+    {
+      "episode": 366,
+      "segment": 72,
+      "score": 0.3719890174918987
+    },
+    {
+      "episode": 480,
+      "segment": 614,
+      "score": 0.3017053094748353
+    }
+  ],
+  "контрактный dba преимущества": [
+    {
+      "episode": 482,
+      "segment": 341,
+      "score": 0.9533566581388624
+    },
+    {
+      "episode": 61,
+      "segment": 478,
+      "score": 0.3065382238860608
+    }
+  ],
+  "структурированные интервью плюсы минусы": [
+    {
+      "episode": 53,
+      "segment": 970,
+      "score": 0.49253572215528785
+    }
+  ],
+  "российские дата-центры сравнение": [
+    {
+      "episode": 36,
+      "segment": 866,
+      "score": 0.5534253700329432
+    },
+    {
+      "episode": 407,
+      "segment": 122,
+      "score": 0.6630125885378908
+    }
+  ],
+  "Pentiment game screenshots": [
+    {
+      "episode": 5,
+      "segment": 579,
+      "score": 0.040450369308435596
+    },
+    {
+      "episode": 3,
+      "segment": 29,
+      "score": 0.6908434291394919
+    }
+  ],
+  "SQLite driver alternatives Go": [
+    {
+      "episode": 457,
+      "segment": 264,
+      "score": 0.28042220845918997
+    }
+  ],
+  "Itanium processor discontinuation": [
+    {
+      "episode": 458,
+      "segment": 584,
+      "score": 0.8371114585409796
+    }
+  ],
+  "покупка бандлов старых игр": [
+    {
+      "episode": 80,
+      "segment": 174,
+      "score": 0.08652171837935807
+    },
+    {
+      "episode": 299,
+      "segment": 32,
+      "score": 0.5959898855399292
+    }
+  ],
+  "technical skills vs soft skills": [
+    {
+      "episode": 473,
+      "segment": 718,
+      "score": 0.6058843719570207
+    },
+    {
+      "episode": 171,
+      "segment": 851,
+      "score": 0.6509626330518617
+    }
+  ],
+  "Adobe Flash end of support": [
+    {
+      "episode": 390,
+      "segment": 543,
+      "score": 0.7586751008508377
+    }
+  ],
+  "JetBrains IDE input latency": [
+    {
+      "episode": 107,
+      "segment": 131,
+      "score": 0.8338170677541595
+    }
+  ],
+  "Harvard Extension School experience": [
+    {
+      "episode": 127,
+      "segment": 191,
+      "score": 0.9394058374367017
+    }
+  ],
+  "императивный vs функциональный стиль": [
+    {
+      "episode": 49,
+      "segment": 357,
+      "score": 0.5946228114097435
+    }
+  ],
+  "slow motion tv display explained": [
+    {
+      "episode": 174,
+      "segment": 118,
+      "score": 0.0753172615562977
+    }
+  ],
+  "MMAP usage database problems": [
+    {
+      "episode": 90,
+      "segment": 527,
+      "score": 0.8963712634226276
+    },
+    {
+      "episode": 123,
+      "segment": 193,
+      "score": 0.6188089372764173
+    }
+  ],
+  "MongoDB join feature history": [
+    {
+      "episode": 176,
+      "segment": 58,
+      "score": 0.6360785700373828
+    }
+  ],
+  "YDB консенсус и blob storage": [
+    {
+      "episode": 412,
+      "segment": 526,
+      "score": 0.21912021900057643
+    }
+  ],
+  "Postgres vs Elasticsearch for logs": [
+    {
+      "episode": 453,
+      "segment": 911,
+      "score": 0.7666284078435575
+    }
+  ],
+  "incremental backups in databases": [
+    {
+      "episode": 385,
+      "segment": 376,
+      "score": 0.06364511338394341
+    },
+    {
+      "episode": 359,
+      "segment": 906,
+      "score": 0.40296540137614134
+    }
+  ],
+  "Learn TLA resources": [
+    {
+      "episode": 327,
+      "segment": 218,
+      "score": 0.37098375627183444
+    }
+  ],
+  "ScalaJS frontend development issues": [
+    {
+      "episode": 423,
+      "segment": 202,
+      "score": 0.8306646078006532
+    }
+  ],
+  "ClickHouse достоинства и недостатки": [
+    {
+      "episode": 15,
+      "segment": 801,
+      "score": 0.5138968716242605
+    }
+  ],
+  "метаморфическое тестирование объяснение": [
+    {
+      "episode": 331,
+      "segment": 364,
+      "score": 0.9899154846873703
+    },
+    {
+      "episode": 504,
+      "segment": 357,
+      "score": 0.32957799647583963
+    }
+  ],
+  "Umbra database architecture features": [
+    {
+      "episode": 88,
+      "segment": 284,
+      "score": 0.003950359111831614
+    },
+    {
+      "episode": 142,
+      "segment": 243,
+      "score": 0.6747146667344941
+    }
+  ],
+  "распределённые алгоритмы в практике": [
+    {
+      "episode": 91,
+      "segment": 85,
+      "score": 0.12650648398811526
+    }
+  ],
+  "IT-образование без математики": [
+    {
+      "episode": 188,
+      "segment": 556,
+      "score": 0.5946138539561809
+    }
+  ],
+  "ICO бизнес-модель примеры": [
+    {
+      "episode": 119,
+      "segment": 752,
+      "score": 0.09622233792181134
+    }
+  ],
+  "Tesla battery API usage": [
+    {
+      "episode": 30,
+      "segment": 642,
+      "score": 0.7108875996609412
+    }
+  ],
+  "Bayonetta серия игр обзор": [
+    {
+      "episode": 291,
+      "segment": 207,
+      "score": 0.9470090530902394
+    }
+  ],
+  "go arena memory management": [
+    {
+      "episode": 29,
+      "segment": 443,
+      "score": 0.012821129794531871
+    }
+  ],
+  "Facebook migration to Python 3": [
+    {
+      "episode": 9,
+      "segment": 139,
+      "score": 0.19764495213316102
+    },
+    {
+      "episode": 163,
+      "segment": 6,
+      "score": 0.7284342512427203
+    }
+  ],
+  "Go language advantages": [
+    {
+      "episode": 275,
+      "segment": 401,
+      "score": 0.8258338297787282
+    },
+    {
+      "episode": 225,
+      "segment": 457,
+      "score": 0.1434599894181926
+    }
+  ],
+  "shunting yard railway operations": [
+    {
+      "episode": 427,
+      "segment": 138,
+      "score": 0.2518804373764276
+    }
+  ],
+  "Rust data ownership transfer": [
+    {
+      "episode": 308,
+      "segment": 558,
+      "score": 0.6787262642306432
+    },
+    {
+      "episode": 281,
+      "segment": 744,
+      "score": 0.6954917089896502
+    }
+  ],
+  "олимпиадное vs промышленное программирование": [
+    {
+      "episode": 336,
+      "segment": 389,
+      "score": 0.21747078178370527
+    }
+  ],
+  "eBitEngine возможности 3D игры": [
+    {
+      "episode": 291,
+      "segment": 255,
+      "score": 0.49950255204888194
+    },
+    {
+      "episode": 410,
+      "segment": 837,
+      "score": 0.008322962436810077
+    }
+  ],
+  "Вандерлист собеседование culture fit": [
+    {
+      "episode": 442,
+      "segment": 650,
+      "score": 0.958058008706509
+    },
+    {
+      "episode": 284,
+      "segment": 226,
+      "score": 0.6275317482358306
+    }
+  ],
+  "DevOps monitoring best practices": [
+    {
+      "episode": 335,
+      "segment": 982,
+      "score": 0.5738867323133123
+    }
+  ],
+  "будет ли WebVulkan": [
+    {
+      "episode": 4,
+      "segment": 853,
+      "score": 0.6697768964722766
+    },
+    {
+      "episode": 396,
+      "segment": 279,
+      "score": 0.9984215852159083
+    }
+  ],
+  "E2P protocol vs TOR": [
+    {
+      "episode": 131,
+      "segment": 518,
+      "score": 0.010682183082077579
+    }
+  ],
+  "Omnigress platform overview": [
+    {
+      "episode": 370,
+      "segment": 36,
+      "score": 0.6358120319953554
+    },
+    {
+      "episode": 340,
+      "segment": 905,
+      "score": 0.1750240601785974
+    }
+  ],
+  "game development impact on GPUs": [
+    {
+      "episode": 98,
+      "segment": 373,
+      "score": 0.5840247063049054
+    }
+  ],
+  "F# type providers features": [
+    {
+      "episode": 159,
+      "segment": 101,
+      "score": 0.42436376312486634
+    },
+    {
+      "episode": 424,
+      "segment": 446,
+      "score": 0.8307667147282491
+    }
+  ],
+  "Go компилятор для микроконтроллера": [
+    {
+      "episode": 45,
+      "segment": 847,
+      "score": 0.280681770559689
+    }
+  ],
+  "акторы и изоляция данных": [
+    {
+      "episode": 473,
+      "segment": 943,
+      "score": 0.24143191079979398
+    }
+  ],
+  "MongoDB versus PostgreSQL BI interface": [
+    {
+      "episode": 407,
+      "segment": 852,
+      "score": 0.628875207404923
+    }
+  ],
+  "how to organize a hackathon": [
+    {
+      "episode": 236,
+      "segment": 227,
+      "score": 0.35912821079518353
+    }
+  ],
+  "custom IP blocks in OpenStack": [
+    {
+      "episode": 364,
+      "segment": 500,
+      "score": 0.8569854289706696
+    }
+  ],
+  "open source vs proprietary support": [
+    {
+      "episode": 282,
+      "segment": 673,
+      "score": 0.2407361953413507
+    }
+  ],
+  "Java Postgres logical replication": [
+    {
+      "episode": 366,
+      "segment": 798,
+      "score": 0.1251422754532897
+    }
+  ],
+  "corporate blog employee censorship": [
+    {
+      "episode": 28,
+      "segment": 752,
+      "score": 0.704606467337523
+    },
+    {
+      "episode": 255,
+      "segment": 752,
+      "score": 0.9439565404179568
+    }
+  ],
+  "Linux vs Mac for developers": [
+    {
+      "episode": 45,
+      "segment": 205,
+      "score": 0.474605371755638
+    }
+  ],
+  "how to discuss salary increase": [
+    {
+      "episode": 2,
+      "segment": 463,
+      "score": 0.8739910701193954
+    }
+  ],
+  "TaxFix Germany tax return review": [
+    {
+      "episode": 234,
+      "segment": 817,
+      "score": 0.8685433335135833
+    }
+  ],
+  "карьерные пути в информационной безопасности": [
+    {
+      "episode": 441,
+      "segment": 619,
+      "score": 0.2336637370512007
+    }
+  ],
+  "Postgres ML features": [
+    {
+      "episode": 80,
+      "segment": 444,
+      "score": 0.4139591797681682
+    }
+  ],
+  "Thrift algebraic data types": [
+    {
+      "episode": 152,
+      "segment": 585,
+      "score": 0.910139803806592
+    },
+    {
+      "episode": 0,
+      "segment": 189,
+      "score": 0.024056388267586937
+    }
+  ],
+  "безопасная смена схемы базы": [
+    {
+      "episode": 30,
+      "segment": 918,
+      "score": 0.5262364645085545
+    }
+  ],
+  "отказаться от тестового задания": [
+    {
+      "episode": 320,
+      "segment": 365,
+      "score": 0.11895377210495872
+    }
+  ],
+  "computational photography advancements": [
+    {
+      "episode": 20,
+      "segment": 261,
+      "score": 0.5599875226784348
+    }
+  ],
+  "JVM developer daily tools": [
+    {
+      "episode": 399,
+      "segment": 660,
+      "score": 0.050033985086649246
+    }
+  ],
+  "возврат сотрудников в офис": [
+    {
+      "episode": 77,
+      "segment": 727,
+      "score": 0.202215182334041
+    }
+  ],
+  "null object vs optional java": [
+    {
+      "episode": 360,
+      "segment": 398,
+      "score": 0.30603320576154713
+    }
+  ],
+  "Samsung S8 launch Russia price": [
+    {
+      "episode": 267,
+      "segment": 16,
+      "score": 0.84635203099619
+    },
+    {
+      "episode": 200,
+      "segment": 333,
+      "score": 0.4499028791574332
+    }
+  ],
+  "курс технологии УБД МГУ": [
+    {
+      "episode": 506,
+      "segment": 632,
+      "score": 0.6325662994636851
+    }
+  ],
+  "Go DeadCode RTA analysis": [
+    {
+      "episode": 453,
+      "segment": 29,
+      "score": 0.5909003179014916
+    },
+    {
+      "episode": 392,
+      "segment": 111,
+      "score": 0.2130155012998859
+    }
+  ],
+  "Linux kernel community newcomer experience": [
+    {
+      "episode": 310,
+      "segment": 382,
+      "score": 0.03937987199465154
+    }
+  ],
+  "Jepsen testing vs unit tests": [
+    {
+      "episode": 472,
+      "segment": 306,
+      "score": 0.5497802639803461
+    },
+    {
+      "episode": 235,
+      "segment": 473,
+      "score": 0.6642012691886602
+    }
+  ],
+  "Timescale лицензия история смены": [
+    {
+      "episode": 360,
+      "segment": 689,
+      "score": 0.41999760298226163
+    },
+    {
+      "episode": 298,
+      "segment": 957,
+      "score": 0.02724378309246367
+    }
+  ],
+  "выращивание свиней как бизнес": [
+    {
+      "episode": 294,
+      "segment": 235,
+      "score": 0.2321599263756169
+    },
+    {
+      "episode": 376,
+      "segment": 799,
+      "score": 0.13571247936983588
+    }
+  ],
+  "менторство советы для менеджеров": [
+    {
+      "episode": 131,
+      "segment": 944,
+      "score": 0.33616648602590227
+    },
+    {
+      "episode": 132,
+      "segment": 667,
+      "score": 0.17585755637938505
+    }
+  ],
+  "SBT vs Maven comparison": [
+    {
+      "episode": 137,
+      "segment": 580,
+      "score": 0.8274290167022125
+    },
+    {
+      "episode": 429,
+      "segment": 340,
+      "score": 0.5259631713689443
+    }
+  ],
+  "LLM agents code development workflow": [
+    {
+      "episode": 107,
+      "segment": 547,
+      "score": 0.08109455794514464
+    },
+    {
+      "episode": 391,
+      "segment": 742,
+      "score": 0.5042786557033554
+    }
+  ],
+  "eventual consistency replication highload": [
+    {
+      "episode": 490,
+      "segment": 506,
+      "score": 0.9988752870628834
+    }
+  ],
+  "datalog vs sql declarative queries": [
+    {
+      "episode": 264,
+      "segment": 577,
+      "score": 0.14477739464505035
+    }
+  ],
+  "Postgres 9.6 features": [
+    {
+      "episode": 271,
+      "segment": 579,
+      "score": 0.47818119732477327
+    },
+    {
+      "episode": 420,
+      "segment": 261,
+      "score": 0.28116074274664316
+    }
+  ],
+  "инженерный маятник менеджмент IC": [
+    {
+      "episode": 383,
+      "segment": 717,
+      "score": 0.7588719134432231
+    },
+    {
+      "episode": 94,
+      "segment": 473,
+      "score": 0.20761130636384695
+    }
+  ],
+  "SQLSmith purpose and limitations": [
+    {
+      "episode": 263,
+      "segment": 489,
+      "score": 0.4143354799285086
+    },
+    {
+      "episode": 52,
+      "segment": 82,
+      "score": 0.38408466530390695
+    }
+  ],
+  "docker container format advantages": [
+    {
+      "episode": 214,
+      "segment": 16,
+      "score": 0.060174911267625864
+    },
+    {
+      "episode": 19,
+      "segment": 351,
+      "score": 0.35831677361917924
+    }
+  ],
+  "online hate group evolution study": [
+    {
+      "episode": 432,
+      "segment": 225,
+      "score": 0.25361579224080555
+    },
+    {
+      "episode": 394,
+      "segment": 567,
+      "score": 0.6428911323171823
+    }
+  ],
+  "чистое функциональное программирование плюсы": [
+    {
+      "episode": 37,
+      "segment": 416,
+      "score": 0.4841086487110362
+    },
+    {
+      "episode": 62,
+      "segment": 140,
+      "score": 0.4357771375524949
+    }
+  ],
+  "обзор айти конференций Россия": [
+    {
+      "episode": 124,
+      "segment": 228,
+      "score": 0.1742196913611722
+    }
+  ],
+  "Ofzone Moscow конференция детали": [
+    {
+      "episode": 212,
+      "segment": 225,
+      "score": 0.11253812000362196
+    }
+  ],
+  "MapD vs KDB+ performance": [
+    {
+      "episode": 28,
+      "segment": 835,
+      "score": 0.18190320051459807
+    }
+  ],
+  "KEF R series speakers review": [
+    {
+      "episode": 352,
+      "segment": 62,
+      "score": 0.061104742900415676
+    }
+  ],
+  "учеба в Осло Норвегия": [
+    {
+      "episode": 459,
+      "segment": 593,
+      "score": 0.9954142840155575
+    }
+  ],
+  "Figma CRDT architecture discussion": [
+    {
+      "episode": 370,
+      "segment": 962,
+      "score": 0.5496955537455386
+    }
+  ],
+  "Подмосковье майская погода": [
+    {
+      "episode": 157,
+      "segment": 751,
+      "score": 0.825128895220888
+    },
+    {
+      "episode": 465,
+      "segment": 835,
+      "score": 0.29488468353752184
+    }
+  ],
+  "Victoria Metrics vs Prometheus": [
+    {
+      "episode": 295,
+      "segment": 401,
+      "score": 0.00042691000032391013
+    },
+    {
+      "episode": 355,
+      "segment": 10,
+      "score": 0.04387820657178776
+    }
+  ],
+  "что такое рутованный телефон": [
+    {
+      "episode": 462,
+      "segment": 585,
+      "score": 0.3380883009256225
+    }
+  ],
+  "автоматизация для разработчиков польза": [
+    {
+      "episode": 399,
+      "segment": 826,
+      "score": 0.9214145805930342
+    },
+    {
+      "episode": 328,
+      "segment": 795,
+      "score": 0.8091350945510264
+    }
+  ],
+  "Windows 10 on Mac": [
+    {
+      "episode": 128,
+      "segment": 100,
+      "score": 0.20670370920050773
+    }
+  ],
+  "Google подкасты Terms of Service": [
+    {
+      "episode": 223,
+      "segment": 922,
+      "score": 0.16325083352947745
+    }
+  ],
+  "Netspectre attack explained": [
+    {
+      "episode": 379,
+      "segment": 710,
+      "score": 0.736869375185233
+    }
+  ],
+  "удалить таску github issues": [
+    {
+      "episode": 205,
+      "segment": 72,
+      "score": 0.22418068792211499
+    }
+  ],
+  "Yahoo Trace log analytics": [
+    {
+      "episode": 497,
+      "segment": 450,
+      "score": 0.8242268075989425
+    }
+  ],
+  "PyPy vs CPython comparison": [
+    {
+      "episode": 478,
+      "segment": 492,
+      "score": 0.9624382361465877
+    }
+  ],
+  "Akka cluster split brain handling": [
+    {
+      "episode": 315,
+      "segment": 999,
+      "score": 0.8508970680825017
+    }
+  ],
+  "Hippo индекс в Postgres": [
+    {
+      "episode": 476,
+      "segment": 671,
+      "score": 0.3263347548259288
+    }
+  ],
+  "стартап инвестиции организация команда": [
+    {
+      "episode": 372,
+      "segment": 621,
+      "score": 0.6533149558240273
+    }
+  ],
+  "Elegant Objects book review": [
+    {
+      "episode": 322,
+      "segment": 901,
+      "score": 0.8113282970259611
+    }
+  ],
+  "bash http request without curl": [
+    {
+      "episode": 167,
+      "segment": 258,
+      "score": 0.13548818787277528
+    },
+    {
+      "episode": 388,
+      "segment": 860,
+      "score": 0.266481144008233
+    }
+  ],
+  "organizational hierarchy impact innovation": [
+    {
+      "episode": 312,
+      "segment": 108,
+      "score": 0.8644301710849503
+    }
+  ],
+  "тихая эргономичная компьютерная мышь": [
+    {
+      "episode": 330,
+      "segment": 122,
+      "score": 0.909386789390945
+    },
+    {
+      "episode": 86,
+      "segment": 132,
+      "score": 0.32873294864464064
+    }
+  ],
+  "ChatGPT ошибки с 3D-принтерами": [
+    {
+      "episode": 303,
+      "segment": 355,
+      "score": 0.6325849367604828
+    }
+  ],
+  "различия клавиатур MacBook": [
+    {
+      "episode": 114,
+      "segment": 114,
+      "score": 0.9111178853903572
+    },
+    {
+      "episode": 359,
+      "segment": 681,
+      "score": 0.05548206892911911
+    }
+  ],
+  "GO vs C++ for developers": [
+    {
+      "episode": 474,
+      "segment": 443,
+      "score": 0.41217415393597856
+    },
+    {
+      "episode": 109,
+      "segment": 711,
+      "score": 0.1958415261341725
+    }
+  ],
+  "аналоги TLA+ с генерацией кода": [
+    {
+      "episode": 498,
+      "segment": 776,
+      "score": 0.09043549381652538
+    },
+    {
+      "episode": 259,
+      "segment": 836,
+      "score": 0.17640255259468407
+    }
+  ],
+  "GitHub блокировка в России": [
+    {
+      "episode": 472,
+      "segment": 796,
+      "score": 0.3923001864419484
+    }
+  ],
+  "инвойс для самозанятых UK": [
+    {
+      "episode": 107,
+      "segment": 35,
+      "score": 0.161659297105882
+    }
+  ],
+  "Riak database MapReduce Multiget": [
+    {
+      "episode": 347,
+      "segment": 81,
+      "score": 0.08765553706272045
+    },
+    {
+      "episode": 175,
+      "segment": 505,
+      "score": 0.08615780599087974
+    }
+  ],
+  "толерантность женщины IT Украина": [
+    {
+      "episode": 370,
+      "segment": 67,
+      "score": 0.39507505378865204
+    }
+  ],
+  "equality vs equity explained": [
+    {
+      "episode": 14,
+      "segment": 596,
+      "score": 0.5520825331411399
+    }
+  ],
+  "Postgres release changes recent versions": [
+    {
+      "episode": 329,
+      "segment": 95,
+      "score": 0.709404405769825
+    },
+    {
+      "episode": 173,
+      "segment": 390,
+      "score": 0.3730556101915059
+    }
+  ],
+  "разница программист менеджер дофамин": [
+    {
+      "episode": 150,
+      "segment": 541,
+      "score": 0.3277966865267685
+    }
+  ],
+  "работа в выходные IT компании": [
+    {
+      "episode": 407,
+      "segment": 829,
+      "score": 0.16943904517418074
+    }
+  ],
+  "стратегии миграции баз данных": [
+    {
+      "episode": 217,
+      "segment": 912,
+      "score": 0.8631896372488947
+    }
+  ],
+  "конференция Strange Loop видео": [
+    {
+      "episode": 299,
+      "segment": 314,
+      "score": 0.11072104514963887
+    },
+    {
+      "episode": 294,
+      "segment": 581,
+      "score": 0.5123923605217072
+    }
+  ],
+  "лучшие практики тестирования микросервисов": [
+    {
+      "episode": 388,
+      "segment": 101,
+      "score": 0.3911190911026018
+    },
+    {
+      "episode": 224,
+      "segment": 51,
+      "score": 0.10643484679326842
+    }
+  ],
+  "Docker Swarm для чего нужен": [
+    {
+      "episode": 429,
+      "segment": 18,
+      "score": 0.9960978495614478
+    }
+  ],
+  "FreeBSD использование и метрики": [
+    {
+      "episode": 16,
+      "segment": 60,
+      "score": 0.16007435026532435
+    }
+  ],
+  "comparison Go vs Rust abstractions": [
+    {
+      "episode": 484,
+      "segment": 365,
+      "score": 0.349726971300496
+    }
+  ],
+  "Kaggle Master requirements": [
+    {
+      "episode": 14,
+      "segment": 873,
+      "score": 0.8425543185333034
+    },
+    {
+      "episode": 299,
+      "segment": 938,
+      "score": 0.5354488583760493
+    }
+  ],
+  "High Load конференция обзоры докладов": [
+    {
+      "episode": 277,
+      "segment": 80,
+      "score": 0.02511530887552671
+    },
+    {
+      "episode": 423,
+      "segment": 529,
+      "score": 0.03815871870405596
+    }
+  ],
+  "BigchainDB блокчейн обзор": [
+    {
+      "episode": 340,
+      "segment": 599,
+      "score": 0.7548001052984757
+    },
+    {
+      "episode": 417,
+      "segment": 638,
+      "score": 0.39573381050555956
+    }
+  ],
+  "Brendan Gregg ZFS ARC bug": [
+    {
+      "episode": 171,
+      "segment": 575,
+      "score": 0.17807863894994136
+    },
+    {
+      "episode": 435,
+      "segment": 871,
+      "score": 0.2979104448180129
+    }
+  ],
+  "Gerrit vs GitHub code review": [
+    {
+      "episode": 457,
+      "segment": 429,
+      "score": 0.5088261180984673
+    },
+    {
+      "episode": 472,
+      "segment": 835,
+      "score": 0.07384936863188907
+    }
+  ],
+  "Clojure community online resources": [
+    {
+      "episode": 214,
+      "segment": 729,
+      "score": 0.3066194861922278
+    }
+  ],
+  "разница Нью-Йорк и Нью-Джерси": [
+    {
+      "episode": 400,
+      "segment": 730,
+      "score": 0.9319210476869704
+    },
+    {
+      "episode": 465,
+      "segment": 659,
+      "score": 0.9522523821198337
+    }
+  ],
+  "Rust language memory management": [
+    {
+      "episode": 333,
+      "segment": 63,
+      "score": 0.7714975463023058
+    },
+    {
+      "episode": 230,
+      "segment": 200,
+      "score": 0.3762145454468321
+    }
+  ],
+  "современные SQL аналитика": [
+    {
+      "episode": 17,
+      "segment": 666,
+      "score": 0.07929460515366071
+    },
+    {
+      "episode": 457,
+      "segment": 764,
+      "score": 0.28387135467849356
+    }
+  ],
+  "Antithesis гипервизор обзор": [
+    {
+      "episode": 9,
+      "segment": 397,
+      "score": 0.09829130954208165
+    }
+  ],
+  "нет кода на github решение": [
+    {
+      "episode": 6,
+      "segment": 821,
+      "score": 0.059659419626472476
+    }
+  ],
+  "новое в terraform changelog": [
+    {
+      "episode": 157,
+      "segment": 597,
+      "score": 0.023590843460930544
+    },
+    {
+      "episode": 6,
+      "segment": 905,
+      "score": 0.26425658537765917
+    }
+  ],
+  "проблемы массового производства электроники": [
+    {
+      "episode": 209,
+      "segment": 739,
+      "score": 0.5093410763002277
+    },
+    {
+      "episode": 349,
+      "segment": 321,
+      "score": 0.43216234684011245
+    }
+  ],
+  "Postgres parquet extension Rust": [
+    {
+      "episode": 180,
+      "segment": 975,
+      "score": 0.30403647138836476
+    },
+    {
+      "episode": 387,
+      "segment": 94,
+      "score": 0.33822877451189515
+    }
+  ],
+  "Rust borrow checker explained": [
+    {
+      "episode": 57,
+      "segment": 213,
+      "score": 0.03453245888480516
+    }
+  ],
+  "Erlang Beam vs Go performance": [
+    {
+      "episode": 227,
+      "segment": 259,
+      "score": 0.5751221405722757
+    },
+    {
+      "episode": 46,
+      "segment": 814,
+      "score": 0.8807106104298916
+    }
+  ],
+  "Scala конференции 2019 новости": [
+    {
+      "episode": 148,
+      "segment": 224,
+      "score": 0.5277456757568147
+    }
+  ],
+  "будущее носимых интерфейсов": [
+    {
+      "episode": 107,
+      "segment": 82,
+      "score": 0.9172729908569407
+    },
+    {
+      "episode": 198,
+      "segment": 508,
+      "score": 0.032372582101006464
+    }
+  ],
+  "Go linker performance issues": [
+    {
+      "episode": 236,
+      "segment": 637,
+      "score": 0.4834253770367698
+    }
+  ],
+  "конференция мой путь предпринимателя": [
+    {
+      "episode": 123,
+      "segment": 39,
+      "score": 0.2690946146813066
+    },
+    {
+      "episode": 483,
+      "segment": 63,
+      "score": 0.5850882252446375
+    }
+  ],
+  "fastdoom performance optimizations": [
+    {
+      "episode": 47,
+      "segment": 41,
+      "score": 0.983524984805142
+    }
+  ],
+  "эмоциональное выгорание программистов": [
+    {
+      "episode": 141,
+      "segment": 373,
+      "score": 0.11349744274522255
+    }
+  ],
+  "Dremio vs Databricks comparison": [
+    {
+      "episode": 440,
+      "segment": 941,
+      "score": 0.9521446147758867
+    }
+  ],
+  "cardinality importance for users": [
+    {
+      "episode": 374,
+      "segment": 20,
+      "score": 0.5318251563854592
+    }
+  ],
+  "как волосы убрать с лица": [
+    {
+      "episode": 260,
+      "segment": 149,
+      "score": 0.8757096318110649
+    },
+    {
+      "episode": 375,
+      "segment": 532,
+      "score": 0.8885500802733655
+    }
+  ],
+  "ИП налог двойная оплата": [
+    {
+      "episode": 414,
+      "segment": 356,
+      "score": 0.33434994846858246
+    },
+    {
+      "episode": 360,
+      "segment": 893,
+      "score": 0.5326923337546052
+    }
+  ],
+  "Spider-Man Miles Morales review": [
+    {
+      "episode": 17,
+      "segment": 808,
+      "score": 0.43554906540994365
+    },
+    {
+      "episode": 280,
+      "segment": 78,
+      "score": 0.07902634912824624
+    }
+  ],
+  "Postgres ZStore columnar storage": [
+    {
+      "episode": 408,
+      "segment": 618,
+      "score": 0.7256661508728742
+    }
+  ],
+  "проблемы пользовательских интерфейсов": [
+    {
+      "episode": 70,
+      "segment": 245,
+      "score": 0.9879081085551089
+    }
+  ],
+  "Haskell committee structure": [
+    {
+      "episode": 18,
+      "segment": 956,
+      "score": 0.1743755775614273
+    }
+  ],
+  "Java unsafe замену безопасным способом": [
+    {
+      "episode": 366,
+      "segment": 931,
+      "score": 0.6633876057628988
+    },
+    {
+      "episode": 263,
+      "segment": 799,
+      "score": 0.8465460415509486
+    }
+  ],
+  "Elixir Desktop LiveView VXWidgets": [
+    {
+      "episode": 407,
+      "segment": 501,
+      "score": 0.2060237626792053
+    }
+  ],
+  "перенос сохранений PlayStation 5 от PS4": [
+    {
+      "episode": 455,
+      "segment": 564,
+      "score": 0.40322789019712724
+    }
+  ],
+  "процесс принятия проектов Apache Foundation": [
+    {
+      "episode": 78,
+      "segment": 235,
+      "score": 0.49045248900823146
+    },
+    {
+      "episode": 94,
+      "segment": 299,
+      "score": 0.26604984556306477
+    }
+  ],
+  "черновые лица графика": [
+    {
+      "episode": 439,
+      "segment": 275,
+      "score": 0.028691133360906118
+    }
+  ],
+  "Scala 2.12 новинки и совместимость с Dotty": [
+    {
+      "episode": 458,
+      "segment": 485,
+      "score": 0.3138918058871122
+    },
+    {
+      "episode": 268,
+      "segment": 826,
+      "score": 0.7407585136228653
+    }
+  ],
+  "Луна фото 20x увеличение": [
+    {
+      "episode": 388,
+      "segment": 653,
+      "score": 0.6697161122771167
+    },
+    {
+      "episode": 43,
+      "segment": 353,
+      "score": 0.4019085680114409
+    }
+  ],
+  "технический долг метрики измерения": [
+    {
+      "episode": 220,
+      "segment": 605,
+      "score": 0.1540584288569946
+    }
+  ],
+  "Rit 11 лет Хабрахабр концерт живой музыки пиво Тёмный Властелин": [
+    {
+      "episode": 167,
+      "segment": 459,
+      "score": 0.035089832435732604
+    }
+  ],
+  "влияние сна на производительность программиста": [
+    {
+      "episode": 16,
+      "segment": 460,
+      "score": 0.6364667806026344
+    },
+    {
+      "episode": 363,
+      "segment": 394,
+      "score": 0.44683251950143543
+    }
+  ],
+  "High Lot конференция 7-8 ноября": [
+    {
+      "episode": 391,
+      "segment": 768,
+      "score": 0.12524067616665902
+    },
+    {
+      "episode": 56,
+      "segment": 492,
+      "score": 0.7964034209670803
+    }
+  ],
+  "CSI драйвер Proxmox один сервер NAS": [
+    {
+      "episode": 104,
+      "segment": 759,
+      "score": 0.27998123100892525
+    },
+    {
+      "episode": 401,
+      "segment": 397,
+      "score": 0.8692393016873158
+    }
+  ],
+  "технический долг оценка заразность приоритет": [
+    {
+      "episode": 88,
+      "segment": 841,
+      "score": 0.5953543919944052
+    },
+    {
+      "episode": 249,
+      "segment": 264,
+      "score": 0.5066772677808523
+    }
+  ],
+  "оптимизация эвристик для турнира ACFPC": [
+    {
+      "episode": 19,
+      "segment": 392,
+      "score": 0.04279049065879925
+    }
+  ],
+  "проверка типов Hindley-Milner Python библиотека": [
+    {
+      "episode": 248,
+      "segment": 364,
+      "score": 0.33615493342086256
+    }
+  ],
+  "Параллельное программирование обучение": [
+    {
+      "episode": 3,
+      "segment": 851,
+      "score": 0.8967363208198874
+    }
+  ],
+  "климат открытый проект вентиляторы": [
+    {
+      "episode": 329,
+      "segment": 178,
+      "score": 0.19814159160996148
+    }
+  ],
+  "видео YouTube с iPhone 11 Pro стабилизация": [
+    {
+      "episode": 142,
+      "segment": 675,
+      "score": 0.9578556402098066
+    }
+  ],
+  "Amazon Lumberyard GameLift мультиплеер хостинг": [
+    {
+      "episode": 278,
+      "segment": 511,
+      "score": 0.7872440931956208
+    },
+    {
+      "episode": 53,
+      "segment": 684,
+      "score": 0.2924361951120247
+    }
+  ],
+  "CPU уязвимость защита производительность": [
+    {
+      "episode": 305,
+      "segment": 130,
+      "score": 0.7281376550993274
+    }
+  ],
+  "диффузные нейронные сети генерация изображений": [
+    {
+      "episode": 347,
+      "segment": 576,
+      "score": 0.9376677410389548
+    }
+  ],
+  "наушники бесконечная батарейка 300 часов": [
+    {
+      "episode": 178,
+      "segment": 753,
+      "score": 0.40349665875712215
+    }
+  ],
+  "потери мотивации при жестких KPI": [
+    {
+      "episode": 212,
+      "segment": 368,
+      "score": 0.5365251457671603
+    },
+    {
+      "episode": 257,
+      "segment": 659,
+      "score": 0.4655422764378563
+    }
+  ],
+  "Кубернетес проблемы ядра SGрупп статистика памяти": [
+    {
+      "episode": 381,
+      "segment": 587,
+      "score": 0.8020206696643313
+    },
+    {
+      "episode": 425,
+      "segment": 49,
+      "score": 0.4782585174388271
+    }
+  ],
+  "DirectPageLinks RAFT мультимастер": [
+    {
+      "episode": 432,
+      "segment": 538,
+      "score": 0.8522042003197412
+    },
+    {
+      "episode": 78,
+      "segment": 139,
+      "score": 0.025508294415381605
+    }
+  ],
+  "помощь при таможенном оформлении посылки": [
+    {
+      "episode": 325,
+      "segment": 578,
+      "score": 0.8754268229067655
+    },
+    {
+      "episode": 30,
+      "segment": 548,
+      "score": 0.7009645879958277
+    }
+  ],
+  "производительность 30 FPS комфортно": [
+    {
+      "episode": 171,
+      "segment": 587,
+      "score": 0.6681166287885979
+    },
+    {
+      "episode": 307,
+      "segment": 399,
+      "score": 0.7803975128778736
+    }
+  ],
+  "прогнозирование временных рядов книга Forecasting Principles and Practice": [
+    {
+      "episode": 386,
+      "segment": 776,
+      "score": 0.7309997193015192
+    },
+    {
+      "episode": 355,
+      "segment": 723,
+      "score": 0.08442601719931442
+    }
+  ],
+  "расстояние от точки до точки прямой": [
+    {
+      "episode": 293,
+      "segment": 974,
+      "score": 0.2442334929394736
+    },
+    {
+      "episode": 484,
+      "segment": 205,
+      "score": 0.4419096079787628
+    }
+  ],
+  "практики интервьюирование кандидатов домашние задания": [
+    {
+      "episode": 452,
+      "segment": 295,
+      "score": 0.16312260678047275
+    }
+  ],
+  "Компиляция запросов in‑memory БД производительность": [
+    {
+      "episode": 228,
+      "segment": 631,
+      "score": 0.24929428227526673
+    }
+  ],
+  "FiiO E10K внешняя звуковая карта сравнение": [
+    {
+      "episode": 451,
+      "segment": 657,
+      "score": 0.08183196283257232
+    }
+  ],
+  "\n": [
+    {
+      "episode": 447,
+      "segment": 98,
+      "score": 0.3083465377766743
+    }
+  ],
+  "метапрограммирование синтаксический анализатор": [
+    {
+      "episode": 111,
+      "segment": 721,
+      "score": 0.5336241133892196
+    },
+    {
+      "episode": 134,
+      "segment": 746,
+      "score": 0.015844735277453226
+    }
+  ],
+  "Dynamic Time Warping временные ряды поиск шаблонов": [
+    {
+      "episode": 237,
+      "segment": 100,
+      "score": 0.5444542396687244
+    },
+    {
+      "episode": 278,
+      "segment": 733,
+      "score": 0.4937611382619064
+    }
+  ],
+  "спам комментарии дискусс веб безопасность": [
+    {
+      "episode": 24,
+      "segment": 163,
+      "score": 0.7111179255180422
+    }
+  ],
+  "мраморный PLA печать": [
+    {
+      "episode": 206,
+      "segment": 428,
+      "score": 0.40289675706127615
+    },
+    {
+      "episode": 486,
+      "segment": 417,
+      "score": 0.5067791717009219
+    }
+  ],
+  "Ubiquity Unify настройка сети": [
+    {
+      "episode": 44,
+      "segment": 569,
+      "score": 0.8450234113936288
+    },
+    {
+      "episode": 15,
+      "segment": 825,
+      "score": 0.6692093104713407
+    }
+  ],
+  "PGD метапы конференция доклад": [
+    {
+      "episode": 454,
+      "segment": 107,
+      "score": 0.24212490150952948
+    },
+    {
+      "episode": 411,
+      "segment": 526,
+      "score": 0.45896835131677094
+    }
+  ],
+  "анализ спайков и аномалий мониторинга": [
+    {
+      "episode": 156,
+      "segment": 217,
+      "score": 0.21845241890378642
+    },
+    {
+      "episode": 247,
+      "segment": 43,
+      "score": 0.020571396539462716
+    }
+  ],
+  "Майлстром автоматический откат трафика Facebook": [
+    {
+      "episode": 309,
+      "segment": 21,
+      "score": 0.5838152148892132
+    },
+    {
+      "episode": 470,
+      "segment": 419,
+      "score": 0.27070218179848116
+    }
+  ],
+  "Postgres Pro отпуск патреон блог": [
+    {
+      "episode": 232,
+      "segment": 693,
+      "score": 0.7262882001951152
+    }
+  ],
+  "менеджер ушёл в Shopify веб-рендер Firefox": [
+    {
+      "episode": 184,
+      "segment": 566,
+      "score": 0.26552671576000375
+    }
+  ],
+  "markdown alternative math support": [
+    {
+      "episode": 199,
+      "segment": 769,
+      "score": 0.3734895241971288
+    },
+    {
+      "episode": 252,
+      "segment": 753,
+      "score": 0.6369210386986485
+    }
+  ],
+  "Patreon pledges Epic exclusivity controversy": [
+    {
+      "episode": 305,
+      "segment": 991,
+      "score": 0.8438637626629781
+    }
+  ],
+  "Django микросервисы проектирование": [
+    {
+      "episode": 298,
+      "segment": 550,
+      "score": 0.03797149220864238
+    },
+    {
+      "episode": 219,
+      "segment": 607,
+      "score": 0.1965707961556602
+    }
+  ],
+  "Go vendor spec commit tag usage": [
+    {
+      "episode": 110,
+      "segment": 506,
+      "score": 0.979114879712205
+    }
+  ],
+  "Япония Wi‑Fi ноутбук совместимость": [
+    {
+      "episode": 267,
+      "segment": 687,
+      "score": 0.7205044239785399
+    },
+    {
+      "episode": 421,
+      "segment": 19,
+      "score": 0.40740225789327367
+    }
+  ],
+  "Snowflake архитектура разделение вычислений и хранения": [
+    {
+      "episode": 210,
+      "segment": 875,
+      "score": 0.8713537610471229
+    },
+    {
+      "episode": 423,
+      "segment": 290,
+      "score": 0.7924487804091922
+    }
+  ],
+  "HDMI подключение Raspberry Pi монитор": [
+    {
+      "episode": 58,
+      "segment": 17,
+      "score": 0.44858298994415124
+    }
+  ],
+  "podcast hosting S3 DDoS protection": [
+    {
+      "episode": 479,
+      "segment": 460,
+      "score": 0.25632155570455817
+    },
+    {
+      "episode": 232,
+      "segment": 759,
+      "score": 0.7707913666084978
+    }
+  ],
+  "CI‑CD безопасность сборки ядра": [
+    {
+      "episode": 258,
+      "segment": 473,
+      "score": 0.49724547212157943
+    }
+  ],
+  "Rust трейдер итератор parallel map flatmap fold": [
+    {
+      "episode": 296,
+      "segment": 751,
+      "score": 0.5620680881024769
+    }
+  ],
+  "показывает ли игра Horizon Zero Dawn сюжет?": [
+    {
+      "episode": 42,
+      "segment": 52,
+      "score": 0.4479994158951608
+    }
+  ],
+  "оптимальный выбор между допилкой и переписыванием": [
+    {
+      "episode": 384,
+      "segment": 409,
+      "score": 0.8976151291536926
+    },
+    {
+      "episode": 22,
+      "segment": 223,
+      "score": 0.16880746556807713
+    }
+  ],
+  "производительность Postgres настройки shared buffers": [
+    {
+      "episode": 134,
+      "segment": 463,
+      "score": 0.845555983166201
+    },
+    {
+      "episode": 280,
+      "segment": 663,
+      "score": 0.5318563590655672
+    }
+  ],
+  "переезд Нью-Йорк стартап": [
+    {
+      "episode": 179,
+      "segment": 454,
+      "score": 0.6701268938494723
+    }
+  ],
+  "Log4j обратная совместимость отключения": [
+    {
+      "episode": 195,
+      "segment": 307,
+      "score": 0.2729094051658788
+    }
+  ],
+  "AI персонализированное обучение философии": [
+    {
+      "episode": 265,
+      "segment": 244,
+      "score": 0.33673819069481026
+    }
+  ],
+  "Гугл карты алгоритм AOI": [
+    {
+      "episode": 404,
+      "segment": 491,
+      "score": 0.6061239293671294
+    }
+  ],
+  "только сбор монеток в Last of Us 2 влияние на сюжет": [
+    {
+      "episode": 140,
+      "segment": 424,
+      "score": 0.45966653602198415
+    },
+    {
+      "episode": 193,
+      "segment": 247,
+      "score": 0.3666567887841552
+    }
+  ],
+  "Telegram отправка фото как файл вместо сжатия": [
+    {
+      "episode": 320,
+      "segment": 72,
+      "score": 0.6909858642373885
+    }
+  ],
+  "разница 8бит HDR 10бит": [
+    {
+      "episode": 506,
+      "segment": 289,
+      "score": 0.18122399805936928
+    },
+    {
+      "episode": 477,
+      "segment": 811,
+      "score": 0.25997478024157217
+    }
+  ],
+  "C++17 новые фичи концепты модули коррутины optional SIMD": [
+    {
+      "episode": 93,
+      "segment": 949,
+      "score": 0.8917600891133519
+    }
+  ],
+  "SQL изоляция уровни реализация MVCC": [
+    {
+      "episode": 236,
+      "segment": 638,
+      "score": 0.12094528466742349
+    }
+  ],
+  "LogDevice преимущества по сравнению Kafka": [
+    {
+      "episode": 415,
+      "segment": 969,
+      "score": 0.4501980490766898
+    }
+  ],
+  "новый браузерный движок nim": [
+    {
+      "episode": 212,
+      "segment": 136,
+      "score": 0.25392171644275885
+    },
+    {
+      "episode": 99,
+      "segment": 110,
+      "score": 0.20447259958211317
+    }
+  ],
+  "программное обеспечение для редактирования моделей Blender": [
+    {
+      "episode": 139,
+      "segment": 1,
+      "score": 0.8823857994476951
+    }
+  ],
+  "SSH уязвимость сканирование IPv4 ключей": [
+    {
+      "episode": 159,
+      "segment": 490,
+      "score": 0.09733961145997905
+    },
+    {
+      "episode": 395,
+      "segment": 570,
+      "score": 0.5524103571457207
+    }
+  ],
+  "Visual Basic.NET Flash Air Delphi niche": [
+    {
+      "episode": 168,
+      "segment": 942,
+      "score": 0.15621721241577324
+    }
+  ],
+  "обновление ОС Garmin марафоны": [
+    {
+      "episode": 123,
+      "segment": 988,
+      "score": 0.46229589839130714
+    }
+  ],
+  "Python 3.12 обновления ключи dict сортировка memory malloc": [
+    {
+      "episode": 174,
+      "segment": 694,
+      "score": 0.13787258587950724
+    },
+    {
+      "episode": 191,
+      "segment": 387,
+      "score": 0.24991396906009178
+    }
+  ],
+  "Как оценить корреляцию в мониторинге сервисов": [
+    {
+      "episode": 235,
+      "segment": 142,
+      "score": 0.03525738722302296
+    },
+    {
+      "episode": 211,
+      "segment": 65,
+      "score": 0.4042938067372501
+    }
+  ],
+  "изменение лицензии open source проект": [
+    {
+      "episode": 330,
+      "segment": 629,
+      "score": 0.05452668731285548
+    },
+    {
+      "episode": 400,
+      "segment": 219,
+      "score": 0.9788286423331197
+    }
+  ],
+  "путь развития линейного менеджера": [
+    {
+      "episode": 148,
+      "segment": 989,
+      "score": 0.5073685144309975
+    },
+    {
+      "episode": 127,
+      "segment": 415,
+      "score": 0.19483562350168893
+    }
+  ],
+  "3D принтер медведь откаты дефекты": [
+    {
+      "episode": 112,
+      "segment": 215,
+      "score": 0.012552287025776487
+    },
+    {
+      "episode": 12,
+      "segment": 106,
+      "score": 0.26476365571497307
+    }
+  ],
+  "unconscious bias equity equality training": [
+    {
+      "episode": 281,
+      "segment": 648,
+      "score": 0.2747945867185386
+    },
+    {
+      "episode": 279,
+      "segment": 977,
+      "score": 0.3697525017426736
+    }
+  ],
+  "Postgres горизонтальное масштабирование pluggable storage": [
+    {
+      "episode": 95,
+      "segment": 512,
+      "score": 0.9042774541845022
+    },
+    {
+      "episode": 425,
+      "segment": 835,
+      "score": 0.15116127267045087
+    }
+  ],
+  "Value‑Object типы обертки примитивов": [
+    {
+      "episode": 39,
+      "segment": 202,
+      "score": 0.4044899702160707
+    }
+  ],
+  "Java репозитории статистика май 2024": [
+    {
+      "episode": 212,
+      "segment": 938,
+      "score": 0.05438766398597539
+    },
+    {
+      "episode": 188,
+      "segment": 458,
+      "score": 0.23516195169124665
+    }
+  ],
+  "Девопс ответственность мониторинг": [
+    {
+      "episode": 225,
+      "segment": 448,
+      "score": 0.3783668791732604
+    },
+    {
+      "episode": 71,
+      "segment": 594,
+      "score": 0.21593323662889752
+    }
+  ],
+  "DeepSeek китайская модель и цензура": [
+    {
+      "episode": 124,
+      "segment": 211,
+      "score": 0.7963769527951928
+    },
+    {
+      "episode": 356,
+      "segment": 99,
+      "score": 0.5352927221502773
+    }
+  ],
+  "замена ремня 3D принтер ось OY": [
+    {
+      "episode": 489,
+      "segment": 866,
+      "score": 0.3325940165646749
+    },
+    {
+      "episode": 469,
+      "segment": 554,
+      "score": 0.6806481387400989
+    }
+  ],
+  "производительность ETS concurrent Erlang": [
+    {
+      "episode": 378,
+      "segment": 641,
+      "score": 0.5143177624844648
+    }
+  ],
+  "Тrello ограничения 10 досок SaaS бизнес модель": [
+    {
+      "episode": 76,
+      "segment": 898,
+      "score": 0.7614012354907973
+    },
+    {
+      "episode": 112,
+      "segment": 147,
+      "score": 0.8706726776468074
+    }
+  ],
+  "Apple TV инновации": [
+    {
+      "episode": 180,
+      "segment": 809,
+      "score": 0.756718582653506
+    }
+  ],
+  "SPO новая кодовая платформа альтернатива GitHub": [
+    {
+      "episode": 216,
+      "segment": 659,
+      "score": 0.15207291117532185
+    },
+    {
+      "episode": 39,
+      "segment": 214,
+      "score": 0.6872703671477399
+    }
+  ],
+  "плохие практики LinkedIn спам боты": [
+    {
+      "episode": 158,
+      "segment": 953,
+      "score": 0.3605001089025103
+    }
+  ],
+  "Kanban vs Scrum sprint planning": [
+    {
+      "episode": 425,
+      "segment": 462,
+      "score": 0.2830565417310017
+    },
+    {
+      "episode": 253,
+      "segment": 565,
+      "score": 0.6083998247223682
+    }
+  ],
+  "Twitter просмотры фолловеров анализ": [
+    {
+      "episode": 468,
+      "segment": 54,
+      "score": 0.5703274504557446
+    }
+  ],
+  "тренинг нейросетей для upscaling картинок": [
+    {
+      "episode": 43,
+      "segment": 111,
+      "score": 0.9196587912660978
+    },
+    {
+      "episode": 101,
+      "segment": 617,
+      "score": 0.5727680653308008
+    }
+  ],
+  "TextIO оценка вакансий": [
+    {
+      "episode": 183,
+      "segment": 254,
+      "score": 0.8983718453564826
+    }
+  ],
+  "Homebrew MacPorts XSLT Pro cache path": [
+    {
+      "episode": 448,
+      "segment": 555,
+      "score": 0.729447641385134
+    },
+    {
+      "episode": 385,
+      "segment": 549,
+      "score": 0.2823500128284777
+    }
+  ],
+  "Startup Simulator карточная игра юмор": [
+    {
+      "episode": 214,
+      "segment": 461,
+      "score": 0.2285486558194264
+    }
+  ],
+  "сколько лет язык Scala": [
+    {
+      "episode": 442,
+      "segment": 20,
+      "score": 0.7317432135659889
+    },
+    {
+      "episode": 426,
+      "segment": 45,
+      "score": 0.5862078555398337
+    }
+  ],
+  "RX 2000??": [
+    {
+      "episode": 437,
+      "segment": 899,
+      "score": 0.05784700429414025
+    },
+    {
+      "episode": 257,
+      "segment": 719,
+      "score": 0.36176613359161647
+    }
+  ],
+  "Оптимизация запросов базы данных": [
+    {
+      "episode": 396,
+      "segment": 560,
+      "score": 0.5307851353831898
+    }
+  ],
+  "как лучше открыть разработку языка": [
+    {
+      "episode": 32,
+      "segment": 192,
+      "score": 0.4625110641771445
+    }
+  ],
+  "Web3 негативные восприятия": [
+    {
+      "episode": 318,
+      "segment": 694,
+      "score": 0.9628949219913107
+    },
+    {
+      "episode": 209,
+      "segment": 58,
+      "score": 0.6157862885559433
+    }
+  ],
+  "Apple Podcasts транскрипты Terms of Service карта": [
+    {
+      "episode": 197,
+      "segment": 831,
+      "score": 0.9169436904095374
+    }
+  ],
+  "распознавание пин‑кода по радиоволнам": [
+    {
+      "episode": 205,
+      "segment": 843,
+      "score": 0.5456477071890512
+    },
+    {
+      "episode": 470,
+      "segment": 555,
+      "score": 0.6029440801118123
+    }
+  ],
+  "эффективное чтение книг для программистов": [
+    {
+      "episode": 6,
+      "segment": 72,
+      "score": 0.7174935429289816
+    }
+  ],
+  "инференс модели на Rust устройства": [
+    {
+      "episode": 253,
+      "segment": 388,
+      "score": 0.35654821093462885
+    },
+    {
+      "episode": 333,
+      "segment": 634,
+      "score": 0.014110736464160056
+    }
+  ],
+  "career framework engineer communication leadership abstract": [
+    {
+      "episode": 144,
+      "segment": 240,
+      "score": 0.8200540244964479
+    }
+  ],
+  "Terraform миграция AWS Google Cloud": [
+    {
+      "episode": 487,
+      "segment": 788,
+      "score": 0.15997664535003508
+    },
+    {
+      "episode": 370,
+      "segment": 563,
+      "score": 0.7050973003080666
+    }
+  ],
+  "Notion базы данных проблемы PostgreSQL": [
+    {
+      "episode": 280,
+      "segment": 115,
+      "score": 0.12648766560774927
+    },
+    {
+      "episode": 47,
+      "segment": 771,
+      "score": 0.6744148581140555
+    }
+  ],
+  "CLion поддержка удалённой отладки": [
+    {
+      "episode": 226,
+      "segment": 41,
+      "score": 0.9859145706186883
+    },
+    {
+      "episode": 504,
+      "segment": 520,
+      "score": 0.516995339298728
+    }
+  ],
+  "PostgreSQL WebAssembly синхронизация данных": [
+    {
+      "episode": 326,
+      "segment": 699,
+      "score": 0.5379120258922735
+    }
+  ],
+  "тестер нужен проекте": [
+    {
+      "episode": 460,
+      "segment": 231,
+      "score": 0.31305961684513284
+    }
+  ],
+  "Arduino Pong на телевизоре": [
+    {
+      "episode": 71,
+      "segment": 835,
+      "score": 0.730799651704224
+    }
+  ],
+  "выход на конференцию инженеры": [
+    {
+      "episode": 18,
+      "segment": 919,
+      "score": 0.17174075600983574
+    },
+    {
+      "episode": 446,
+      "segment": 967,
+      "score": 0.9721812315103189
+    }
+  ],
+  "инструмент наблюдения микросервисов единый UI": [
+    {
+      "episode": 438,
+      "segment": 437,
+      "score": 0.4263936836333758
+    }
+  ],
+  "типизированные IPC безопасность": [
+    {
+      "episode": 19,
+      "segment": 966,
+      "score": 0.24378480791277302
+    },
+    {
+      "episode": 49,
+      "segment": 147,
+      "score": 0.10156618576685095
+    }
+  ],
+  "генеративные модели планирование сценариев": [
+    {
+      "episode": 148,
+      "segment": 783,
+      "score": 0.4469924378152955
+    }
+  ],
+  "Ansible 2.2 F5 BigIP обновления": [
+    {
+      "episode": 263,
+      "segment": 815,
+      "score": 0.8107787473675202
+    },
+    {
+      "episode": 373,
+      "segment": 317,
+      "score": 0.007715860231774285
+    }
+  ],
+  "iOS JIT Secure Enclave синхронизация данных": [
+    {
+      "episode": 477,
+      "segment": 119,
+      "score": 0.5382031241389917
+    }
+  ],
+  "Go сборка детерминированных билдов": [
+    {
+      "episode": 74,
+      "segment": 311,
+      "score": 0.06190808636828404
+    }
+  ],
+  "American Express Gold активация аккаунта пароль копировать": [
+    {
+      "episode": 298,
+      "segment": 225,
+      "score": 0.6288925298164535
+    },
+    {
+      "episode": 227,
+      "segment": 176,
+      "score": 0.0659175265593086
+    }
+  ],
+  "Docker Windows Subsystem Linux VSL2": [
+    {
+      "episode": 203,
+      "segment": 626,
+      "score": 0.7196926704213664
+    },
+    {
+      "episode": 122,
+      "segment": 0,
+      "score": 0.8661042620390891
+    }
+  ],
+  "AI модели заменяют программистов?": [
+    {
+      "episode": 37,
+      "segment": 952,
+      "score": 0.6425082763684986
+    }
+  ],
+  "Cloudflare HTTPS парсинг Regel toolkit": [
+    {
+      "episode": 452,
+      "segment": 657,
+      "score": 0.8242359901424605
+    },
+    {
+      "episode": 26,
+      "segment": 205,
+      "score": 0.94902261153795
+    }
+  ],
+  "стартап open-source база данных бизнес-модель": [
+    {
+      "episode": 440,
+      "segment": 754,
+      "score": 0.27978257286860797
+    }
+  ],
+  "автоматизация Airtable интеграция тем": [
+    {
+      "episode": 381,
+      "segment": 800,
+      "score": 0.6538624782865029
+    },
+    {
+      "episode": 111,
+      "segment": 401,
+      "score": 0.9562286346460408
+    }
+  ],
+  "какая роль inclusion в корпоративной культуре": [
+    {
+      "episode": 118,
+      "segment": 124,
+      "score": 0.3044090620396719
+    }
+  ],
+  "покрутка чипа bootloader Linux Mac ноутбук охлаждение": [
+    {
+      "episode": 210,
+      "segment": 802,
+      "score": 0.6442031849643581
+    }
+  ],
+  "\"путь/шаг???\"...": [
+    {
+      "episode": 95,
+      "segment": 282,
+      "score": 0.7690044162464024
+    },
+    {
+      "episode": 40,
+      "segment": 781,
+      "score": 0.1833857220959081
+    }
+  ],
+  "Erlang Factory конференция доклады": [
+    {
+      "episode": 483,
+      "segment": 483,
+      "score": 0.9271772389924632
+    },
+    {
+      "episode": 250,
+      "segment": 441,
+      "score": 0.08084978793950959
+    }
+  ],
+  "Nvidia графические карты Big Navi AMD": [
+    {
+      "episode": 367,
+      "segment": 296,
+      "score": 0.7871100235764924
+    },
+    {
+      "episode": 75,
+      "segment": 150,
+      "score": 0.009335810474342066
+    }
+  ],
+  "docker Linux support updates": [
+    {
+      "episode": 366,
+      "segment": 590,
+      "score": 0.3687272774530449
+    }
+  ],
+  "CRDT счётчик многопроцессорная система": [
+    {
+      "episode": 474,
+      "segment": 577,
+      "score": 0.7078912367405411
+    },
+    {
+      "episode": 200,
+      "segment": 400,
+      "score": 0.5945663246554143
+    }
+  ],
+  "RARP reversed ARP used for": [
+    {
+      "episode": 36,
+      "segment": 782,
+      "score": 0.5706588885768674
+    },
+    {
+      "episode": 401,
+      "segment": 978,
+      "score": 0.7442075227990982
+    }
+  ],
+  "конференция .NET Summit Минск 2024": [
+    {
+      "episode": 444,
+      "segment": 66,
+      "score": 0.19215877469267872
+    },
+    {
+      "episode": 225,
+      "segment": 334,
+      "score": 0.26986362417388476
+    }
+  ],
+  "фитнес health vacations приложения Groupon": [
+    {
+      "episode": 460,
+      "segment": 157,
+      "score": 0.8594438680238154
+    },
+    {
+      "episode": 437,
+      "segment": 908,
+      "score": 0.25404106120935765
+    }
+  ],
+  "согласованность CP AP распределенных баз данных": [
+    {
+      "episode": 341,
+      "segment": 484,
+      "score": 0.7026785048639835
+    }
+  ],
+  "point in time recovery DynamoDB tables": [
+    {
+      "episode": 229,
+      "segment": 661,
+      "score": 0.981376665841716
+    }
+  ],
+  "почему 2600 имя хакерского журнала": [
+    {
+      "episode": 435,
+      "segment": 955,
+      "score": 0.5305499505417093
+    },
+    {
+      "episode": 105,
+      "segment": 343,
+      "score": 0.7209420267190699
+    }
+  ],
+  "PostgreSQL конференция видео": [
+    {
+      "episode": 482,
+      "segment": 946,
+      "score": 0.2733108188116985
+    }
+  ],
+  "закон о сторонних платежках EU 3%": [
+    {
+      "episode": 122,
+      "segment": 428,
+      "score": 0.7740769130398952
+    }
+  ],
+  "оценка стартапов инвесторы параметры": [
+    {
+      "episode": 239,
+      "segment": 648,
+      "score": 0.18721205773606198
+    }
+  ],
+  "провайдеры Twilio альтернативные Agora": [
+    {
+      "episode": 48,
+      "segment": 618,
+      "score": 0.9906202857706407
+    }
+  ],
+  "FLIT JetBrains Toolbox macOS issue": [
+    {
+      "episode": 357,
+      "segment": 204,
+      "score": 0.5761572921368691
+    },
+    {
+      "episode": 468,
+      "segment": 909,
+      "score": 0.12866771857833048
+    }
+  ],
+  "поиск по ключевым словам и хэштегам в Twitter": [
+    {
+      "episode": 153,
+      "segment": 693,
+      "score": 0.34156554110509285
+    }
+  ],
+  "разработка софту инженерные практики …? … ... .....?? …??? Пн??……….?? В??………….....": [
+    {
+      "episode": 254,
+      "segment": 714,
+      "score": 0.9852738326137883
+    }
+  ],
+  "конференция Гидра Санкт-Петербург 11-12 октября": [
+    {
+      "episode": 69,
+      "segment": 152,
+      "score": 0.002558701238315364
+    }
+  ],
+  "\"QGIS библиотека …\"?": [
+    {
+      "episode": 114,
+      "segment": 850,
+      "score": 0.3158371661573611
+    }
+  ],
+  "QuickCheck Erlang SSI Postgres random sleep": [
+    {
+      "episode": 224,
+      "segment": 994,
+      "score": 0.32778162257727683
+    }
+  ],
+  "Перевод задерживается сроки Android iOS фокус": [
+    {
+      "episode": 136,
+      "segment": 699,
+      "score": 0.500320644457837
+    },
+    {
+      "episode": 182,
+      "segment": 973,
+      "score": 0.7874345953145842
+    }
+  ],
+  "Convex компания бизнес риск сервисы": [
+    {
+      "episode": 473,
+      "segment": 218,
+      "score": 0.5305760927427297
+    },
+    {
+      "episode": 403,
+      "segment": 109,
+      "score": 0.6823631994381067
+    }
+  ],
+  "микросервисы поиск логов монолит": [
+    {
+      "episode": 337,
+      "segment": 672,
+      "score": 0.6371079921308913
+    },
+    {
+      "episode": 358,
+      "segment": 802,
+      "score": 0.7082883438876659
+    }
+  ],
+  "оптимальная база данных end memory": [
+    {
+      "episode": 441,
+      "segment": 815,
+      "score": 0.8221596764593557
+    },
+    {
+      "episode": 253,
+      "segment": 23,
+      "score": 0.9842585237858992
+    }
+  ],
+  "BuzzFeed Engineering Manager responsibilities": [
+    {
+      "episode": 418,
+      "segment": 727,
+      "score": 0.02813432101423774
+    }
+  ],
+  "продажа книг как lead magnet": [
+    {
+      "episode": 420,
+      "segment": 341,
+      "score": 0.253581349303986
+    },
+    {
+      "episode": 390,
+      "segment": 534,
+      "score": 0.06920764585807204
+    }
+  ],
+  "битрод опасность резервные копии": [
+    {
+      "episode": 351,
+      "segment": 469,
+      "score": 0.5175903268694015
+    }
+  ],
+  "веб rtc примеры": [
+    {
+      "episode": 320,
+      "segment": 489,
+      "score": 0.9373953140512311
+    },
+    {
+      "episode": 239,
+      "segment": 889,
+      "score": 0.8974255340568295
+    }
+  ],
+  "PostgreSQL JSONB each key value conversion": [
+    {
+      "episode": 288,
+      "segment": 120,
+      "score": 0.6864081909247993
+    },
+    {
+      "episode": 188,
+      "segment": 805,
+      "score": 0.8910632240381552
+    }
+  ],
+  "потеря телефона в Лондоне резервный план": [
+    {
+      "episode": 297,
+      "segment": 307,
+      "score": 0.08857866695302286
+    },
+    {
+      "episode": 302,
+      "segment": 124,
+      "score": 0.48295570381291864
+    }
+  ],
+  "AWS переход проект масштаб стоимости": [
+    {
+      "episode": 82,
+      "segment": 679,
+      "score": 0.43877685132483013
+    }
+  ],
+  "Как реализовать DNS на FORT": [
+    {
+      "episode": 8,
+      "segment": 412,
+      "score": 0.6853608542932236
+    }
+  ],
+  "Dart фронт‑энд мобильные платформы": [
+    {
+      "episode": 451,
+      "segment": 739,
+      "score": 0.2354358800168853
+    }
+  ],
+  "GitHub Scientist параллельный merge проверка выходных данных": [
+    {
+      "episode": 490,
+      "segment": 158,
+      "score": 0.006331190558169553
+    }
+  ],
+  "как работает таймеры в Erlang": [
+    {
+      "episode": 79,
+      "segment": 534,
+      "score": 0.05309290582638271
+    }
+  ],
+  "Software Defined Radio enthusiasts resources": [
+    {
+      "episode": 139,
+      "segment": 701,
+      "score": 0.6496669020648407
+    }
+  ],
+  "индексируемые базы iPhone Spotlight поиск": [
+    {
+      "episode": 376,
+      "segment": 104,
+      "score": 0.15254771900827913
+    }
+  ],
+  "Rust embedded язык преимущества": [
+    {
+      "episode": 399,
+      "segment": 783,
+      "score": 0.2669948055879209
+    }
+  ],
+  "краткое резюме важно": [
+    {
+      "episode": 378,
+      "segment": 978,
+      "score": 0.2174156467182955
+    },
+    {
+      "episode": 19,
+      "segment": 484,
+      "score": 0.527731393238875
+    }
+  ],
+  "Чили землетрясения и безопасность": [
+    {
+      "episode": 204,
+      "segment": 885,
+      "score": 0.445413939574439
+    },
+    {
+      "episode": 29,
+      "segment": 374,
+      "score": 0.7060346830958462
+    }
+  ],
+  "ICFP конкурс Россия 2024": [
+    {
+      "episode": 465,
+      "segment": 922,
+      "score": 0.1386471565999322
+    },
+    {
+      "episode": 61,
+      "segment": 624,
+      "score": 0.08770821769617321
+    }
+  ],
+  "ROS робототехника симуляция Gazebo": [
+    {
+      "episode": 40,
+      "segment": 267,
+      "score": 0.0726645206900065
+    },
+    {
+      "episode": 371,
+      "segment": 201,
+      "score": 0.5051269087837982
+    }
+  ],
+  "AnyDesk вместо TeamViewer подключение к серверу GUI": [
+    {
+      "episode": 507,
+      "segment": 163,
+      "score": 0.8721043321633322
+    },
+    {
+      "episode": 424,
+      "segment": 60,
+      "score": 0.6344126650824758
+    }
+  ],
+  "хакатон веб3 Минск 22-23 июня": [
+    {
+      "episode": 39,
+      "segment": 810,
+      "score": 0.6258066790544107
+    }
+  ],
+  "Эпоксидка слоты компьютерные драйверы": [
+    {
+      "episode": 377,
+      "segment": 791,
+      "score": 0.8989371859898497
+    }
+  ],
+  "стратегия коммуникации разных стилей": [
+    {
+      "episode": 243,
+      "segment": 61,
+      "score": 0.14579053539067022
+    },
+    {
+      "episode": 380,
+      "segment": 892,
+      "score": 0.7829206120703143
+    }
+  ],
+  "переход Java C# Microsoft To Do API": [
+    {
+      "episode": 327,
+      "segment": 631,
+      "score": 0.45114257417434955
+    }
+  ],
+  "Copilot копирайт и GPL риски": [
+    {
+      "episode": 249,
+      "segment": 835,
+      "score": 0.5261733905408841
+    }
+  ],
+  "C++/CLI поддержка и форк clang": [
+    {
+      "episode": 281,
+      "segment": 637,
+      "score": 0.026878474314247947
+    },
+    {
+      "episode": 379,
+      "segment": 998,
+      "score": 0.7432022390372203
+    }
+  ],
+  "Zero Knowledge Proof криптография инфосек": [
+    {
+      "episode": 445,
+      "segment": 160,
+      "score": 0.767365946952301
+    }
+  ],
+  "WSL GUI Linux приложения под Windows": [
+    {
+      "episode": 256,
+      "segment": 561,
+      "score": 0.6657296734861377
+    }
+  ],
+  "Rust garbage collection library": [
+    {
+      "episode": 341,
+      "segment": 488,
+      "score": 0.5346969564223752
+    },
+    {
+      "episode": 259,
+      "segment": 889,
+      "score": 0.58837424470326
+    }
+  ],
+  "виртуализация macOS через virtualization framework": [
+    {
+      "episode": 403,
+      "segment": 766,
+      "score": 0.30581857034999926
+    },
+    {
+      "episode": 254,
+      "segment": 227,
+      "score": 0.27340213435394944
+    }
+  ],
+  "старые телефоны несовместимы с суперапами": [
+    {
+      "episode": 72,
+      "segment": 342,
+      "score": 0.5255247223631324
+    },
+    {
+      "episode": 340,
+      "segment": 922,
+      "score": 0.8655108967889541
+    }
+  ],
+  "Wasp безопасность библиотеки": [
+    {
+      "episode": 445,
+      "segment": 938,
+      "score": 0.2432572831067522
+    }
+  ],
+  "одноплатник домашние задачи Raspberry Pi": [
+    {
+      "episode": 34,
+      "segment": 745,
+      "score": 0.6481383802378912
+    },
+    {
+      "episode": 435,
+      "segment": 184,
+      "score": 0.0983053545433108
+    }
+  ],
+  "мультиагентное обучение реали дота 20-год": [
+    {
+      "episode": 74,
+      "segment": 767,
+      "score": 0.8410584728146427
+    },
+    {
+      "episode": 90,
+      "segment": 676,
+      "score": 0.04992329704886256
+    }
+  ],
+  "переход от студента к разработчику": [
+    {
+      "episode": 408,
+      "segment": 939,
+      "score": 0.7140954369508258
+    },
+    {
+      "episode": 101,
+      "segment": 727,
+      "score": 0.22264676172474418
+    }
+  ],
+  "Как пришёл к подкасту команда MADEVS": [
+    {
+      "episode": 330,
+      "segment": 974,
+      "score": 0.013473475185663553
+    }
+  ],
+  "система сборки динамические зависимости Excel Makefile": [
+    {
+      "episode": 178,
+      "segment": 346,
+      "score": 0.6231581127867817
+    },
+    {
+      "episode": 38,
+      "segment": 3,
+      "score": 0.5701111979493815
+    }
+  ],
+  "Erlang MMO server architecture": [
+    {
+      "episode": 362,
+      "segment": 885,
+      "score": 0.20621463731135636
+    }
+  ],
+  "white paper деньги обсуждение": [
+    {
+      "episode": 121,
+      "segment": 821,
+      "score": 0.04059417929221576
+    }
+  ],
+  "макросы Scala XML библиотека 2.11": [
+    {
+      "episode": 373,
+      "segment": 14,
+      "score": 0.9194819663900891
+    }
+  ],
+  "Lightning Network масштабируемость блокчейна": [
+    {
+      "episode": 496,
+      "segment": 279,
+      "score": 0.68728081605138
+    },
+    {
+      "episode": 55,
+      "segment": 535,
+      "score": 0.8843705208480293
+    }
+  ],
+  "Python 3 улучшает производительность": [
+    {
+      "episode": 195,
+      "segment": 693,
+      "score": 0.37155507213292194
+    }
+  ],
+  "производительность воздуха 3D печать": [
+    {
+      "episode": 504,
+      "segment": 549,
+      "score": 0.5712958117542569
+    },
+    {
+      "episode": 116,
+      "segment": 629,
+      "score": 0.2450119802652746
+    }
+  ],
+  "оптимизация нагрузки по нуманодам": [
+    {
+      "episode": 138,
+      "segment": 124,
+      "score": 0.5914407235028911
+    },
+    {
+      "episode": 266,
+      "segment": 451,
+      "score": 0.6026320833760475
+    }
+  ],
+  "AI спамеры бабушка O2 UK": [
+    {
+      "episode": 319,
+      "segment": 401,
+      "score": 0.1783836291272518
+    }
+  ],
+  "DevOps будущее и Kubernetes": [
+    {
+      "episode": 37,
+      "segment": 348,
+      "score": 0.21832149614652974
+    },
+    {
+      "episode": 24,
+      "segment": 823,
+      "score": 0.7996661766343308
+    }
+  ],
+  "проблемы с оплатой в Яндекс Такси": [
+    {
+      "episode": 452,
+      "segment": 505,
+      "score": 0.7456001181726565
+    },
+    {
+      "episode": 269,
+      "segment": 468,
+      "score": 0.03750334432881408
+    }
+  ],
+  "Docker орлангов ноды сети порты": [
+    {
+      "episode": 377,
+      "segment": 450,
+      "score": 0.7258020023657783
+    }
+  ],
+  "Radical Candor негативные коннотации": [
+    {
+      "episode": 504,
+      "segment": 83,
+      "score": 0.6778605644003011
+    },
+    {
+      "episode": 383,
+      "segment": 24,
+      "score": 0.7905629307893176
+    }
+  ],
+  "проблемы при работе с unikernel безопасность гипервизор": [
+    {
+      "episode": 447,
+      "segment": 274,
+      "score": 0.9933747651530214
+    },
+    {
+      "episode": 359,
+      "segment": 240,
+      "score": 0.7402225521907618
+    }
+  ],
+  "Recon Ensemble Paxos Cassandra": [
+    {
+      "episode": 370,
+      "segment": 867,
+      "score": 0.08203936609520934
+    },
+    {
+      "episode": 418,
+      "segment": 628,
+      "score": 0.7967632436898329
+    }
+  ],
+  "ОМС страхование проблемы отмена": [
+    {
+      "episode": 58,
+      "segment": 181,
+      "score": 0.7438608617214711
+    },
+    {
+      "episode": 91,
+      "segment": 703,
+      "score": 0.122921743022266
+    }
+  ],
+  "SAST влияние на продажи безопасность код": [
+    {
+      "episode": 43,
+      "segment": 479,
+      "score": 0.9835697485662259
+    },
+    {
+      "episode": 206,
+      "segment": 265,
+      "score": 0.5006412938813659
+    }
+  ],
+  "машинное обучение в инцидент-отслеживании проблемы": [
+    {
+      "episode": 315,
+      "segment": 652,
+      "score": 0.4174909544438177
+    },
+    {
+      "episode": 73,
+      "segment": 18,
+      "score": 0.26983418221426725
+    }
+  ],
+  "iPhone 12 Pro RAW фото вопросы": [
+    {
+      "episode": 471,
+      "segment": 868,
+      "score": 0.8060959961621956
+    },
+    {
+      "episode": 239,
+      "segment": 416,
+      "score": 0.448913489055936
+    }
+  ],
+  "Erlang C bindings reduce overhead": [
+    {
+      "episode": 383,
+      "segment": 102,
+      "score": 0.16000526800089454
+    },
+    {
+      "episode": 77,
+      "segment": 706,
+      "score": 0.9081060919328205
+    }
+  ],
+  "GitKraken SSH config host resolution bug": [
+    {
+      "episode": 138,
+      "segment": 820,
+      "score": 0.6384933538549686
+    }
+  ],
+  "Google контроль открытого кода Kubernetes": [
+    {
+      "episode": 175,
+      "segment": 512,
+      "score": 0.8221962242548589
+    }
+  ],
+  "Flying Bear Ghost 6 3D printer review": [
+    {
+      "episode": 296,
+      "segment": 225,
+      "score": 0.3295030626712049
+    }
+  ],
+  "Ubuntu 24/25 мая конференция безопасность LTS релиз": [
+    {
+      "episode": 14,
+      "segment": 831,
+      "score": 0.2569950560301312
+    },
+    {
+      "episode": 457,
+      "segment": 173,
+      "score": 0.1565649272970977
+    }
+  ],
+  "Node.js 21 Client WebSocket feature": [
+    {
+      "episode": 39,
+      "segment": 921,
+      "score": 0.862111128342357
+    },
+    {
+      "episode": 169,
+      "segment": 109,
+      "score": 0.9341224059725771
+    }
+  ],
+  "виза предпринимательская лондон 50 тысяч": [
+    {
+      "episode": 243,
+      "segment": 204,
+      "score": 0.9501548660731604
+    },
+    {
+      "episode": 352,
+      "segment": 178,
+      "score": 0.2152259626392583
+    }
+  ],
+  "Umbra CedarDB коммерческая база данных": [
+    {
+      "episode": 328,
+      "segment": 113,
+      "score": 0.9745642116804405
+    }
+  ],
+  "переход карьера C++ iOS развитие": [
+    {
+      "episode": 375,
+      "segment": 209,
+      "score": 0.5141495096123121
+    },
+    {
+      "episode": 9,
+      "segment": 748,
+      "score": 0.9969199426548736
+    }
+  ],
+  "путь трассинг реалтайм denoising NVIDIA": [
+    {
+      "episode": 57,
+      "segment": 130,
+      "score": 0.4696209125538714
+    },
+    {
+      "episode": 65,
+      "segment": 397,
+      "score": 0.7952201540904146
+    }
+  ],
+  "Google автопилот управление лимитами ресурсов": [
+    {
+      "episode": 0,
+      "segment": 805,
+      "score": 0.7337573952752983
+    },
+    {
+      "episode": 447,
+      "segment": 673,
+      "score": 0.42629123777766953
+    }
+  ],
+  "Крис Касперски ошибки Intel процессоры": [
+    {
+      "episode": 125,
+      "segment": 972,
+      "score": 0.03581954623196182
+    }
+  ],
+  "пределы масштабирования партиционирования": [
+    {
+      "episode": 408,
+      "segment": 242,
+      "score": 0.717354933759393
+    }
+  ],
+  "курс игровой графики стоимость 115 тысяч рублей": [
+    {
+      "episode": 408,
+      "segment": 727,
+      "score": 0.4198181169502475
+    }
+  ],
+  "старые кассеты ракорд прозрачная пленка": [
+    {
+      "episode": 391,
+      "segment": 578,
+      "score": 0.1442529273785914
+    }
+  ],
+  "микросервисы стейтлес база данных": [
+    {
+      "episode": 474,
+      "segment": 141,
+      "score": 0.3046727774393252
+    },
+    {
+      "episode": 233,
+      "segment": 993,
+      "score": 0.9633589753918723
+    }
+  ],
+  "Hitman Game of the Year Edition стоит ли играть?": [
+    {
+      "episode": 133,
+      "segment": 395,
+      "score": 0.9969732563177486
+    }
+  ],
+  "эргономика сидения за компьютером": [
+    {
+      "episode": 188,
+      "segment": 543,
+      "score": 0.20425893601061929
+    }
+  ],
+  "токио future custom macro Rust": [
+    {
+      "episode": 358,
+      "segment": 19,
+      "score": 0.8567895521186246
+    }
+  ],
+  "Wi‑Fi проблемы с передачей данных": [
+    {
+      "episode": 307,
+      "segment": 764,
+      "score": 0.31510631301601477
+    }
+  ],
+  "поток кандидатов в стажировки": [
+    {
+      "episode": 255,
+      "segment": 233,
+      "score": 0.008387854061637667
+    },
+    {
+      "episode": 134,
+      "segment": 690,
+      "score": 0.9353405070339663
+    }
+  ],
+  "PlayStation обновление прошивки Metro Exodus проблемы": [
+    {
+      "episode": 351,
+      "segment": 735,
+      "score": 0.17958475432539522
+    },
+    {
+      "episode": 370,
+      "segment": 367,
+      "score": 0.1629907840075815
+    }
+  ],
+  "edge pushdown запросы и индексирование": [
+    {
+      "episode": 267,
+      "segment": 410,
+      "score": 0.48157153300161815
+    }
+  ],
+  "архитектура кода интеграции компании": [
+    {
+      "episode": 237,
+      "segment": 831,
+      "score": 0.9049786460489413
+    }
+  ],
+  "Twitter леволиберальный пузырь": [
+    {
+      "episode": 125,
+      "segment": 611,
+      "score": 0.4860912072659982
+    }
+  ],
+  "Erlang и Elixir в продакшене": [
+    {
+      "episode": 177,
+      "segment": 388,
+      "score": 0.15561464976915473
+    }
+  ],
+  "B‑Plus vs LSM дерево SSD сжатие": [
+    {
+      "episode": 6,
+      "segment": 491,
+      "score": 0.020828296943542268
+    },
+    {
+      "episode": 289,
+      "segment": 416,
+      "score": 0.19686456434207977
+    }
+  ],
+  "WhatsApp API библиотека Go": [
+    {
+      "episode": 48,
+      "segment": 196,
+      "score": 0.3920984429258658
+    }
+  ],
+  "Dolby Atmos формат передачи метаданных": [
+    {
+      "episode": 413,
+      "segment": 90,
+      "score": 0.43716983299512124
+    },
+    {
+      "episode": 15,
+      "segment": 791,
+      "score": 0.322467419175097
+    }
+  ],
+  "управление зависимостями Go": [
+    {
+      "episode": 430,
+      "segment": 709,
+      "score": 0.18847686731312752
+    }
+  ],
+  "титулы компаний влияют на карьеру": [
+    {
+      "episode": 257,
+      "segment": 881,
+      "score": 0.5867623594381057
+    },
+    {
+      "episode": 313,
+      "segment": 681,
+      "score": 0.39467041641255984
+    }
+  ],
+  "Tail at Scale Google сервисы быстрые ответы": [
+    {
+      "episode": 96,
+      "segment": 634,
+      "score": 0.959002685151663
+    }
+  ],
+  "DynamoDB транзакции уникальный подход MVCC отказ": [
+    {
+      "episode": 435,
+      "segment": 319,
+      "score": 0.2366034841469743
+    },
+    {
+      "episode": 412,
+      "segment": 70,
+      "score": 0.9641196771665744
+    }
+  ],
+  "Hermitage проект FoundationDB уровень изоляции": [
+    {
+      "episode": 116,
+      "segment": 835,
+      "score": 0.3414624572508794
+    },
+    {
+      "episode": 476,
+      "segment": 350,
+      "score": 0.2911236201059981
+    }
+  ],
+  "DevZen Meetup Москва 26‑27 2023": [
+    {
+      "episode": 476,
+      "segment": 370,
+      "score": 0.40623239434427927
+    },
+    {
+      "episode": 56,
+      "segment": 374,
+      "score": 0.4388582634252137
+    }
+  ],
+  "Apple сервис персональные данные ремонт": [
+    {
+      "episode": 91,
+      "segment": 33,
+      "score": 0.3777543969757782
+    }
+  ],
+  "мониторинг CPU нагрузка аномалия майнинг скрытый": [
+    {
+      "episode": 65,
+      "segment": 814,
+      "score": 0.28573277088972104
+    },
+    {
+      "episode": 439,
+      "segment": 353,
+      "score": 0.6446532827866529
+    }
+  ],
+  "PostgreSQL асинхронное I/O оптимизация": [
+    {
+      "episode": 487,
+      "segment": 583,
+      "score": 0.4609588364388295
+    }
+  ],
+  "Black Friday gaming laptop deals": [
+    {
+      "episode": 399,
+      "segment": 299,
+      "score": 0.7831743859662169
+    }
+  ],
+  "Panda F-Sync Raft benchmark issue": [
+    {
+      "episode": 461,
+      "segment": 631,
+      "score": 0.023905087487264942
+    }
+  ],
+  "Минск митап Паскале опыт путешествия": [
+    {
+      "episode": 437,
+      "segment": 616,
+      "score": 0.8196217004732821
+    }
+  ],
+  "уровень абстракции языков программирования Erlang OTP": [
+    {
+      "episode": 270,
+      "segment": 87,
+      "score": 0.8590068354557071
+    },
+    {
+      "episode": 334,
+      "segment": 300,
+      "score": 0.607892644045532
+    }
+  ],
+  "публичный API клиент подключения к БД без backend": [
+    {
+      "episode": 146,
+      "segment": 441,
+      "score": 0.9498983435729471
+    },
+    {
+      "episode": 21,
+      "segment": 209,
+      "score": 0.0007056652636030503
+    }
+  ],
+  "fail-slow распределённые системы обнаружение": [
+    {
+      "episode": 369,
+      "segment": 755,
+      "score": 0.053917748052754955
+    },
+    {
+      "episode": 296,
+      "segment": 150,
+      "score": 0.9208838232186957
+    }
+  ],
+  "AirLang VM улучшения масштабируемости время измерений": [
+    {
+      "episode": 411,
+      "segment": 137,
+      "score": 0.047984036467492386
+    }
+  ],
+  "Elixir Meetup Moscow API lenta.ru": [
+    {
+      "episode": 466,
+      "segment": 191,
+      "score": 0.5179445745687857
+    },
+    {
+      "episode": 459,
+      "segment": 997,
+      "score": 0.7306601568627625
+    }
+  ],
+  "ценность предметов через историю торговли": [
+    {
+      "episode": 80,
+      "segment": 306,
+      "score": 0.6967019413535757
+    }
+  ],
+  "SQL инъекция Postgres сквиртл": [
+    {
+      "episode": 38,
+      "segment": 983,
+      "score": 0.4072326875540335
+    }
+  ],
+  "проект Shuttle деградация отказоустойчивость": [
+    {
+      "episode": 63,
+      "segment": 205,
+      "score": 0.8690122584547629
+    },
+    {
+      "episode": 438,
+      "segment": 266,
+      "score": 0.7106127943026438
+    }
+  ],
+  "PostgreSQL 13 авто-вакуума вставки": [
+    {
+      "episode": 4,
+      "segment": 662,
+      "score": 0.573722713928524
+    }
+  ],
+  "проверка разделения репы и SQL в Ecto проект разделение мотивация": [
+    {
+      "episode": 224,
+      "segment": 477,
+      "score": 0.12604015768631338
+    },
+    {
+      "episode": 201,
+      "segment": 841,
+      "score": 0.7812163565953831
+    }
+  ],
+  "образование преподаватели выбор курсов конкуренция вуз": [
+    {
+      "episode": 270,
+      "segment": 488,
+      "score": 0.6948947560074668
+    },
+    {
+      "episode": 394,
+      "segment": 246,
+      "score": 0.10748812773909999
+    }
+  ],
+  "публичный личный бренд в IT": [
+    {
+      "episode": 445,
+      "segment": 742,
+      "score": 0.9646035402462522
+    }
+  ],
+  "Rust web frameworks tools async I/O": [
+    {
+      "episode": 86,
+      "segment": 879,
+      "score": 0.5048570922834811
+    }
+  ],
+  "выбор системного языка Go Rust Pony": [
+    {
+      "episode": 272,
+      "segment": 646,
+      "score": 0.3992065748423047
+    }
+  ],
+  "маилстром фейловер дата центров": [
+    {
+      "episode": 365,
+      "segment": 46,
+      "score": 0.35172158148410826
+    }
+  ],
+  "мigrating legacy mainframe to Postgres on Elbrus open source migration best practices": [
+    {
+      "episode": 353,
+      "segment": 568,
+      "score": 0.4111374022586004
+    }
+  ],
+  "советы начинающим тех лидам менторинг обратная связь": [
+    {
+      "episode": 461,
+      "segment": 91,
+      "score": 0.26338441987834904
+    },
+    {
+      "episode": 471,
+      "segment": 353,
+      "score": 0.3791433562900962
+    }
+  ],
+  "как читать техническую документацию быстро": [
+    {
+      "episode": 32,
+      "segment": 816,
+      "score": 0.44298523144522484
+    }
+  ],
+  "приватная сеть дата‑центр РФ каналы 10 Gbps": [
+    {
+      "episode": 163,
+      "segment": 964,
+      "score": 0.5497095663755164
+    }
+  ],
+  "Moonlight проверка TailScale": [
+    {
+      "episode": 381,
+      "segment": 539,
+      "score": 0.965822809821067
+    },
+    {
+      "episode": 181,
+      "segment": 178,
+      "score": 0.3635997595030189
+    }
+  ],
+  "перекись водорода восстановление желтования пластика": [
+    {
+      "episode": 117,
+      "segment": 34,
+      "score": 0.6538762496493082
+    }
+  ],
+  "QUIC UDP throughput optimization": [
+    {
+      "episode": 508,
+      "segment": 768,
+      "score": 0.1135997184770332
+    }
+  ],
+  "автоматизация ICO без сбора": [
+    {
+      "episode": 87,
+      "segment": 591,
+      "score": 0.2565301460080863
+    },
+    {
+      "episode": 23,
+      "segment": 239,
+      "score": 0.1710125777043221
+    }
+  ],
+  "DataFusion push‑based vs pull‑based execution": [
+    {
+      "episode": 422,
+      "segment": 351,
+      "score": 0.6259974759115597
+    }
+  ],
+  "GitHub open-source модель внутреннего управления проблемы коммуникации": [
+    {
+      "episode": 413,
+      "segment": 773,
+      "score": 0.6217880293108005
+    },
+    {
+      "episode": 203,
+      "segment": 289,
+      "score": 0.36726605595450845
+    }
+  ],
+  "улучшение техники тенниса открытая позиция рука ракетка": [
+    {
+      "episode": 370,
+      "segment": 673,
+      "score": 0.7585351490749072
+    },
+    {
+      "episode": 293,
+      "segment": 378,
+      "score": 0.8678168088297942
+    }
+  ],
+  "Restore трассировка лучей": [
+    {
+      "episode": 330,
+      "segment": 166,
+      "score": 0.5590443919032284
+    }
+  ],
+  "Windows резервное копирование аналог Time Machine": [
+    {
+      "episode": 358,
+      "segment": 537,
+      "score": 0.32249998791601797
+    }
+  ],
+  "GDG DevFest Новосибирск конференция Google": [
+    {
+      "episode": 409,
+      "segment": 422,
+      "score": 0.27047172848764656
+    }
+  ],
+  "flash исчезновение 2020": [
+    {
+      "episode": 477,
+      "segment": 521,
+      "score": 0.4985934776011264
+    },
+    {
+      "episode": 508,
+      "segment": 376,
+      "score": 0.29651428175020045
+    }
+  ],
+  "зачем использовать язык Rust вместо C++": [
+    {
+      "episode": 377,
+      "segment": 981,
+      "score": 0.6876213565776469
+    },
+    {
+      "episode": 40,
+      "segment": 606,
+      "score": 0.6403476613756658
+    }
+  ],
+  "переход из Data Science в PMM сложность": [
+    {
+      "episode": 125,
+      "segment": 943,
+      "score": 0.26489725860296365
+    }
+  ],
+  "FreeBSD WhatsApp миллион долларов": [
+    {
+      "episode": 448,
+      "segment": 263,
+      "score": 0.1676819587226953
+    },
+    {
+      "episode": 245,
+      "segment": 548,
+      "score": 0.683803380360663
+    }
+  ],
+  "Лондон рынок IT зарплаты Google hedge fund": [
+    {
+      "episode": 86,
+      "segment": 310,
+      "score": 0.9093601192762308
+    },
+    {
+      "episode": 435,
+      "segment": 677,
+      "score": 0.11944924168883198
+    }
+  ],
+  "защита телефона фейковые данные": [
+    {
+      "episode": 474,
+      "segment": 160,
+      "score": 0.15459427735075804
+    },
+    {
+      "episode": 199,
+      "segment": 899,
+      "score": 0.7332807728619928
+    }
+  ],
+  "пять почему постмортим": [
+    {
+      "episode": 206,
+      "segment": 743,
+      "score": 0.8898693175220985
+    }
+  ],
+  "конфигурация как код BGP проблемы": [
+    {
+      "episode": 232,
+      "segment": 225,
+      "score": 0.6151073520324138
+    },
+    {
+      "episode": 147,
+      "segment": 916,
+      "score": 0.3936318034558898
+    }
+  ],
+  "iOS локальный взлом аутентификации": [
+    {
+      "episode": 153,
+      "segment": 43,
+      "score": 0.09738426706573389
+    },
+    {
+      "episode": 158,
+      "segment": 262,
+      "score": 0.5656870674572478
+    }
+  ],
+  "hashicorp consul nomad vault outage": [
+    {
+      "episode": 378,
+      "segment": 682,
+      "score": 0.7267129445036278
+    },
+    {
+      "episode": 334,
+      "segment": 892,
+      "score": 0.9120134878501555
+    }
+  ],
+  "управление роутером через tftp": [
+    {
+      "episode": 97,
+      "segment": 194,
+      "score": 0.8461196188830895
+    }
+  ],
+  "YDB blob storage group failure recovery": [
+    {
+      "episode": 295,
+      "segment": 969,
+      "score": 0.49227383800874447
+    }
+  ],
+  "программирование AI будущее советы": [
+    {
+      "episode": 10,
+      "segment": 827,
+      "score": 0.696745571451096
+    }
+  ],
+  "web rtc latency geography servers": [
+    {
+      "episode": 461,
+      "segment": 771,
+      "score": 0.5582704201394432
+    }
+  ],
+  "RavenDB InfluxDB WireTiger использование": [
+    {
+      "episode": 400,
+      "segment": 492,
+      "score": 0.45456452610036513
+    },
+    {
+      "episode": 364,
+      "segment": 627,
+      "score": 0.3000854432788934
+    }
+  ],
+  "VR мобильный Unity производительность сравнение Unreal": [
+    {
+      "episode": 274,
+      "segment": 853,
+      "score": 0.7562172293164585
+    },
+    {
+      "episode": 48,
+      "segment": 812,
+      "score": 0.8217640070088413
+    }
+  ],
+  "AMD Ryzen производительность и цена сравнение Intel": [
+    {
+      "episode": 345,
+      "segment": 12,
+      "score": 0.2011084266439509
+    }
+  ],
+  "ZFS incremental backups for R‑subeda": [
+    {
+      "episode": 334,
+      "segment": 480,
+      "score": 0.8609363908682995
+    },
+    {
+      "episode": 431,
+      "segment": 253,
+      "score": 0.5461946983059448
+    }
+  ],
+  "TLA Pluscall использование": [
+    {
+      "episode": 111,
+      "segment": 813,
+      "score": 0.7755238580639959
+    },
+    {
+      "episode": 283,
+      "segment": 867,
+      "score": 0.017616976631151582
+    }
+  ],
+  "Мастер Класс онлайн обучение": [
+    {
+      "episode": 254,
+      "segment": 633,
+      "score": 0.27581556760695924
+    },
+    {
+      "episode": 91,
+      "segment": 854,
+      "score": 0.02735595002191027
+    }
+  ],
+  "Aerospike CP consistency documentation confusion": [
+    {
+      "episode": 242,
+      "segment": 743,
+      "score": 0.6388752750068408
+    },
+    {
+      "episode": 117,
+      "segment": 613,
+      "score": 0.1935857222861913
+    }
+  ],
+  "уровни изоляции баз данных PostgreSQL default": [
+    {
+      "episode": 497,
+      "segment": 55,
+      "score": 0.3575375725151434
+    },
+    {
+      "episode": 65,
+      "segment": 11,
+      "score": 0.39781426734574366
+    }
+  ],
+  "ClickHouse репликация настройка таблиц": [
+    {
+      "episode": 2,
+      "segment": 990,
+      "score": 0.2763871604520226
+    },
+    {
+      "episode": 62,
+      "segment": 807,
+      "score": 0.9592795318177572
+    }
+  ],
+  "объединение стриминговых сервисов будущее": [
+    {
+      "episode": 68,
+      "segment": 115,
+      "score": 0.03427575734087507
+    }
+  ],
+  "история клавиатур контролл капсулка": [
+    {
+      "episode": 438,
+      "segment": 869,
+      "score": 0.40446004405087876
+    }
+  ],
+  "потоковые уведомления веб‑socket Postgres схлопывание": [
+    {
+      "episode": 472,
+      "segment": 510,
+      "score": 0.9670199088906093
+    }
+  ],
+  "Perl 6 доклад Larry Wall конференция": [
+    {
+      "episode": 223,
+      "segment": 472,
+      "score": 0.6224553734527658
+    },
+    {
+      "episode": 259,
+      "segment": 357,
+      "score": 0.16862082068087658
+    }
+  ],
+  "FPGA экономическая эффективность майнинг энергопотребление": [
+    {
+      "episode": 441,
+      "segment": 531,
+      "score": 0.006827282199137308
+    },
+    {
+      "episode": 493,
+      "segment": 761,
+      "score": 0.22580128717913783
+    }
+  ],
+  "ICO финансирование компании": [
+    {
+      "episode": 345,
+      "segment": 866,
+      "score": 0.7402208445282048
+    },
+    {
+      "episode": 184,
+      "segment": 763,
+      "score": 0.7001479098992395
+    }
+  ],
+  "\"производительность сравнение баз данных все‑текст\"": [
+    {
+      "episode": 397,
+      "segment": 866,
+      "score": 0.0936063480529451
+    }
+  ],
+  "игровой дизайн Альгала vs Ведьмак": [
+    {
+      "episode": 425,
+      "segment": 417,
+      "score": 0.9254355213017893
+    }
+  ],
+  "Beta Mall 3D файтинг игра": [
+    {
+      "episode": 399,
+      "segment": 7,
+      "score": 0.42684532409385245
+    }
+  ],
+  "создание кастомных шрифтов SSD1306 STM32": [
+    {
+      "episode": 315,
+      "segment": 702,
+      "score": 0.6146583366945596
+    }
+  ],
+  "CPU IO wait time значение": [
+    {
+      "episode": 131,
+      "segment": 602,
+      "score": 0.1917725252430904
+    }
+  ],
+  "упрощение Kubernetes когнитивная нагрузка": [
+    {
+      "episode": 482,
+      "segment": 86,
+      "score": 0.4232007770470533
+    },
+    {
+      "episode": 178,
+      "segment": 676,
+      "score": 0.20450276727320538
+    }
+  ],
+  "Amazon ECS синхронизация Paxos": [
+    {
+      "episode": 473,
+      "segment": 359,
+      "score": 0.49527020517584763
+    }
+  ],
+  "Go динамические библиотеки проблемы плагин": [
+    {
+      "episode": 336,
+      "segment": 957,
+      "score": 0.19689385700925532
+    }
+  ],
+  "alternatives to Heroku cost scaling Kubernetes": [
+    {
+      "episode": 45,
+      "segment": 447,
+      "score": 0.18386800300690465
+    },
+    {
+      "episode": 90,
+      "segment": 777,
+      "score": 0.11748657057174983
+    }
+  ],
+  "помочь убрать рассылки из почты Android": [
+    {
+      "episode": 373,
+      "segment": 575,
+      "score": 0.5665793157142927
+    }
+  ],
+  "система кэширования клиент-сервер": [
+    {
+      "episode": 121,
+      "segment": 992,
+      "score": 0.05171631359691953
+    }
+  ],
+  "фальсификация результатов физика обсуждение": [
+    {
+      "episode": 455,
+      "segment": 854,
+      "score": 0.7608497254893527
+    }
+  ],
+  "перенос владения данными библиотек": [
+    {
+      "episode": 136,
+      "segment": 282,
+      "score": 0.9893761140452424
+    }
+  ],
+  "High Load конференция впечатления": [
+    {
+      "episode": 346,
+      "segment": 720,
+      "score": 0.25454211669730376
+    }
+  ],
+  "Rasmus Mundus магистратура 2025": [
+    {
+      "episode": 110,
+      "segment": 116,
+      "score": 0.9873163017878029
+    },
+    {
+      "episode": 262,
+      "segment": 869,
+      "score": 0.5761020440272812
+    }
+  ],
+  "какие офисные кресла лучше спина": [
+    {
+      "episode": 15,
+      "segment": 104,
+      "score": 0.10815458238614761
+    }
+  ],
+  "Unreal 4 производительность проблемы": [
+    {
+      "episode": 52,
+      "segment": 947,
+      "score": 0.23203135394422914
+    },
+    {
+      "episode": 166,
+      "segment": 737,
+      "score": 0.45873955523434806
+    }
+  ],
+  "Microsoft To Do развитие после покупки Wonderlist": [
+    {
+      "episode": 237,
+      "segment": 142,
+      "score": 0.665248377805757
+    }
+  ],
+  "Scala продакшн проблемы мониторинг": [
+    {
+      "episode": 430,
+      "segment": 454,
+      "score": 0.5749526041700769
+    }
+  ],
+  "конференция Scala доклад Сергей Лобин": [
+    {
+      "episode": 366,
+      "segment": 317,
+      "score": 0.9796694662700474
+    },
+    {
+      "episode": 170,
+      "segment": 624,
+      "score": 0.728758118113989
+    }
+  ],
+  "Razette-code сравнение языков программирования": [
+    {
+      "episode": 301,
+      "segment": 457,
+      "score": 0.08096286514083328
+    },
+    {
+      "episode": 309,
+      "segment": 877,
+      "score": 0.4878768545895932
+    }
+  ],
+  "GitHub форумы настройки репозитория": [
+    {
+      "episode": 120,
+      "segment": 186,
+      "score": 0.8526037952486059
+    },
+    {
+      "episode": 398,
+      "segment": 635,
+      "score": 0.2753016171240038
+    }
+  ],
+  "Omnigress Postgres application server": [
+    {
+      "episode": 506,
+      "segment": 903,
+      "score": 0.6846586537653245
+    }
+  ],
+  "Rust 3D графика безопасный API GFX": [
+    {
+      "episode": 348,
+      "segment": 717,
+      "score": 0.3823319394947806
+    },
+    {
+      "episode": 253,
+      "segment": 791,
+      "score": 0.25733845509444897
+    }
+  ],
+  "криптомессенджер безопасность": [
+    {
+      "episode": 119,
+      "segment": 207,
+      "score": 0.30554711448477423
+    }
+  ],
+  "Orleans / ..?": [
+    {
+      "episode": 304,
+      "segment": 175,
+      "score": 0.2994023968161226
+    },
+    {
+      "episode": 428,
+      "segment": 975,
+      "score": 0.2121747818641444
+    }
+  ],
+  "Go компилятор для микроконтроллеров": [
+    {
+      "episode": 310,
+      "segment": 899,
+      "score": 0.09156941638036076
+    },
+    {
+      "episode": 15,
+      "segment": 122,
+      "score": 0.9562295211945399
+    }
+  ],
+  "Prometheus scaling Thanos solution": [
+    {
+      "episode": 428,
+      "segment": 474,
+      "score": 0.412301326449625
+    },
+    {
+      "episode": 334,
+      "segment": 407,
+      "score": 0.8313498277303634
+    }
+  ],
+  "\"актер\" сynchron‑? …": [
+    {
+      "episode": 450,
+      "segment": 838,
+      "score": 0.14710435647871156
+    }
+  ],
+  "Кotlin короткий код Java сравнение": [
+    {
+      "episode": 178,
+      "segment": 274,
+      "score": 0.6276445340920963
+    }
+  ],
+  "Highload докладчики посещать конференцию": [
+    {
+      "episode": 277,
+      "segment": 264,
+      "score": 0.6650433544383065
+    }
+  ],
+  "BDD критика и практическое применение": [
+    {
+      "episode": 250,
+      "segment": 114,
+      "score": 0.8115297366818797
+    }
+  ],
+  "Перекись водорода очистка пластика от желтизны": [
+    {
+      "episode": 196,
+      "segment": 639,
+      "score": 0.2040623562504026
+    },
+    {
+      "episode": 346,
+      "segment": 551,
+      "score": 0.9742544948947481
+    }
+  ],
+  "The Signal Path канал электроника": [
+    {
+      "episode": 47,
+      "segment": 968,
+      "score": 0.6391058492323706
+    },
+    {
+      "episode": 171,
+      "segment": 185,
+      "score": 0.3677338087166009
+    }
+  ],
+  "SQL database differences Postgres MySQL SQLite": [
+    {
+      "episode": 509,
+      "segment": 559,
+      "score": 0.3771714726187131
+    },
+    {
+      "episode": 36,
+      "segment": 666,
+      "score": 0.2717024526407026
+    }
+  ],
+  "Prometheus 2.0 storage changes": [
+    {
+      "episode": 356,
+      "segment": 702,
+      "score": 0.5814348232520145
+    }
+  ],
+  "Erlang R18 нововведения таймеры и мапы": [
+    {
+      "episode": 75,
+      "segment": 723,
+      "score": 0.3707057596939358
+    }
+  ],
+  "тестирование без требований как найти дефекты": [
+    {
+      "episode": 216,
+      "segment": 409,
+      "score": 0.01962782399959828
+    }
+  ],
+  "Azure Active Directory роли PM EM": [
+    {
+      "episode": 109,
+      "segment": 105,
+      "score": 0.8616751018462389
+    }
+  ],
+  "архитектура компиляторов LLVM книга": [
+    {
+      "episode": 416,
+      "segment": 339,
+      "score": 0.8970476608721426
+    }
+  ],
+  "senior developer критерии метрики бизнес": [
+    {
+      "episode": 329,
+      "segment": 90,
+      "score": 0.7545210140548767
+    },
+    {
+      "episode": 426,
+      "segment": 439,
+      "score": 0.6433593066665192
+    }
+  ],
+  "путь развития FS2 в команде": [
+    {
+      "episode": 497,
+      "segment": 504,
+      "score": 0.865079125212
+    },
+    {
+      "episode": 474,
+      "segment": 99,
+      "score": 0.03199639540662802
+    }
+  ],
+  "LeapingDB high availability range queries": [
+    {
+      "episode": 304,
+      "segment": 935,
+      "score": 0.21174162029623456
+    },
+    {
+      "episode": 139,
+      "segment": 30,
+      "score": 0.9195193371426739
+    }
+  ],
+  "Как поддерживать контакты эффективно": [
+    {
+      "episode": 174,
+      "segment": 604,
+      "score": 0.005117863185198246
+    },
+    {
+      "episode": 373,
+      "segment": 337,
+      "score": 0.6959063103688514
+    }
+  ],
+  "Perl веб vs Erlang производительность": [
+    {
+      "episode": 141,
+      "segment": 774,
+      "score": 0.3801273375793749
+    },
+    {
+      "episode": 454,
+      "segment": 88,
+      "score": 0.9346972612213914
+    }
+  ],
+  "как избежать дисконнекта между руководством и разработчиками": [
+    {
+      "episode": 471,
+      "segment": 901,
+      "score": 0.21250660550977474
+    }
+  ],
+  "проблема немецкий чат‑бот мобильное приложение": [
+    {
+      "episode": 146,
+      "segment": 923,
+      "score": 0.18588023818125388
+    }
+  ],
+  "CAP проект Kubernetes год": [
+    {
+      "episode": 448,
+      "segment": 107,
+      "score": 0.44812411470328806
+    },
+    {
+      "episode": 354,
+      "segment": 748,
+      "score": 0.3014802156326247
+    }
+  ],
+  "Postgres коммитер сложность патчей": [
+    {
+      "episode": 54,
+      "segment": 220,
+      "score": 0.6810176026509269
+    },
+    {
+      "episode": 236,
+      "segment": 616,
+      "score": 0.29808558147802455
+    }
+  ],
+  "NAS бекап стримов": [
+    {
+      "episode": 392,
+      "segment": 661,
+      "score": 0.9938547464027548
+    },
+    {
+      "episode": 169,
+      "segment": 414,
+      "score": 0.5332079826668119
+    }
+  ],
+  "Haskell вакансии зарубежные предложения": [
+    {
+      "episode": 394,
+      "segment": 337,
+      "score": 0.14450887626149378
+    }
+  ],
+  "Adobe Animate анимация скелет кости": [
+    {
+      "episode": 41,
+      "segment": 125,
+      "score": 0.8431530807558678
+    }
+  ],
+  "Erlang VM обновления API сокет ускорение": [
+    {
+      "episode": 422,
+      "segment": 911,
+      "score": 0.5854893117561375
+    }
+  ],
+  "Readeck альтернативы Pocket": [
+    {
+      "episode": 376,
+      "segment": 535,
+      "score": 0.5023213693368392
+    }
+  ],
+  "Как получить внешние данные для смарт-контрактов": [
+    {
+      "episode": 495,
+      "segment": 817,
+      "score": 0.7280647545543879
+    }
+  ],
+  "PGElastic Elasticsearch to Postgres migration tool": [
+    {
+      "episode": 365,
+      "segment": 639,
+      "score": 0.6541011761129041
+    }
+  ],
+  "Erlang scheduler VM push‑to‑talk": [
+    {
+      "episode": 93,
+      "segment": 411,
+      "score": 0.29377919328212077
+    },
+    {
+      "episode": 492,
+      "segment": 598,
+      "score": 0.4989241081670869
+    }
+  ],
+  "fuzzing Go first class citizen": [
+    {
+      "episode": 244,
+      "segment": 590,
+      "score": 0.07227241911507554
+    },
+    {
+      "episode": 246,
+      "segment": 176,
+      "score": 0.2999883627699095
+    }
+  ],
+  "зависимые типы матрицы Haskell компилятор проверяет": [
+    {
+      "episode": 157,
+      "segment": 600,
+      "score": 0.15203662569972276
+    },
+    {
+      "episode": 1,
+      "segment": 716,
+      "score": 0.12977250101864435
+    }
+  ],
+  "Red Hat OpenJDK hiring process": [
+    {
+      "episode": 438,
+      "segment": 855,
+      "score": 0.7120383892776426
+    },
+    {
+      "episode": 440,
+      "segment": 816,
+      "score": 0.4049114275597038
+    }
+  ],
+  "потребность спрос на кремниевые чипы": [
+    {
+      "episode": 73,
+      "segment": 987,
+      "score": 0.5437797840567183
+    }
+  ],
+  "Null объект паттерн NullObject": [
+    {
+      "episode": 185,
+      "segment": 902,
+      "score": 0.8947301969576313
+    }
+  ],
+  "нужно ли носить паспорт в Москве?": [
+    {
+      "episode": 166,
+      "segment": 515,
+      "score": 0.15448919992342236
+    },
+    {
+      "episode": 286,
+      "segment": 529,
+      "score": 0.7773657302127043
+    }
+  ],
+  "ICFPC организация участников": [
+    {
+      "episode": 0,
+      "segment": 428,
+      "score": 0.7622772238458931
+    }
+  ],
+  "баланс уровней безопасности передачи файлов": [
+    {
+      "episode": 81,
+      "segment": 549,
+      "score": 0.2764572618504295
+    }
+  ],
+  "локальный теплоизоляционный контроль лофта": [
+    {
+      "episode": 486,
+      "segment": 23,
+      "score": 0.7796808681096725
+    }
+  ],
+  "сушка 5G PLA влажность": [
+    {
+      "episode": 136,
+      "segment": 655,
+      "score": 0.07475661971600833
+    },
+    {
+      "episode": 100,
+      "segment": 375,
+      "score": 0.7981762106754723
+    }
+  ],
+  "виртуальный контейнер миграция файловой системы": [
+    {
+      "episode": 406,
+      "segment": 105,
+      "score": 0.33001006039280756
+    },
+    {
+      "episode": 200,
+      "segment": 133,
+      "score": 0.17538868377465477
+    }
+  ],
+  "доступность мобильных устройств скринридер Android": [
+    {
+      "episode": 93,
+      "segment": 170,
+      "score": 0.8864903474603004
+    },
+    {
+      "episode": 362,
+      "segment": 472,
+      "score": 0.3895775702708012
+    }
+  ],
+  "Rust integer overflow behavior": [
+    {
+      "episode": 210,
+      "segment": 955,
+      "score": 0.1176856364658222
+    }
+  ],
+  "коммуникация на работе": [
+    {
+      "episode": 305,
+      "segment": 49,
+      "score": 0.6594245345830668
+    },
+    {
+      "episode": 236,
+      "segment": 233,
+      "score": 0.21632358381045103
+    }
+  ],
+  "Zookeeper service discovery недостатки": [
+    {
+      "episode": 107,
+      "segment": 264,
+      "score": 0.34110759336815377
+    }
+  ],
+  "полнотекстовый поиск в аналитике данных": [
+    {
+      "episode": 388,
+      "segment": 690,
+      "score": 0.21464382992351483
+    }
+  ],
+  "Microsoft Windows Linux development environment": [
+    {
+      "episode": 476,
+      "segment": 963,
+      "score": 0.2838875415695328
+    }
+  ],
+  "Кеширование больших дата‑флоу проблемы": [
+    {
+      "episode": 416,
+      "segment": 602,
+      "score": 0.490078808171051
+    }
+  ],
+  "Scala выбор компиляции проверка": [
+    {
+      "episode": 313,
+      "segment": 45,
+      "score": 0.06331916098343082
+    }
+  ],
+  "Node.js sandbox permissions JavaScript": [
+    {
+      "episode": 403,
+      "segment": 716,
+      "score": 0.12660917569778696
+    }
+  ],
+  "почему удаляется файл из Яндекс.Диска при синхронизации": [
+    {
+      "episode": 503,
+      "segment": 401,
+      "score": 0.21980773348825855
+    },
+    {
+      "episode": 505,
+      "segment": 838,
+      "score": 0.40843503022982
+    }
+  ],
+  "Facebook новый стандарт компрессии Z-Standard": [
+    {
+      "episode": 273,
+      "segment": 295,
+      "score": 0.01302405744502666
+    }
+  ],
+  "BitLocker TPM защита ноутбука украденный": [
+    {
+      "episode": 483,
+      "segment": 52,
+      "score": 0.3063120311609586
+    }
+  ],
+  "Mira.com совместная работа доска": [
+    {
+      "episode": 26,
+      "segment": 862,
+      "score": 0.21439958741043408
+    }
+  ],
+  "PostgreSQL FDW презентация": [
+    {
+      "episode": 99,
+      "segment": 336,
+      "score": 0.8017706457031553
+    },
+    {
+      "episode": 424,
+      "segment": 157,
+      "score": 0.5261631897598416
+    }
+  ],
+  "Белорусский IT рынок зарплаты сервисные компании": [
+    {
+      "episode": 15,
+      "segment": 442,
+      "score": 0.9760754670905497
+    },
+    {
+      "episode": 352,
+      "segment": 652,
+      "score": 0.7437143704950909
+    }
+  ],
+  "света NASA открытые исследования": [
+    {
+      "episode": 302,
+      "segment": 557,
+      "score": 0.6330307825500318
+    }
+  ],
+  "Go HTML template script module safety": [
+    {
+      "episode": 31,
+      "segment": 772,
+      "score": 0.3384307163147833
+    },
+    {
+      "episode": 228,
+      "segment": 179,
+      "score": 0.5929411853722288
+    }
+  ],
+  "контрол плейн разница Data Plane": [
+    {
+      "episode": 303,
+      "segment": 404,
+      "score": 0.8665606128618439
+    },
+    {
+      "episode": 194,
+      "segment": 660,
+      "score": 0.6151277384918727
+    }
+  ],
+  "как поддержать сотрудника эмоционально": [
+    {
+      "episode": 324,
+      "segment": 213,
+      "score": 0.13783226760832412
+    }
+  ],
+  "Fiber переход на Scala проблемы руководства": [
+    {
+      "episode": 295,
+      "segment": 279,
+      "score": 0.2906834139788236
+    },
+    {
+      "episode": 317,
+      "segment": 33,
+      "score": 0.3877558545406594
+    }
+  ],
+  "scrum story points experience benefits": [
+    {
+      "episode": 488,
+      "segment": 224,
+      "score": 0.6232313892242547
+    },
+    {
+      "episode": 277,
+      "segment": 512,
+      "score": 0.3463260448297548
+    }
+  ],
+  "release notes короткая версия": [
+    {
+      "episode": 290,
+      "segment": 926,
+      "score": 0.8040468941538621
+    },
+    {
+      "episode": 371,
+      "segment": 366,
+      "score": 0.0008659813824927198
+    }
+  ],
+  "Local First Software принципы": [
+    {
+      "episode": 101,
+      "segment": 159,
+      "score": 0.8064521521357022
+    },
+    {
+      "episode": 508,
+      "segment": 67,
+      "score": 0.20212470625779522
+    }
+  ],
+  "системы fuzzing kernel syscalls coverage-guided": [
+    {
+      "episode": 504,
+      "segment": 789,
+      "score": 0.8643034912232882
+    },
+    {
+      "episode": 251,
+      "segment": 433,
+      "score": 0.6515815564805499
+    }
+  ],
+  "Hybrid OT CRDT Google Docs synchronization": [
+    {
+      "episode": 196,
+      "segment": 508,
+      "score": 0.5973697409034003
+    }
+  ],
+  "3D печать многоцветные PLA": [
+    {
+      "episode": 12,
+      "segment": 923,
+      "score": 0.3091191901626006
+    }
+  ],
+  "Норвегия социальность сравнение Россия": [
+    {
+      "episode": 486,
+      "segment": 602,
+      "score": 0.32838628088327293
+    }
+  ],
+  "ksqlDB потоковая SQL агрегация": [
+    {
+      "episode": 8,
+      "segment": 358,
+      "score": 0.8435667373341454
+    },
+    {
+      "episode": 508,
+      "segment": 86,
+      "score": 0.38452329484375225
+    }
+  ],
+  "3d печать игрушки пластины": [
+    {
+      "episode": 327,
+      "segment": 518,
+      "score": 0.025240328735990025
+    }
+  ],
+  "Victoria Metrics популярность рост": [
+    {
+      "episode": 322,
+      "segment": 620,
+      "score": 0.3570718854384113
+    },
+    {
+      "episode": 443,
+      "segment": 848,
+      "score": 0.0788507331468774
+    }
+  ],
+  "векторы атак Android безопасность": [
+    {
+      "episode": 213,
+      "segment": 20,
+      "score": 0.5230660754594258
+    }
+  ],
+  "архитектор B2B платформы обязанности": [
+    {
+      "episode": 388,
+      "segment": 845,
+      "score": 0.24918365815678456
+    }
+  ],
+  "покачать игру спайдер‑мэн 2023": [
+    {
+      "episode": 496,
+      "segment": 155,
+      "score": 0.5483433924369577
+    },
+    {
+      "episode": 478,
+      "segment": 933,
+      "score": 0.7453780506626654
+    }
+  ],
+  "Ким Скотт Google менеджмент фидбэк": [
+    {
+      "episode": 484,
+      "segment": 580,
+      "score": 0.7941930209944688
+    },
+    {
+      "episode": 200,
+      "segment": 939,
+      "score": 0.442307110015255
+    }
+  ],
+  "Mongo master node latency 20 ms": [
+    {
+      "episode": 8,
+      "segment": 498,
+      "score": 0.7254603261337121
+    }
+  ],
+  "ribgrep JSON условия": [
+    {
+      "episode": 449,
+      "segment": 624,
+      "score": 0.5422970640875915
+    }
+  ],
+  "T‑shaped инженеры объяснение": [
+    {
+      "episode": 266,
+      "segment": 391,
+      "score": 0.8446282165421548
+    },
+    {
+      "episode": 310,
+      "segment": 627,
+      "score": 0.32883763673115374
+    }
+  ],
+  "Go vs Haskell article humor": [
+    {
+      "episode": 209,
+      "segment": 910,
+      "score": 0.6539879835621827
+    }
+  ],
+  "почему PyPi быстрее чем CPython": [
+    {
+      "episode": 28,
+      "segment": 179,
+      "score": 0.7755494761687434
+    },
+    {
+      "episode": 24,
+      "segment": 839,
+      "score": 0.4390047263902448
+    }
+  ],
+  "Какова система научных исследований в российских институтах?": [
+    {
+      "episode": 480,
+      "segment": 524,
+      "score": 0.8028102510314181
+    }
+  ],
+  "профессиональные интервью нерелевантные вопросы": [
+    {
+      "episode": 30,
+      "segment": 178,
+      "score": 0.8523240346871129
+    }
+  ],
+  "Cassandra микротранзакции проблемы данных": [
+    {
+      "episode": 317,
+      "segment": 533,
+      "score": 0.5855245785245808
+    },
+    {
+      "episode": 244,
+      "segment": 10,
+      "score": 0.41848558203881503
+    }
+  ],
+  "PlayStation покупка исключительно эксклюзивы": [
+    {
+      "episode": 467,
+      "segment": 800,
+      "score": 0.4593391334091321
+    },
+    {
+      "episode": 184,
+      "segment": 406,
+      "score": 0.7225837761460362
+    }
+  ],
+  "Bluetooth проблемы кодеки Apple aptX": [
+    {
+      "episode": 246,
+      "segment": 800,
+      "score": 0.3315002275557505
+    }
+  ],
+  "матричная структура команды": [
+    {
+      "episode": 469,
+      "segment": 383,
+      "score": 0.6774635330522202
+    }
+  ],
+  "первый раз на Positive Hack Days": [
+    {
+      "episode": 212,
+      "segment": 18,
+      "score": 0.40244367545755777
+    }
+  ],
+  "обезличивание сотрудников мотивация": [
+    {
+      "episode": 391,
+      "segment": 597,
+      "score": 0.6075720223823313
+    },
+    {
+      "episode": 286,
+      "segment": 76,
+      "score": 0.007651246659109545
+    }
+  ],
+  "Банк с инвестициями стартапов кризис 2022": [
+    {
+      "episode": 80,
+      "segment": 820,
+      "score": 0.07131016795629996
+    },
+    {
+      "episode": 119,
+      "segment": 334,
+      "score": 0.8263838201304573
+    }
+  ],
+  "Amazon hiring STAR leadership principles": [
+    {
+      "episode": 463,
+      "segment": 861,
+      "score": 0.5446401452478868
+    },
+    {
+      "episode": 140,
+      "segment": 137,
+      "score": 0.30859458246603677
+    }
+  ],
+  "влияние веса велосипеда на скорость": [
+    {
+      "episode": 345,
+      "segment": 401,
+      "score": 0.3237921588445264
+    }
+  ],
+  "3D принтер Clipper проблемы": [
+    {
+      "episode": 60,
+      "segment": 508,
+      "score": 0.4402900097393402
+    }
+  ],
+  "распознавание радиосигналов Shazam CGViki": [
+    {
+      "episode": 381,
+      "segment": 858,
+      "score": 0.775386316018184
+    },
+    {
+      "episode": 181,
+      "segment": 777,
+      "score": 0.742373025163031
+    }
+  ],
+  "ResyncDB проект убил": [
+    {
+      "episode": 411,
+      "segment": 105,
+      "score": 0.7147574921419129
+    },
+    {
+      "episode": 368,
+      "segment": 985,
+      "score": 0.745805368918691
+    }
+  ],
+  "Scala 2.12 переход SBT ускорение компиляции": [
+    {
+      "episode": 384,
+      "segment": 532,
+      "score": 0.7692449252114152
+    },
+    {
+      "episode": 419,
+      "segment": 466,
+      "score": 0.506234432667509
+    }
+  ],
+  "Baldur's Gate советы и опыт": [
+    {
+      "episode": 373,
+      "segment": 290,
+      "score": 0.8968995818003381
+    },
+    {
+      "episode": 163,
+      "segment": 582,
+      "score": 0.9071797579185675
+    }
+  ],
+  "Проблемы воспроизведения винила": [
+    {
+      "episode": 2,
+      "segment": 490,
+      "score": 0.13432243761035567
+    },
+    {
+      "episode": 213,
+      "segment": 329,
+      "score": 0.06379100061941945
+    }
+  ],
+  "Amazon Prime видео реклама качество": [
+    {
+      "episode": 451,
+      "segment": 379,
+      "score": 0.3200612561845453
+    }
+  ],
+  "\"качественные 3D‑принтинг для проектирования»": [
+    {
+      "episode": 456,
+      "segment": 782,
+      "score": 0.24143833899628964
+    },
+    {
+      "episode": 332,
+      "segment": 590,
+      "score": 0.09689206281801688
+    }
+  ],
+  "проверка несущих стен в доме": [
+    {
+      "episode": 40,
+      "segment": 45,
+      "score": 0.9489271603077851
+    },
+    {
+      "episode": 279,
+      "segment": 632,
+      "score": 0.03274512224775805
+    }
+  ],
+  "верификация криптографических алгоритмов workflow": [
+    {
+      "episode": 167,
+      "segment": 334,
+      "score": 0.19649858317427704
+    }
+  ],
+  "тесты SQLite 711 раз код": [
+    {
+      "episode": 321,
+      "segment": 306,
+      "score": 0.8116060471014654
+    }
+  ],
+  "пиревью процесс компании": [
+    {
+      "episode": 119,
+      "segment": 643,
+      "score": 0.0935748999096252
+    },
+    {
+      "episode": 356,
+      "segment": 430,
+      "score": 0.9182781334442167
+    }
+  ],
+  "Chatham House Rule конференции обсуждение сложных тем": [
+    {
+      "episode": 19,
+      "segment": 134,
+      "score": 0.5574888810100461
+    },
+    {
+      "episode": 77,
+      "segment": 377,
+      "score": 0.5522005394334653
+    }
+  ],
+  "Поддерживаю опенсорсные проекты Patreon": [
+    {
+      "episode": 188,
+      "segment": 507,
+      "score": 0.9491025077950356
+    },
+    {
+      "episode": 360,
+      "segment": 391,
+      "score": 0.6192920647732367
+    }
+  ],
+  "тивоизация JPL V3 3D принтер прошивка": [
+    {
+      "episode": 374,
+      "segment": 775,
+      "score": 0.8342804619257911
+    }
+  ],
+  "Cockroach vs PostgreSQL транзакционный DDL": [
+    {
+      "episode": 477,
+      "segment": 488,
+      "score": 0.2395870603755701
+    },
+    {
+      "episode": 27,
+      "segment": 950,
+      "score": 0.7672387823964905
+    }
+  ],
+  "Netflix балансинг серверов": [
+    {
+      "episode": 131,
+      "segment": 371,
+      "score": 0.9888205310943792
+    },
+    {
+      "episode": 330,
+      "segment": 490,
+      "score": 0.39863438779044824
+    }
+  ],
+  "управление дофамином в программировании": [
+    {
+      "episode": 357,
+      "segment": 954,
+      "score": 0.7198063772781965
+    },
+    {
+      "episode": 441,
+      "segment": 723,
+      "score": 0.4408734514840267
+    }
+  ],
+  "инструмент документирования PDF Markdown Nim Python": [
+    {
+      "episode": 371,
+      "segment": 827,
+      "score": 0.3429118218678061
+    },
+    {
+      "episode": 273,
+      "segment": 327,
+      "score": 0.5663987498707
+    }
+  ],
+  "3D печать модели гуся singaverse": [
+    {
+      "episode": 108,
+      "segment": 696,
+      "score": 0.6502712063097014
+    }
+  ],
+  "Интроверт лидерство развитие карьеры": [
+    {
+      "episode": 25,
+      "segment": 510,
+      "score": 0.3576584212243984
+    }
+  ],
+  "ACCA 2.4 Java 8 Scala 2.11 compatibility": [
+    {
+      "episode": 431,
+      "segment": 190,
+      "score": 0.9314469977673305
+    },
+    {
+      "episode": 25,
+      "segment": 779,
+      "score": 0.7239225755188076
+    }
+  ],
+  "Solar поиск распределённый движок": [
+    {
+      "episode": 140,
+      "segment": 841,
+      "score": 0.14738660429424144
+    }
+  ],
+  "Clear Linux KVM контейнеры производительность Docker": [
+    {
+      "episode": 94,
+      "segment": 211,
+      "score": 0.05211920545712967
+    },
+    {
+      "episode": 413,
+      "segment": 582,
+      "score": 0.5842514830864743
+    }
+  ],
+  "Docker модульность Mesos Marathon Kubernetes AWS bare metal": [
+    {
+      "episode": 61,
+      "segment": 432,
+      "score": 0.20672623104965093
+    },
+    {
+      "episode": 301,
+      "segment": 928,
+      "score": 0.8330210101906068
+    }
+  ],
+  "Карабинер настройки стрелок клавиатуры": [
+    {
+      "episode": 266,
+      "segment": 919,
+      "score": 0.6861334729363205
+    }
+  ],
+  "Развитие продвинутого Python-программиста": [
+    {
+      "episode": 314,
+      "segment": 463,
+      "score": 0.19409476893830324
+    },
+    {
+      "episode": 213,
+      "segment": 40,
+      "score": 0.9306186483080436
+    }
+  ],
+  "YouTube репорт комментарии скрыть": [
+    {
+      "episode": 284,
+      "segment": 578,
+      "score": 0.6286287350086659
+    }
+  ],
+  "go-infer анализ Go goroutines типы сообщений": [
+    {
+      "episode": 4,
+      "segment": 611,
+      "score": 0.8552144291875082
+    },
+    {
+      "episode": 53,
+      "segment": 3,
+      "score": 0.23425946244701068
+    }
+  ],
+  "Беларусь IT репрессии PandaDoc": [
+    {
+      "episode": 180,
+      "segment": 909,
+      "score": 0.7597611881487165
+    },
+    {
+      "episode": 140,
+      "segment": 945,
+      "score": 0.0657657515437654
+    }
+  ],
+  "Microsoft GitHub покупка влияние разработчиков": [
+    {
+      "episode": 14,
+      "segment": 609,
+      "score": 0.9874395410871059
+    },
+    {
+      "episode": 242,
+      "segment": 197,
+      "score": 0.7856071645179643
+    }
+  ],
+  "Yandex Conference marketing talks quality": [
+    {
+      "episode": 278,
+      "segment": 500,
+      "score": 0.3379637208345848
+    },
+    {
+      "episode": 207,
+      "segment": 923,
+      "score": 0.13931650006670082
+    }
+  ],
+  "проверка патреонов март 5 долларов": [
+    {
+      "episode": 21,
+      "segment": 689,
+      "score": 0.02716565496663015
+    },
+    {
+      "episode": 424,
+      "segment": 577,
+      "score": 0.7116000612240306
+    }
+  ],
+  "автоматизация кибернетических систем": [
+    {
+      "episode": 184,
+      "segment": 0,
+      "score": 0.16538203820100894
+    }
+  ],
+  "Casper partition boundary shifting sorting optimization": [
+    {
+      "episode": 30,
+      "segment": 790,
+      "score": 0.8444540687692935
+    },
+    {
+      "episode": 312,
+      "segment": 769,
+      "score": 0.7452841208752325
+    }
+  ],
+  "Instaparse генератор парсеров Clojure": [
+    {
+      "episode": 98,
+      "segment": 162,
+      "score": 0.9151098357681605
+    }
+  ],
+  "распределённый консенсус raft caspaxos сравнение": [
+    {
+      "episode": 315,
+      "segment": 902,
+      "score": 0.6563036463556284
+    }
+  ],
+  "анализ фото подделки фотографии": [
+    {
+      "episode": 92,
+      "segment": 825,
+      "score": 0.19432403089978711
+    },
+    {
+      "episode": 447,
+      "segment": 532,
+      "score": 0.5540421035099428
+    }
+  ],
+  "адаптеры динамический фильтринг": [
+    {
+      "episode": 205,
+      "segment": 420,
+      "score": 0.8214264309893123
+    }
+  ],
+  "OpenBSD JIT‑компиляция Firefox форк безопасность": [
+    {
+      "episode": 174,
+      "segment": 572,
+      "score": 0.4847772729214279
+    },
+    {
+      "episode": 196,
+      "segment": 551,
+      "score": 0.6653015503043147
+    }
+  ],
+  "почему Lua Default проблематично для крупных проектов": [
+    {
+      "episode": 216,
+      "segment": 474,
+      "score": 0.005446962048855197
+    },
+    {
+      "episode": 207,
+      "segment": 369,
+      "score": 0.8621988196345144
+    }
+  ],
+  "Postgres vs ClickHouse для аналитики": [
+    {
+      "episode": 375,
+      "segment": 322,
+      "score": 0.16511333350958157
+    },
+    {
+      "episode": 79,
+      "segment": 28,
+      "score": 0.8432809026795086
+    }
+  ],
+  "права гарантий юридические советы игр": [
+    {
+      "episode": 204,
+      "segment": 160,
+      "score": 0.7117904882884413
+    }
+  ],
+  "Java простое веб приложение без Spring": [
+    {
+      "episode": 379,
+      "segment": 630,
+      "score": 0.969581335733353
+    }
+  ],
+  "Ansible deployment Kubernetes across clouds": [
+    {
+      "episode": 374,
+      "segment": 14,
+      "score": 0.16831498724430505
+    }
+  ],
+  "Позгресс storage high availability": [
+    {
+      "episode": 87,
+      "segment": 569,
+      "score": 0.5447672536698087
+    }
+  ],
+  "SpiceDB реализует Google Zanzibar permissions": [
+    {
+      "episode": 491,
+      "segment": 130,
+      "score": 0.21356129455358397
+    },
+    {
+      "episode": 348,
+      "segment": 931,
+      "score": 0.7473120740709759
+    }
+  ],
+  "словарь молодежного сленга 2024": [
+    {
+      "episode": 291,
+      "segment": 695,
+      "score": 0.6904084768113865
+    },
+    {
+      "episode": 477,
+      "segment": 25,
+      "score": 0.036504343304499476
+    }
+  ],
+  "Rust Real World книги примеры JSON парсинг": [
+    {
+      "episode": 493,
+      "segment": 682,
+      "score": 0.7768519813037524
+    },
+    {
+      "episode": 442,
+      "segment": 875,
+      "score": 0.41646100980482803
+    }
+  ],
+  "PulseView логический анализатор Sigrok канал": [
+    {
+      "episode": 223,
+      "segment": 997,
+      "score": 0.7189538082169779
+    },
+    {
+      "episode": 315,
+      "segment": 516,
+      "score": 0.8817140573854967
+    }
+  ],
+  "in-memory storage delta management": [
+    {
+      "episode": 68,
+      "segment": 543,
+      "score": 0.1010578354530779
+    },
+    {
+      "episode": 71,
+      "segment": 637,
+      "score": 0.8352052812212426
+    }
+  ],
+  "Bluetooth ключ 1 байт уязвимость": [
+    {
+      "episode": 117,
+      "segment": 694,
+      "score": 0.9979158138551357
+    }
+  ],
+  "LLVM интеграция Haskell tutorial": [
+    {
+      "episode": 47,
+      "segment": 323,
+      "score": 0.23245960392952836
+    },
+    {
+      "episode": 470,
+      "segment": 789,
+      "score": 0.645991244394896
+    }
+  ],
+  "Проблемы собственного линкера GoLingo": [
+    {
+      "episode": 438,
+      "segment": 553,
+      "score": 0.7075604235770822
+    }
+  ],
+  "первый доклад студент конференция": [
+    {
+      "episode": 486,
+      "segment": 738,
+      "score": 0.7229790234752483
+    },
+    {
+      "episode": 58,
+      "segment": 750,
+      "score": 0.17319535178201495
+    }
+  ],
+  "оптимизация байткода без ветвления": [
+    {
+      "episode": 255,
+      "segment": 971,
+      "score": 0.12045424802039295
+    },
+    {
+      "episode": 467,
+      "segment": 897,
+      "score": 0.3674629779956571
+    }
+  ],
+  "IBM vs Amazon влияние на разработку": [
+    {
+      "episode": 509,
+      "segment": 26,
+      "score": 0.9360027887600832
+    },
+    {
+      "episode": 336,
+      "segment": 965,
+      "score": 0.5462221392007739
+    }
+  ],
+  "оптимизация Doom 30% быстрее": [
+    {
+      "episode": 299,
+      "segment": 586,
+      "score": 0.5420824456093577
+    },
+    {
+      "episode": 96,
+      "segment": 370,
+      "score": 0.33504214864587356
+    }
+  ],
+  "Raspberry Pi 5 £ review UK": [
+    {
+      "episode": 445,
+      "segment": 654,
+      "score": 0.5572488984583032
+    }
+  ],
+  "проблема закрепления ролей инженера": [
+    {
+      "episode": 308,
+      "segment": 691,
+      "score": 0.29478189273078403
+    },
+    {
+      "episode": 469,
+      "segment": 462,
+      "score": 0.7800874303560068
+    }
+  ],
+  "LRU кэш Redis алгоритм удаление случайных элементов": [
+    {
+      "episode": 136,
+      "segment": 418,
+      "score": 0.030802401004108138
+    },
+    {
+      "episode": 341,
+      "segment": 764,
+      "score": 0.056184666975750974
+    }
+  ],
+  "ChromeOS Steam поддержка игры": [
+    {
+      "episode": 414,
+      "segment": 925,
+      "score": 0.7721913421825609
+    }
+  ],
+  "Blizzard разработала Diablo?": [
+    {
+      "episode": 279,
+      "segment": 583,
+      "score": 0.9763480693087716
+    }
+  ],
+  "подготовка к настольному ДНД за неделю": [
+    {
+      "episode": 37,
+      "segment": 996,
+      "score": 0.5786664945009354
+    }
+  ],
+  "отбор голосов на темы обсуждения": [
+    {
+      "episode": 59,
+      "segment": 990,
+      "score": 0.7245045410033223
+    },
+    {
+      "episode": 379,
+      "segment": 790,
+      "score": 0.7272106854193944
+    }
+  ],
+  "embedded разработка на Python": [
+    {
+      "episode": 52,
+      "segment": 80,
+      "score": 0.8279873239373012
+    }
+  ],
+  "SQL стандарт функции массивов": [
+    {
+      "episode": 172,
+      "segment": 124,
+      "score": 0.686967189885164
+    },
+    {
+      "episode": 64,
+      "segment": 916,
+      "score": 0.4017744665458495
+    }
+  ],
+  "Разнообразие мнений при выборе контента": [
+    {
+      "episode": 84,
+      "segment": 22,
+      "score": 0.5036805139034602
+    },
+    {
+      "episode": 321,
+      "segment": 745,
+      "score": 0.9615420008754483
+    }
+  ],
+  "выход на международный рынок": [
+    {
+      "episode": 313,
+      "segment": 516,
+      "score": 0.836869147160753
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "segment_id": "1b900202-0ff5-4856-87cf-c5d0d8388fde",
+    "episode_id": "2e59e9bd-276e-43d3-94dc-30d51c8dff71",
+    "episode_number": 505,
+    "segment_number": 23,
+    "text": "На самом деле Саша пытается не палиться в том, как он разрабатывает под Windows, потому что эта тема для следующего выпуска. Материал еще выписан. Но там же тоже ретро Windows? Нет, там Windows 11. Ого, окей, ладно.",
+    "result": {
+      "query": "Sasha developing Windows 11"
+    }
+  }
+]

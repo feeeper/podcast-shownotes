@@ -1,0 +1,12 @@
+[
+  {
+    "segment_id": "80394973-dd3e-46b1-834f-8ebca1bc2977",
+    "episode_id": "aeda4221-91c0-4510-b0ba-b82a7e76ecc7",
+    "episode_number": 504,
+    "segment_number": 9,
+    "text": "Ну самое главное убирают поддержку X8632. Ага, то есть теперь в right-lance run everywhere except 8632. Следующая тема. Я думаю, мы можем резюмировать, что отрадно видеть, что Java развивается, не заброшена. Но мы здесь так себе java-исто, к сожалению. Совсем верно.",
+    "result": {
+      "query": "Java drops x86-32 support"
+    }
+  }
+]
