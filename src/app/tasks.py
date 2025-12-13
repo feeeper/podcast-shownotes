@@ -397,16 +397,93 @@ def download_episode_mp3(
 def transcribe_episode(
     self, episode_data: dict[str, Any]
 ) -> dict[str, Any]:
-    """Transcribe episode audio via Deepgram."""
-    # TODO: Implement real transcription
+    """
+    Transcribe episode audio via Deepgram.
+
+    Uses Deepgram's nova-2 model with Russian language support,
+    paragraph detection, and speaker diarization.
+    """
+    from deepgram import DeepgramClient, PrerecordedOptions, FileSource
+    import httpx
+
     episode_num = episode_data["episode_number"]
+    episode_path = Path(
+        episode_data.get("episode_path", STORAGE_DIR / str(episode_num))
+    )
+    mp3_path = episode_path / "episode.mp3"
+    transcription_path = episode_path / "transcription-deepgram.json"
+
     logger.info(f"Transcribing episode {episode_num}")
 
-    episode_path = episode_data.get("episode_path", "")
-    episode_data["transcription_path"] = str(
-        Path(episode_path) / "transcription.json"
-    )
-    return episode_data
+    # Skip if any transcription already exists
+    existing_transcription = next(episode_path.glob("transcription-*.json"), None)
+    if existing_transcription:
+        logger.info(
+            f"Transcription already exists for episode {episode_num} "
+            f"at {existing_transcription}, skipping"
+        )
+        episode_data["transcription_path"] = str(existing_transcription)
+        return episode_data
+
+    # Check MP3 exists
+    if not mp3_path.exists():
+        raise ValueError(
+            f"MP3 file not found for episode {episode_num}: {mp3_path}"
+        )
+
+    # Check API key
+    api_key = settings.deepgram_api_key
+    if not api_key:
+        raise ValueError("DEEPGRAM_API_KEY not configured")
+
+    try:
+        # Read MP3 file
+        logger.info(f"Reading MP3 file: {mp3_path}")
+        with open(mp3_path, "rb") as f:
+            buffer_data = f.read()
+        logger.info(f"MP3 file size: {len(buffer_data) / (1024 * 1024):.1f} MB")
+
+        # Configure Deepgram
+        client = DeepgramClient(api_key)
+        options = PrerecordedOptions(
+            model="nova-3",
+            language="ru",
+            paragraphs=True,
+            diarize=True,
+        )
+
+        payload: FileSource = {
+            "buffer": buffer_data,
+        }
+
+        # Send to Deepgram
+        logger.info(f"Sending episode {episode_num} to Deepgram API")
+        response = client.listen.prerecorded.v("1").transcribe_file(
+            source=payload,
+            options=options,
+            timeout=httpx.Timeout(600.0, connect=30.0),
+        )
+
+        # Save transcription
+        logger.info(f"Saving transcription to: {transcription_path}")
+        transcription_path.write_text(
+            response.to_json(ensure_ascii=False),
+            encoding="utf-8",
+        )
+
+        logger.info(
+            f"Transcription completed for episode {episode_num} "
+            f"at {transcription_path}"
+        )
+        episode_data["transcription_path"] = str(transcription_path)
+        return episode_data
+
+    except Exception as e:
+        logger.error(
+            f"Error transcribing episode {episode_num}: {e}",
+            exc_info=True,
+        )
+        raise self.retry(exc=e)
 
 
 @app.task(
