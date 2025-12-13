@@ -20,3 +20,5 @@ src/components/indexer/data
 volumes
 tests/.jupyter
 utils.log
+.jupyter
+celerybeat-schedule.*
