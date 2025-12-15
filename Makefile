@@ -111,6 +111,12 @@ run-indexer-deepgram:
 lab:
 	$(CONDA_RUN) python -m jupyter lab --no-browser
 
+run-worker:
+	$(CONDA_RUN) celery -A src.app.app worker --loglevel=info -Q scheduler,downloads,transcription,segmentation
+
+run-beat:
+	$(CONDA_RUN) celery -A src.app.app beat --loglevel=info
+
 SHELL := $(shell which bash)
 
 # Q: why `$(CONDA_RUN) some_command` instead of just

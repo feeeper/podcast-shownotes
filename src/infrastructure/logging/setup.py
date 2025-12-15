@@ -9,7 +9,7 @@ from logging.handlers import TimedRotatingFileHandler
 import json_logging
 from .file_handler import FileHandler
 from .json_formatter import JsonFormatter
-from shared.args import LoggingArgs
+from src.shared.args import LoggingArgs
 
 
 

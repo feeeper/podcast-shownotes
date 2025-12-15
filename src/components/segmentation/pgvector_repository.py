@@ -8,8 +8,8 @@ import re
 import numpy as np
 import psycopg2
 import psycopg2.extras
-from components.segmentation.embedding_builder import EmbeddingBuilder
-from components.segmentation.segmentation_builder import SegmentationResult
+from src.components.segmentation.embedding_builder import EmbeddingBuilder
+from src.components.segmentation.segmentation_builder import SegmentationResult
 from pgvector.psycopg2 import register_vector
 
 from .models import (

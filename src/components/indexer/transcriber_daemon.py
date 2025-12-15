@@ -6,8 +6,8 @@ import time
 import signal
 from pathlib import Path
 
-from shared.args import IndexerServerArgs, Provider
-from infrastructure.logging.setup import setup_logging
+from src.shared.args import IndexerServerArgs, Provider
+from src.infrastructure.logging.setup import setup_logging
 
 from .transcriber_openai import TranscriberOpenAi
 from .transcriber_deepgram import TranscriberDeepgram
