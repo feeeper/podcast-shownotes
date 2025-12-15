@@ -7,17 +7,17 @@ from pathlib import Path
 from aiohttp import web
 import asyncio
 
-from shared.args import (
+from src.shared.args import (
     IndexerServerArgs,
     DaemonArgs,
     DbConnectionArgs,
 )
-from infrastructure.logging.setup import setup_logging
-from shared.daemon_wrapper import DaemonWrapper
-from components.segmentation.embedding_builder import EmbeddingBuilder
-from components.segmentation.pgvector_repository import DB
+from src.infrastructure.logging.setup import setup_logging
+from src.shared.daemon_wrapper import DaemonWrapper
+from src.components.segmentation.embedding_builder import EmbeddingBuilder
+from src.components.segmentation.pgvector_repository import DB
 
-from components.segmentation.models import SearchResultComplexDto
+from src.components.segmentation.models import SearchResultComplexDto
 
 
 @dataclass

@@ -493,14 +493,108 @@ def transcribe_episode(
     default_retry_delay=300,
 )
 def segment_episode(self, episode_data: dict[str, Any]) -> dict[str, Any]:
-    """Segment transcription and store in pgvector."""
-    # TODO: Implement real segmentation
+    """
+    Segment transcription using LLM and store in pgvector.
+
+    Uses LLM-based segmentation to split the transcription into
+    topic-based segments, generates embeddings, and stores everything
+    in PostgreSQL with pgvector for similarity search.
+    """
+    from src.components.segmentation.segmentation_builder import (
+        SegmentationBuilder,
+    )
+    from src.components.segmentation.pgvector_repository import DB
+
     episode_num = episode_data["episode_number"]
+    episode_path = Path(
+        episode_data.get("episode_path", STORAGE_DIR / str(episode_num))
+    )
+
     logger.info(f"Segmenting episode {episode_num}")
 
-    return {
-        "status": "completed",
-        "episode_number": episode_num,
-        "episode_path": episode_data.get("episode_path", ""),
-        "completed_at": datetime.now().isoformat(),
-    }
+    # Check transcription exists
+    transcription_path = episode_data.get("transcription_path")
+    if not transcription_path:
+        existing = next(episode_path.glob("transcription-*.json"), None)
+        if not existing:
+            raise ValueError(
+                f"Transcription not found for episode {episode_num}"
+            )
+        transcription_path = str(existing)
+
+    # Check LLM API configuration
+    api_key = settings.segmentation_llm_api_key
+    base_url = settings.segmentation_llm_api_url
+    if not api_key or not base_url:
+        raise ValueError(
+            "SEGMENTATION_LLM_API_KEY and SEGMENTATION_LLM_API_URL "
+            "must be configured"
+        )
+
+    try:
+        # Connect to database
+        db = DB(
+            host=settings.db_host,
+            port=settings.db_port,
+            dbname=settings.db_name,
+            user=settings.db_user,
+            password=settings.db_password,
+        )
+
+        # Skip if already in database
+        existing_episode = db.find_episode(episode_num)
+        if existing_episode:
+            logger.info(
+                f"Episode {episode_num} already in database "
+                f"(id={existing_episode.id}), skipping"
+            )
+            return {
+                "status": "skipped",
+                "episode_number": episode_num,
+                "episode_path": str(episode_path),
+                "episode_id": str(existing_episode.id),
+                "completed_at": datetime.now().isoformat(),
+            }
+
+        # Build segmentation
+        logger.info(f"Building segments for episode {episode_num}")
+        builder = SegmentationBuilder(
+            storage_dir=STORAGE_DIR,
+            api_key=api_key,
+            base_url=base_url,
+        )
+        segmentation_result = builder.get_segments(episode_path)
+
+        logger.info(
+            f"Created {len(segmentation_result.segments)} segments "
+            f"for episode {episode_num}"
+        )
+
+        # Store in database
+        logger.info(f"Storing segments in database for episode {episode_num}")
+        episode_id = db.insert(segmentation_result)
+
+        if episode_id:
+            logger.info(
+                f"Stored episode {episode_num} with id {episode_id}"
+            )
+        else:
+            logger.warning(
+                f"Failed to store episode {episode_num} in database"
+            )
+
+        return {
+            "status": "completed",
+            "episode_number": episode_num,
+            "episode_path": str(episode_path),
+            "episode_id": str(episode_id) if episode_id else None,
+            "segments_count": len(segmentation_result.segments),
+            "completed_at": datetime.now().isoformat(),
+        }
+
+    except Exception as e:
+        logger.error(
+            f"Error segmenting episode {episode_num}: {e}",
+            exc_info=True,
+        )
+        raise self.retry(exc=e)

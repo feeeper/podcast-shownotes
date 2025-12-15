@@ -9,9 +9,9 @@ import signal
 from pathlib import Path
 
 import requests
-from shared.args import DaemonArgs
+from src.shared.args import DaemonArgs
 
-from infrastructure.logging.setup import setup_logging
+from src.infrastructure.logging.setup import setup_logging
 
 from .index_builder import IndexBuilder
 

@@ -3,11 +3,11 @@ import json
 
 import stanza
 
-from shared.shownotes import (
+from src.shared.shownotes import (
     get_sentences_with_timestamps_by_letter,
     get_deepgram_sentences,
 )
-from shared.models import (
+from src.shared.models import (
     Segment,
     Transcription,
     DeepgramTranscription,
