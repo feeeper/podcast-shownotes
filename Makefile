@@ -117,6 +117,12 @@ run-worker:
 run-beat:
 	$(CONDA_RUN) celery -A src.app.app beat --loglevel=info
 
+run-redis:
+	docker run -d --name redis -p 6379:6379 redis
+
+start-redis:
+	docker start redis
+
 SHELL := $(shell which bash)
 
 # Q: why `$(CONDA_RUN) some_command` instead of just
