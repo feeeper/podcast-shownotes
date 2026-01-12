@@ -1,14 +1,16 @@
 import json
 import logging
 import re
+from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Generator
 
 import bs4
 import feedparser
 import requests
 from celery import chain
+from redis import Redis
 
 from dotenv import load_dotenv
 
@@ -16,6 +18,66 @@ from src.app.app import app, settings
 
 
 load_dotenv()
+
+# Redis client for distributed locking
+# Uses the same Redis instance as Celery broker
+redis_client = Redis.from_url(settings.broker_url)
+
+# Key for tracking episodes currently being processed
+EPISODES_PROCESSING_KEY = "episodes:processing"
+
+
+@contextmanager
+def redis_lock(
+    lock_name: str,
+    timeout: int = 300
+) -> Generator[bool, None, None]:
+    """
+    Distributed lock using Redis.
+
+    Args:
+        lock_name: Unique name for the lock
+        timeout: Lock expiration in seconds (prevents deadlock if process dies)
+
+    Yields:
+        True if lock was acquired, False otherwise
+    """
+    lock = redis_client.lock(lock_name, timeout=timeout)
+    acquired = lock.acquire(blocking=False)
+    try:
+        yield acquired
+    finally:
+        if acquired:
+            try:
+                lock.release()
+            except Exception:
+                pass  # Lock may have expired
+
+
+def is_episode_processing(episode_num: int) -> bool:
+    """Check if episode is already being processed."""
+    return redis_client.sismember(EPISODES_PROCESSING_KEY, str(episode_num))
+
+
+def mark_episode_processing(episode_num: int, ttl: int = 86400) -> bool:
+    """
+    Mark episode as being processed.
+
+    Args:
+        episode_num: Episode number to mark
+        ttl: Time-to-live in seconds (default 24h, prevents stale entries)
+
+    Returns:
+        True if marked (wasn't already in set), False if already existed
+    """
+    added = redis_client.sadd(EPISODES_PROCESSING_KEY, str(episode_num))
+    redis_client.expire(EPISODES_PROCESSING_KEY, ttl)
+    return bool(added)
+
+
+def unmark_episode_processing(episode_num: int) -> None:
+    """Remove episode from processing set."""
+    redis_client.srem(EPISODES_PROCESSING_KEY, str(episode_num))
 
 logger = logging.getLogger(__name__)
 
@@ -38,63 +100,81 @@ def check_rss_feed(self):
     """
     Celery Beat task that checks the RSS feed at https://devzen.ru/feed/
     and triggers processing chains for new episodes.
+
+    Uses a distributed Redis lock to ensure only one instance runs at a time,
+    preventing duplicate processing chains when multiple Beat instances exist.
     """
-    try:
-        logger.info(f"Checking RSS feed: {FEED_URL}")
-        feed = feedparser.parse(FEED_URL)
+    with redis_lock("check_rss_feed_lock", timeout=300) as acquired:
+        if not acquired:
+            logger.info("RSS feed check already in progress, skipping")
+            return {
+                "status": "skipped",
+                "reason": "lock_not_acquired",
+                "checked_at": datetime.now().isoformat(),
+            }
 
-        if feed.bozo:
-            logger.warning(f"Feed parsing error: {feed.bozo_exception}")
-            return {"status": "error", "message": str(feed.bozo_exception)}
+        try:
+            logger.info(f"Checking RSS feed: {FEED_URL}")
+            feed = feedparser.parse(FEED_URL)
 
-        feed_info = {
-            "title": feed.feed.get("title", "Unknown"),
-            "link": feed.feed.get("link", ""),
-            "updated": feed.feed.get("updated", ""),
-            "entry_count": len(feed.entries),
-        }
+            if feed.bozo:
+                logger.warning(f"Feed parsing error: {feed.bozo_exception}")
+                return {"status": "error", "message": str(feed.bozo_exception)}
 
-        logger.info(
-            f"Feed checked successfully. Found {feed_info['entry_count']} entries."
-        )
+            feed_info = {
+                "title": feed.feed.get("title", "Unknown"),
+                "link": feed.feed.get("link", ""),
+                "updated": feed.feed.get("updated", ""),
+                "entry_count": len(feed.entries),
+            }
 
-        new_episodes = []
-        for entry in feed.entries:
-            episode_data = _process_feed_entry(entry)
-            if episode_data:
-                new_episodes.append(episode_data)
+            logger.info(
+                f"Feed checked successfully. "
+                f"Found {feed_info['entry_count']} entries."
+            )
 
-        # Trigger processing chain for each new episode
-        for episode_data in new_episodes:
-            _trigger_episode_processing(episode_data)
+            new_episodes = []
+            for entry in feed.entries:
+                episode_data = _process_feed_entry(entry)
+                if episode_data:
+                    new_episodes.append(episode_data)
 
-        return {
-            "status": "success",
-            "feed_info": feed_info,
-            "new_episodes_count": len(new_episodes),
-            "new_episodes": [ep["episode_number"] for ep in new_episodes],
-            "checked_at": datetime.now().isoformat(),
-        }
+            # Trigger processing chain for each new episode
+            for episode_data in new_episodes:
+                _trigger_episode_processing(episode_data)
 
-    except Exception as e:
-        logger.error(f"Error checking RSS feed: {e}", exc_info=True)
-        raise self.retry(exc=e)
+            return {
+                "status": "success",
+                "feed_info": feed_info,
+                "new_episodes_count": len(new_episodes),
+                "new_episodes": [ep["episode_number"] for ep in new_episodes],
+                "checked_at": datetime.now().isoformat(),
+            }
+
+        except Exception as e:
+            logger.error(f"Error checking RSS feed: {e}", exc_info=True)
+            raise self.retry(exc=e)
 
 
 def _process_feed_entry(entry) -> dict[str, Any] | None:
     """
     Process a single RSS feed entry and return episode data if it's a new episode.
 
-    Returns None if the entry should be skipped (non-episode or already exists).
+    Returns None if the entry should be skipped:
+    - Non-episode entries (themes, etc.)
+    - Episode already exists on disk
+    - Episode already being processed (tracked in Redis)
     """
     try:
         # Skip non-episode entries
         if entry.link.startswith(NON_EPISODE_LINK_PREFIXES):
+            logger.debug(f"Episode {entry.link} is not an episode")
             return None
 
         # Extract episode number from link
         matches = re.findall(r"/episode-(\d+)", entry.link)
         if not matches:
+            logger.debug(f"Episode {entry.link} is not a valid episode link")
             return None
 
         episode_num = int(matches[0])
@@ -102,6 +182,20 @@ def _process_feed_entry(entry) -> dict[str, Any] | None:
 
         # Check if episode already exists with MP3
         if episode_path.exists() and (episode_path / "episode.mp3").exists():
+            logger.debug(f"Episode {episode_num} already exists on disk")
+            return None
+
+        # Check if episode is already being processed (Redis set)
+        if is_episode_processing(episode_num):
+            logger.debug(f"Episode {episode_num} already being processed")
+            return None
+
+        # Mark episode as processing BEFORE returning
+        # This is atomic - if another process marked it first, we skip
+        if not mark_episode_processing(episode_num):
+            logger.debug(
+                f"Episode {episode_num} was just marked by another process"
+            )
             return None
 
         # Build episode data
@@ -415,7 +509,7 @@ def transcribe_episode(
 
     logger.info(f"Transcribing episode {episode_num}")
 
-    # Skip if any transcription already exists
+    # Skip if any transcription already exists (first check before lock)
     existing_transcription = next(episode_path.glob("transcription-*.json"), None)
     if existing_transcription:
         logger.info(
@@ -425,65 +519,89 @@ def transcribe_episode(
         episode_data["transcription_path"] = str(existing_transcription)
         return episode_data
 
-    # Check MP3 exists
-    if not mp3_path.exists():
-        raise ValueError(
-            f"MP3 file not found for episode {episode_num}: {mp3_path}"
+    # Acquire distributed lock to prevent duplicate Deepgram calls
+    # Timeout is 1 hour since transcription can take a long time
+    with redis_lock(f"transcribe_episode_{episode_num}", timeout=3600) as acquired:
+        if not acquired:
+            logger.info(
+                f"Transcription already in progress for episode {episode_num}, "
+                "skipping duplicate task"
+            )
+            return episode_data
+
+        # Re-check after acquiring lock (double-checked locking)
+        existing_transcription = next(
+            episode_path.glob("transcription-*.json"), None
         )
+        if existing_transcription:
+            logger.info(
+                f"Transcription appeared while waiting for lock "
+                f"for episode {episode_num}: {existing_transcription}"
+            )
+            episode_data["transcription_path"] = str(existing_transcription)
+            return episode_data
 
-    # Check API key
-    api_key = settings.deepgram_api_key
-    if not api_key:
-        raise ValueError("DEEPGRAM_API_KEY not configured")
+        # Check MP3 exists
+        if not mp3_path.exists():
+            raise ValueError(
+                f"MP3 file not found for episode {episode_num}: {mp3_path}"
+            )
 
-    try:
-        # Read MP3 file
-        logger.info(f"Reading MP3 file: {mp3_path}")
-        with open(mp3_path, "rb") as f:
-            buffer_data = f.read()
-        logger.info(f"MP3 file size: {len(buffer_data) / (1024 * 1024):.1f} MB")
+        # Check API key
+        api_key = settings.deepgram_api_key
+        if not api_key:
+            raise ValueError("DEEPGRAM_API_KEY not configured")
 
-        # Configure Deepgram
-        client = DeepgramClient(api_key)
-        options = PrerecordedOptions(
-            model="nova-3",
-            language="ru",
-            paragraphs=True,
-            diarize=True,
-        )
+        try:
+            # Read MP3 file
+            logger.info(f"Reading MP3 file: {mp3_path}")
+            with open(mp3_path, "rb") as f:
+                buffer_data = f.read()
+            logger.info(
+                f"MP3 file size: {len(buffer_data) / (1024 * 1024):.1f} MB"
+            )
 
-        payload: FileSource = {
-            "buffer": buffer_data,
-        }
+            # Configure Deepgram
+            client = DeepgramClient(api_key)
+            options = PrerecordedOptions(
+                model="nova-3",
+                language="ru",
+                paragraphs=True,
+                diarize=True,
+            )
 
-        # Send to Deepgram
-        logger.info(f"Sending episode {episode_num} to Deepgram API")
-        response = client.listen.prerecorded.v("1").transcribe_file(
-            source=payload,
-            options=options,
-            timeout=httpx.Timeout(600.0, connect=30.0),
-        )
+            payload: FileSource = {
+                "buffer": buffer_data,
+            }
 
-        # Save transcription
-        logger.info(f"Saving transcription to: {transcription_path}")
-        transcription_path.write_text(
-            response.to_json(ensure_ascii=False),
-            encoding="utf-8",
-        )
+            # Send to Deepgram
+            logger.info(f"Sending episode {episode_num} to Deepgram API")
+            response = client.listen.prerecorded.v("1").transcribe_file(
+                source=payload,
+                options=options,
+                timeout=httpx.Timeout(600.0, connect=30.0),
+            )
 
-        logger.info(
-            f"Transcription completed for episode {episode_num} "
-            f"at {transcription_path}"
-        )
-        episode_data["transcription_path"] = str(transcription_path)
-        return episode_data
+            # Save transcription
+            logger.info(f"Saving transcription to: {transcription_path}")
+            transcription_path.write_text(
+                response.to_json(ensure_ascii=False),
+                encoding="utf-8",
+            )
 
-    except Exception as e:
-        logger.error(
-            f"Error transcribing episode {episode_num}: {e}",
-            exc_info=True,
-        )
-        raise self.retry(exc=e)
+            logger.info(
+                f"Transcription completed for episode {episode_num} "
+                f"at {transcription_path}"
+            )
+            episode_data["transcription_path"] = str(transcription_path)
+            return episode_data
+
+        except Exception as e:
+            logger.error(
+                f"Error transcribing episode {episode_num}: {e}",
+                exc_info=True,
+            )
+            raise self.retry(exc=e)
 
 
 @app.task(
@@ -499,6 +617,9 @@ def segment_episode(self, episode_data: dict[str, Any]) -> dict[str, Any]:
     Uses LLM-based segmentation to split the transcription into
     topic-based segments, generates embeddings, and stores everything
     in PostgreSQL with pgvector for similarity search.
+
+    This is the final task in the processing chain - it removes the
+    episode from the Redis processing set when done.
     """
     from src.components.segmentation.segmentation_builder import (
         SegmentationBuilder,
@@ -517,8 +638,8 @@ def segment_episode(self, episode_data: dict[str, Any]) -> dict[str, Any]:
     if not transcription_path:
         existing = next(episode_path.glob("transcription-*.json"), None)
         if not existing:
-            raise ValueError(
-                f"Transcription not found for episode {episode_num}"
+            raise FileNotFoundError(
+                f"Transcription file not found: {episode_path}"
             )
         transcription_path = str(existing)
 
@@ -531,70 +652,98 @@ def segment_episode(self, episode_data: dict[str, Any]) -> dict[str, Any]:
             "must be configured"
         )
 
-    try:
-        # Connect to database
-        db = DB(
-            host=settings.db_host,
-            port=settings.db_port,
-            dbname=settings.db_name,
-            user=settings.db_user,
-            password=settings.db_password,
-        )
-
-        # Skip if already in database
-        existing_episode = db.find_episode(episode_num)
-        if existing_episode:
+    # Acquire distributed lock to prevent duplicate LLM/embedding calls
+    # Timeout is 30 minutes for segmentation
+    with redis_lock(f"segment_episode_{episode_num}", timeout=1800) as acquired:
+        if not acquired:
             logger.info(
-                f"Episode {episode_num} already in database "
-                f"(id={existing_episode.id}), skipping"
+                f"Segmentation already in progress for episode {episode_num}, "
+                "skipping duplicate task"
             )
             return {
                 "status": "skipped",
                 "episode_number": episode_num,
+                "reason": "lock_not_acquired",
+            }
+
+        try:
+            # Connect to database
+            db = DB(
+                host=settings.db_host,
+                port=settings.db_port,
+                dbname=settings.db_name,
+                user=settings.db_user,
+                password=settings.db_password,
+            )
+
+            # Skip if already in database (also serves as double-check after lock)
+            existing_episode = db.find_episode(episode_num)
+            if existing_episode:
+                logger.info(
+                    f"Episode {episode_num} already in database "
+                    f"(id={existing_episode.id}), skipping"
+                )
+                # Clean up processing marker
+                unmark_episode_processing(episode_num)
+                return {
+                    "status": "skipped",
+                    "episode_number": episode_num,
+                    "episode_path": str(episode_path),
+                    "episode_id": str(existing_episode.id),
+                    "completed_at": datetime.now().isoformat(),
+                }
+
+            # Build segmentation
+            logger.info(f"Building segments for episode {episode_num}")
+            builder = SegmentationBuilder(
+                storage_dir=STORAGE_DIR,
+                api_key=api_key,
+                base_url=base_url,
+            )
+            segmentation_result = builder.get_segments(episode_path)
+
+            logger.info(
+                f"Created {len(segmentation_result.segments)} segments "
+                f"for episode {episode_num}"
+            )
+
+            # Store in database
+            logger.info(
+                f"Storing segments in database for episode {episode_num}"
+            )
+            episode_id = db.insert(segmentation_result)
+
+            if episode_id:
+                logger.info(
+                    f"Stored episode {episode_num} with id {episode_id}"
+                )
+            else:
+                logger.warning(
+                    f"Failed to store episode {episode_num} in database"
+                )
+
+            # Clean up processing marker on success
+            unmark_episode_processing(episode_num)
+
+            return {
+                "status": "completed",
+                "episode_number": episode_num,
                 "episode_path": str(episode_path),
-                "episode_id": str(existing_episode.id),
+                "episode_id": str(episode_id) if episode_id else None,
+                "segments_count": len(segmentation_result.segments),
                 "completed_at": datetime.now().isoformat(),
             }
 
-        # Build segmentation
-        logger.info(f"Building segments for episode {episode_num}")
-        builder = SegmentationBuilder(
-            storage_dir=STORAGE_DIR,
-            api_key=api_key,
-            base_url=base_url,
-        )
-        segmentation_result = builder.get_segments(episode_path)
-
-        logger.info(
-            f"Created {len(segmentation_result.segments)} segments "
-            f"for episode {episode_num}"
-        )
-
-        # Store in database
-        logger.info(f"Storing segments in database for episode {episode_num}")
-        episode_id = db.insert(segmentation_result)
-
-        if episode_id:
-            logger.info(
-                f"Stored episode {episode_num} with id {episode_id}"
+        except Exception as e:
+            logger.error(
+                f"Error segmenting episode {episode_num}: {e}",
+                exc_info=True,
             )
-        else:
-            logger.warning(
-                f"Failed to store episode {episode_num} in database"
-            )
-
-        return {
-            "status": "completed",
-            "episode_number": episode_num,
-            "episode_path": str(episode_path),
-            "episode_id": str(episode_id) if episode_id else None,
-            "segments_count": len(segmentation_result.segments),
-            "completed_at": datetime.now().isoformat(),
-        }
-
-    except Exception as e:
-        logger.error(
-            f"Error segmenting episode {episode_num}: {e}",
-            exc_info=True,
-        )
-        raise self.retry(exc=e)
+            # Only unmark if we've exhausted retries
+            if self.request.retries >= self.max_retries:
+                logger.warning(
+                    f"Max retries reached for episode {episode_num}, "
+                    "removing from processing set"
+                )
+                unmark_episode_processing(episode_num)
+            raise self.retry(exc=e)

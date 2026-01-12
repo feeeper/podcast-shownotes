@@ -1,11 +1,16 @@
+import logging
 import os
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Optional
 
 from dotenv import load_dotenv
 
 from celery import Celery
+from celery.signals import worker_process_init, beat_init
 from celery.schedules import crontab
+
+from src.infrastructure.logging.file_handler import FileHandler
 
 
 load_dotenv()
@@ -65,6 +70,61 @@ class CelerySettings:
 
 
 settings = CelerySettings()
+
+
+def setup_celery_logging(process_type: str) -> None:
+    """
+    Configure logging for Celery worker or beat processes.
+    
+    Sets up logging to write to both stdout and date-based log files.
+    
+    Args:
+        process_type: Either 'worker' or 'beat'
+    """
+    # Get root logger
+    root_logger = logging.getLogger()
+    
+    # Clear any existing handlers to avoid duplicates
+    root_logger.handlers.clear()
+    
+    # Set log level
+    root_logger.setLevel(logging.INFO)
+    
+    # Create formatter
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    
+    # Add stdout handler
+    stdout_handler = logging.StreamHandler()
+    stdout_handler.setLevel(logging.INFO)
+    stdout_handler.setFormatter(formatter)
+    root_logger.addHandler(stdout_handler)
+    
+    # Add file handler with date-based rotation
+    log_dir = Path('logs')
+    log_file_pattern = f'{{date}}-{process_type}.log'
+    file_handler = FileHandler(
+        log_dir=log_dir,
+        name_pattern=log_file_pattern,
+        log_rotation_num_days=7,  # Keep logs for 7 days
+    )
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(formatter)
+    root_logger.addHandler(file_handler)
+
+
+@worker_process_init.connect
+def setup_worker_logging(**kwargs):
+    """Set up logging when worker process starts."""
+    setup_celery_logging('worker')
+
+
+@beat_init.connect
+def setup_beat_logging(**kwargs):
+    """Set up logging when beat process starts."""
+    setup_celery_logging('beat')
 
 
 def create_celery_app(
