@@ -109,8 +109,7 @@ class LlmTextSegmentation:
     def _call_llm(
         self,
         sentences: list[str],
-        model: str = 'google/gemini-2.0-flash-lite-001',
-        max_tokens: int = 8_000
+        model: str = 'google/gemini-3-flash-preview'
     ) -> dict:
         prompt = """You are a podcast host, and you have recorded an episode that you want to split into distinct topic-based segments.
 
@@ -155,9 +154,8 @@ Output:
                 {'role': 'system', 'content': prompt},
                 {'role': 'user', 'content': json.dumps(sentences, ensure_ascii=False)}
             ],
-            temperature=1,
+            temperature=0,
             model=model,
-            max_tokens=max_tokens,
             response_format={
                 'type': 'json_schema',
                 'json_schema': {
@@ -206,6 +204,7 @@ Output:
             return jcontent.get('sentences', {})
         except Exception as e:
             logger.exception(e, exc_info=True, stack_info=True, extra={'response': response})
+            logger.exception(f"Content (type: {type(content)}): {content}")
             raise
 
     def _get_segments(self, sentences: list[Sentence], delimiters: list[int]) -> list[list[Sentence]]:
