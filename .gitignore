@@ -22,3 +22,4 @@ tests/.jupyter
 utils.log
 .jupyter
 celerybeat-schedule.*
+logs
