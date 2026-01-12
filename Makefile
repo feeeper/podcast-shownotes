@@ -123,6 +123,9 @@ run-redis:
 start-redis:
 	docker start redis
 
+trigger-check-rss-task:
+	celery -A src.app.app call src.app.tasks.check_rss_feed
+
 SHELL := $(shell which bash)
 
 # Q: why `$(CONDA_RUN) some_command` instead of just
