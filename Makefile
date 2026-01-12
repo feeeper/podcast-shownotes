@@ -123,6 +123,12 @@ run-redis:
 start-redis:
 	docker start redis
 
+db-init:
+	$(CONDA_RUN) python -c "from src.shared.utils import init_db; init_db(password='password')"
+
+db-migrate:
+	$(CONDA_RUN) python src/migrations/migration_2025_1.py --password password
+
 trigger-check-rss-task:
 	celery -A src.app.app call src.app.tasks.check_rss_feed
 
