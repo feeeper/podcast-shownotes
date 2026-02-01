@@ -128,6 +128,7 @@ db-init:
 
 db-migrate:
 	$(CONDA_RUN) python src/migrations/migration_2025_1.py --password password
+	$(CONDA_RUN) python src/migrations/migration_multi_podcast.py --password password
 
 trigger-check-rss-task:
 	celery -A src.app.app call src.app.tasks.check_rss_feed

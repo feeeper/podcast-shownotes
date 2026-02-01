@@ -1,5 +1,5 @@
 import datetime
-from pydantic import BaseModel, computed_field
+from pydantic import BaseModel
 from uuid import UUID
 
 
@@ -7,29 +7,24 @@ class BaseModelWithConfig(BaseModel):
     class Config:
         json_encoders = {
             UUID: str,
-            datetime.datetime: lambda dt: dt.isoformat()
+            datetime.datetime: lambda dt: dt.isoformat(),
         }
 
 
 class EpisodeDto(BaseModelWithConfig):
     id: UUID
-    num: int
+    podcast_slug: str
+    num: int | None = None
     title: str
     shownotes: str
-    hosts: list[dict[str, str]]
+    hosts: list[str]
     release_date: datetime.datetime
-
-    @computed_field
-    @property
-    def link(self) -> str:
-        if self.num <= 406:
-            return f'https://devzen.ru/episode-{self.num:0>4}'
-        else:
-            return f'https://devzen.ru/episode-{self.num}'
+    link: str
 
 
 class SearchResultDto(BaseModelWithConfig):
-    episode: int
+    episode: int | None = None
+    podcast_slug: str = ''
     sentence: str
     segment: str
     distance: float
@@ -56,16 +51,10 @@ class SearchResults(BaseModelWithConfig):
 
 class Episode(BaseModelWithConfig):
     id: UUID
-    num: int
+    podcast_slug: str
+    num: int | None = None
     title: str
     shownotes: str
-    hosts: list[dict[str, str]]
+    hosts: list[str]
     release_date: datetime.datetime
-    
-    @computed_field
-    @property
-    def link(self) -> str:
-        if self.num <= 406:
-            return f'https://devzen.ru/episode-{self.num:0>4}'
-        else:
-            return f'https://devzen.ru/episode-{self.num}'
+    link: str

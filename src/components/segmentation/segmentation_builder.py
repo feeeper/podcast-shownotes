@@ -3,8 +3,10 @@ import dataclasses
 from logging import getLogger
 from pathlib import Path
 
-from .llm_segmetation import LlmTextSegmentation
-from .semantic_text_segmentation import SemanticTextSegmentationMultilingual
+from .llm_segmentation import LlmTextSegmentation
+from .semantic_text_segmentation import (
+    SemanticTextSegmentationMultilingual,
+)
 from .sentences import get_sentences
 from .sentences import Sentence
 
@@ -17,7 +19,7 @@ class Segment:
     text: str  # plain text
     start_at: float  # timestamp
     end_at: float  # timestamp
-    episode: int  # episode that contains this segment
+    episode: int | None  # episode number if available
     num: int  # number of the segment in the episode
 
 
@@ -26,7 +28,7 @@ class SegmentSentence:
     text: str  # plain text
     start_at: float  # timestamp
     end_at: float  # timestamp
-    speaker_id: int | None  # speaker id (could differ for different episodes) if exists
+    speaker_id: int | None  # speaker id if exists
     segment_num: int  # number of the segment in the episode
     num: int  # number of the sentence in the segment
 
@@ -52,31 +54,47 @@ class SegmentationBuilder:
         self,
         storage_dir: Path,
         api_key: str,
-        base_url: str
+        base_url: str,
+        language: str = 'ru',
+        embedding_model: str = 'deepvk/USER-bge-m3',
     ) -> None:
         self._storage_dir = storage_dir
         self._api_key = api_key
         self._base_url = base_url
+        self._language = language
+        self._embedding_model = embedding_model
 
     def pick_episodes(self) -> list[Path]:
-        def _is_transcription_exists(directory_: Path) -> bool:
+        def _is_transcription_exists(
+            directory_: Path,
+        ) -> bool:
             for file in directory_.iterdir():
                 if file.name.startswith('transcription-'):
-                    logger.debug(f'Transcription exists: {directory_}')
+                    logger.debug(
+                        f'Transcription exists: {directory_}'
+                    )
                     return True
             return False
 
-        def _is_segmentation_completed(directory_: Path) -> bool:
+        def _is_segmentation_completed(
+            directory_: Path,
+        ) -> bool:
             for file in directory_.iterdir():
-                if file.name.startswith('segmentation_completed'):
-                    logger.debug(f'Segmentation exists: {directory_}')
+                if file.name.startswith(
+                    'segmentation_completed'
+                ):
+                    logger.debug(
+                        f'Segmentation exists: {directory_}'
+                    )
                     return True
             return False
 
         def _is_in_progress(directory_: Path) -> bool:
             for file in directory_.iterdir():
                 if file.name == 'segmentation_in_progress':
-                    logger.info(f'In progress: {directory_}')
+                    logger.info(
+                        f'In progress: {directory_}'
+                    )
                     return True
             return False
 
@@ -86,10 +104,15 @@ class SegmentationBuilder:
                 continue
 
             if not _is_transcription_exists(directory):
-                logger.warning(f'Transcription not found: {directory}')
+                logger.warning(
+                    f'Transcription not found: {directory}'
+                )
                 continue
 
-            if _is_segmentation_completed(directory) or _is_in_progress(directory):
+            if (
+                _is_segmentation_completed(directory)
+                or _is_in_progress(directory)
+            ):
                 continue
 
             to_process.append(directory)
@@ -98,32 +121,64 @@ class SegmentationBuilder:
 
     def get_segments(self, item: Path) -> SegmentationResult:
         transcript_file = self._get_transcript_file(item)
-        sentences = get_sentences(transcript_file)
-        _segmentation = LlmTextSegmentation(sentences, self._api_key, self._base_url)
+        sentences = get_sentences(
+            transcript_file, language=self._language
+        )
+        _segmentation = LlmTextSegmentation(
+            sentences, self._api_key, self._base_url
+        )
         try:
-            segments_sentences: list[list[Sentence]] = _segmentation.get_segments(threshold=0.8, as_sentences=True)
+            segments_sentences: list[list[Sentence]] = (
+                _segmentation.get_segments(
+                    threshold=0.8, as_sentences=True
+                )
+            )
         except Exception as e:
             logger.error(f'Error getting segments: {e}')
-            _segmentation = SemanticTextSegmentationMultilingual(sentences)
-            logger.info(f'Fallback to old segmentation: {type(_segmentation)}')
-            segments_sentences = _segmentation.get_segments(threshold=0.8, as_sentences=True)
+            _segmentation = (
+                SemanticTextSegmentationMultilingual(
+                    sentences, language=self._language
+                )
+            )
+            logger.info(
+                'Fallback to old segmentation: '
+                f'{type(_segmentation)}'
+            )
+            segments_sentences = _segmentation.get_segments(
+                threshold=0.8, as_sentences=True
+            )
 
-        segments = [Segment(
-            text=' '.join([s.text for s in ss]),
-            start_at=ss[0].start,
-            end_at=ss[-1].end,
-            episode=int(item.name),
-            num=n
-        ) for (n, ss) in enumerate(segments_sentences)]
+        # Try to extract episode number from directory name
+        try:
+            episode_num = int(item.name)
+        except ValueError:
+            episode_num = None
 
-        sentences_by_segment = [[SegmentSentence(
-            text=s.text,
-            start_at=s.start,
-            end_at=s.end,
-            speaker_id=s.speaker,
-            segment_num=n,
-            num=-1
-        ) for s in ss] for (n, ss) in enumerate(segments_sentences)]
+        segments = [
+            Segment(
+                text=' '.join([s.text for s in ss]),
+                start_at=ss[0].start,
+                end_at=ss[-1].end,
+                episode=episode_num,
+                num=n,
+            )
+            for (n, ss) in enumerate(segments_sentences)
+        ]
+
+        sentences_by_segment = [
+            [
+                SegmentSentence(
+                    text=s.text,
+                    start_at=s.start,
+                    end_at=s.end,
+                    speaker_id=s.speaker,
+                    segment_num=n,
+                    num=-1,
+                )
+                for s in ss
+            ]
+            for (n, ss) in enumerate(segments_sentences)
+        ]
 
         i = 0
         for n, ss in enumerate(sentences_by_segment):
@@ -134,7 +189,8 @@ class SegmentationBuilder:
         result = SegmentationResult(
             item=item,
             segments=segments,
-            sentences_by_segment=sentences_by_segment)
+            sentences_by_segment=sentences_by_segment,
+        )
 
         return result
 
@@ -143,4 +199,6 @@ class SegmentationBuilder:
         for file in item.iterdir():
             if file.name.startswith('transcription-'):
                 return file
-        raise FileNotFoundError(f'Transcription file not found: {item}')
+        raise FileNotFoundError(
+            f'Transcription file not found: {item}'
+        )

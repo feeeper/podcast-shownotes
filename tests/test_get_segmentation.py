@@ -33,6 +33,7 @@ def test_get_segments():
             })
     segmenter = SemanticTextSegmentationMultilingual(
         [Sentence(**x) for x in segments],
+        language='ru',
         model='sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
 
     segments = segmenter.get_segments(0.8)
@@ -56,6 +57,7 @@ def test_get_segments_as_sentences():
             })
     segmenter = SemanticTextSegmentationMultilingual(
         [Sentence(**x) for x in segments],
+        language='ru',
         model='sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
 
     segments = segmenter.get_segments(0.8, as_sentences=True)
@@ -66,7 +68,12 @@ def test_get_segments_as_sentences():
 
 
 def test_get_segmentation_result():
-    segmentation_builder = SegmentationBuilder(Path('data'))
+    segmentation_builder = SegmentationBuilder(
+        Path('data'),
+        api_key='mock_key',
+        base_url='https://mock_url',
+        language='ru',
+    )
     item_path = Path(__file__).resolve().parent / '472'
     result = segmentation_builder.get_segments(item_path)
 

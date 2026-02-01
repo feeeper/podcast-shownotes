@@ -32,14 +32,21 @@ class SemanticTextSegmentationMultilingual:
     def __init__(
             self,
             sentences: list[Sentence],
+            language: str = 'ru',
             model: str = 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2',
             w: int = 100,
             k: int = 5,
     ):
         self._sentences = sentences
         self.model = SentenceTransformer(model)
-        self._pipeline = Pipeline(lang='ru', processors='tokenize', download_method=DownloadMethod.REUSE_RESOURCES)
-        self.tt = TextTilingTokenizer(w=w, k=k, stopwords=get_stop_words('ru'))
+        self._pipeline = Pipeline(
+            lang=language,
+            processors='tokenize',
+            download_method=DownloadMethod.REUSE_RESOURCES,
+        )
+        self.tt = TextTilingTokenizer(
+            w=w, k=k, stopwords=get_stop_words(language)
+        )
 
     def get_segments(
             self,
