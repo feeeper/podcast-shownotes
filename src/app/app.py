@@ -176,6 +176,7 @@ def create_celery_app(
     # Task routing for different queue priorities
     celery_app.conf.task_routes = {
         "src.app.tasks.check_rss_feed": {"queue": "scheduler"},
+        "src.app.tasks.check_podcast_feed": {"queue": "scheduler"},
         "src.app.tasks.download_episode_metadata": {"queue": "downloads"},
         "src.app.tasks.download_episode_mp3": {"queue": "downloads"},
         "src.app.tasks.transcribe_episode": {"queue": "transcription"},

@@ -24,13 +24,14 @@ class TextTilingTokenizer(TokenizerI):
                  k=10,
                  similarity_method=BLOCK_COMPARISON,
                  stopwords=None,
+                 language='en',
                  smoothing_method=DEFAULT_SMOOTHING,
                  smoothing_width=2,
                  smoothing_rounds=1,
                  cutoff_policy=HC,
                  demo_mode=False):
         if stopwords is None:
-            self.stopwords = get_stop_words('ru')
+            self.stopwords = get_stop_words(language)
         else:
             self.stopwords = stopwords
 

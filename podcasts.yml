@@ -1,0 +1,7 @@
+podcasts:
+  - name: DevZen Podcast
+    slug: devzen
+    rss_url: https://devzen.ru/feed/
+    language: ru
+    transcription_model: nova-3
+    embedding_model: deepvk/USER-bge-m3

@@ -11,7 +11,7 @@ from openai.types.chat.chat_completion import Choice
 from openai.types.completion_usage import CompletionUsage
 
 
-from src.components.segmentation.llm_segmetation import LlmTextSegmentation
+from src.components.segmentation.llm_segmentation import LlmTextSegmentation
 from src.components.segmentation.sentences import Sentence
 
 
