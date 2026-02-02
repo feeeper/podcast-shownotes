@@ -12,6 +12,7 @@ __pycache__/
 *.ipynb
 /.cache/
 /data/
+/episodes/
 envs39
 envs3918
 .log
