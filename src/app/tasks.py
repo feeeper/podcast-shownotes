@@ -323,25 +323,68 @@ def _process_feed_entry(
             else None
         )
 
-        # Check if episode directory already exists
+        # Check if episode is fully processed
         episode_dir = _get_episode_dir(
             podcast_slug, rss_guid,
             episode_link, published,
         )
-        if (
-            episode_dir.exists()
-            and (episode_dir / 'episode.mp3').exists()
-        ):
+        if episode_dir.exists() and (episode_dir / 'segmentation_completed').exists():
             logger.debug(
-                f'Episode already exists on disk: '
+                f'Episode already processed: '
                 f'{episode_dir}'
             )
             return None
 
+        # Check if episode is incomplete (has transcription but no segmentation)
+        # This handles recovery after app restart
+        if _is_episode_incomplete(episode_dir):
+            logger.info(
+                f'Found incomplete episode: {rss_guid} '
+                f'(has transcription but no segmentation). '
+                f'Attempting recovery...'
+            )
+            # Unmark from processing set if it's stuck there
+            if is_episode_processing(podcast_slug, rss_guid):
+                logger.info(
+                    f'Unmarking stuck episode from processing set: '
+                    f'{rss_guid}'
+                )
+                unmark_episode_processing(podcast_slug, rss_guid)
+
+            # Re-mark as processing and trigger segmentation
+            if mark_episode_processing(podcast_slug, rss_guid):
+                episode_data = {
+                    'podcast_slug': podcast_slug,
+                    'rss_guid': rss_guid,
+                    'title': getattr(entry, 'title', ''),
+                    'episode_link': episode_link,
+                    'mp3_link': mp3_link,
+                    'published': published,
+                    'summary': getattr(entry, 'summary', ''),
+                    'authors': [
+                        a.get('name', '')
+                        for a in getattr(
+                            entry, 'authors', []
+                        )
+                    ],
+                    'episode_number': (
+                        _try_extract_episode_number(
+                            episode_link
+                        )
+                    ),
+                    'episode_path': str(episode_dir),
+                }
+                _trigger_segmentation_only(episode_data)
+                return None  # Don't trigger full chain
+            else:
+                logger.debug(
+                    f'Episode recovery already in progress by '
+                    f'another process: {rss_guid}'
+                )
+                return None
+
         # Check if already being processed (Redis)
-        if is_episode_processing(
-            podcast_slug, rss_guid
-        ):
+        if is_episode_processing(podcast_slug, rss_guid):
             logger.debug(
                 f'Episode already being processed: '
                 f'{rss_guid}'
@@ -394,6 +437,30 @@ def _process_feed_entry(
         return None
 
 
+def _is_episode_incomplete(
+    episode_dir: Path,
+) -> bool:
+    """
+    Check if episode is incomplete: has transcription but
+    no segmentation_completed marker.
+
+    Returns:
+        True if episode is incomplete, False otherwise
+    """
+    if not episode_dir.exists():
+        return False
+
+    # Check if segmentation is completed
+    if (episode_dir / 'segmentation_completed').exists():
+        return False
+
+    # Check if transcription exists
+    transcription = next(
+        episode_dir.glob('transcription-*.json'), None
+    )
+    return transcription is not None
+
+
 def _trigger_episode_processing(
     episode_data: dict[str, Any],
 ) -> None:
@@ -411,6 +478,67 @@ def _trigger_episode_processing(
         segment_episode.s(),
     )
     workflow.apply_async()
+
+
+def _trigger_segmentation_only(
+    episode_data: dict[str, Any],
+) -> None:
+    """
+    Trigger segmentation only for an incomplete episode.
+
+    Used for recovery when an episode has transcription
+    but segmentation was not completed.
+    """
+    logger.info(
+        f'Triggering segmentation recovery for '
+        f'{episode_data["podcast_slug"]}:'
+        f'{episode_data.get("title", "")}'
+    )
+
+    # Load episode.json if it exists to get full metadata
+    episode_dir = Path(
+        episode_data.get(
+            'episode_path',
+            str(
+                _get_episode_dir(
+                    episode_data['podcast_slug'],
+                    episode_data['rss_guid'],
+                    episode_data.get('episode_link', ''),
+                    episode_data.get('published'),
+                )
+            ),
+        )
+    )
+
+    if (episode_dir / 'episode.json').exists():
+        try:
+            episode_json = json.loads(
+                (episode_dir / 'episode.json').read_text(
+                    encoding='utf-8'
+                )
+            )
+            # Merge with existing episode_data, prioritizing
+            # episode.json values
+            episode_data = {**episode_data, **episode_json}
+        except Exception as e:
+            logger.warning(
+                f'Failed to load episode.json for '
+                f'{episode_data["podcast_slug"]}:{episode_data["rss_guid"]}: '
+                f'{e}'
+            )
+
+    # Ensure episode_path is set
+    episode_data['episode_path'] = str(episode_dir)
+
+    # Find transcription file
+    transcription = next(
+        episode_dir.glob('transcription-*.json'), None
+    )
+    if transcription:
+        episode_data['transcription_path'] = str(transcription)
+
+    # Trigger segmentation task directly
+    segment_episode.delay(episode_data)
 
 
 @app.task(
@@ -966,6 +1094,13 @@ def segment_episode(
                     f'Stored episode with id '
                     f'{episode_id}'
                 )
+                # Mark episode as fully processed
+                marker = (
+                    episode_dir / 'segmentation_completed'
+                )
+                marker.write_text(
+                    datetime.now().isoformat()
+                )
             else:
                 logger.warning(
                     f'Failed to store episode '
@@ -1013,3 +1148,10 @@ def segment_episode(
                     podcast_slug, rss_guid
                 )
             raise self.retry(exc=e)
+        finally:
+            try:
+                import torch
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+            except ImportError:
+                pass
