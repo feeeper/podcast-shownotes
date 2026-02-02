@@ -112,7 +112,12 @@ lab:
 	$(CONDA_RUN) python -m jupyter lab --no-browser
 
 run-worker:
-	$(CONDA_RUN) celery -A src.app.app worker --loglevel=info -Q scheduler,downloads,transcription,segmentation
+	$(CONDA_RUN) celery -A src.app.app worker --loglevel=info -Q scheduler,downloads,transcription --concurrency=4
+
+# concurrency=1: segmentation loads embedding model onto GPU (~2 GiB);
+# multiple processes would exhaust VRAM
+run-worker-segmentation:
+	$(CONDA_RUN) celery -A src.app.app worker --loglevel=info -Q segmentation --concurrency=1
 
 run-beat:
 	$(CONDA_RUN) celery -A src.app.app beat --loglevel=info
