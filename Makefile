@@ -108,6 +108,9 @@ run-indexer-openai-%:
 run-indexer-deepgram:
 	$(CONDA_RUN) python src/components/indexer/watcher.py --log-dir src/components/indexer/.log --storage-dir src/components/indexer/data --debug false --provider deepgram --dbname podcast_shownotes --dbpassword password --segmentation-api-key $(SEGMENTATION_API_KEY) --segmentation-base-url $(SEGMENTATION_API_URL) --api-key $(DEEPGRAM_API_KEY)
 
+run-api:
+	$(CONDA_RUN) uvicorn src.api.app:app --host 0.0.0.0 --port 8080
+
 lab:
 	$(CONDA_RUN) python -m jupyter lab --no-browser
 
