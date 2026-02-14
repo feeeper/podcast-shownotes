@@ -1,0 +1,20 @@
+meta {
+  name: Delete Podcast
+  type: http
+  seq: 3
+}
+
+delete {
+  url: http://localhost:8080/podcasts/{{podcast_slug}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  podcast_slug: ne-zanesli
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
