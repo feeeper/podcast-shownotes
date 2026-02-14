@@ -24,12 +24,24 @@ def client():
         mock_db = MagicMock()
         mock_get_db.return_value = mock_db
 
-        # Import after patching to avoid startup DB init
-        from src.api.app import app
+        # Patch Celery task
+        with patch(
+            'src.app.tasks.check_podcast_feed'
+        ) as mock_task:
+            mock_task.delay = MagicMock()
 
-        app.dependency_overrides.clear()
-        with TestClient(app, raise_server_exceptions=False) as c:
-            yield c, mock_db
+            # Patch add_podcast_config
+            with patch(
+                'src.shared.podcast_config.add_podcast_config'
+            ):
+                # Import after patching to avoid startup DB init
+                from src.api.app import app
+
+                app.dependency_overrides.clear()
+                with TestClient(
+                    app, raise_server_exceptions=False
+                ) as c:
+                    yield c, mock_db, mock_task
 
 
 def _make_search_results(n: int = 2) -> SearchResults:
@@ -64,7 +76,7 @@ def _make_episode(num: int = 400) -> EpisodeDto:
 
 class TestPing:
     def test_ping(self, client):
-        c, _ = client
+        c, _, _ = client
         resp = c.get('/ping')
         assert resp.status_code == 200
         body = resp.json()
@@ -72,9 +84,92 @@ class TestPing:
         assert 'utcnow' in body
 
 
+class TestCreatePodcast:
+    def test_create_podcast_with_slug(self, client):
+        c, mock_db, mock_task = client
+        podcast_id = uuid4()
+        mock_db.get_podcast_id.return_value = None
+        mock_db.create_podcast.return_value = podcast_id
+
+        resp = c.post(
+            '/podcasts',
+            json={
+                'name': 'New Podcast',
+                'rss_url': 'https://example.com/feed.xml',
+                'slug': 'custom-slug',
+                'language': 'en',
+            },
+        )
+        assert resp.status_code == 201
+        data = resp.json()
+        assert data['id'] == str(podcast_id)
+        assert data['slug'] == 'custom-slug'
+        assert data['name'] == 'New Podcast'
+        mock_db.create_podcast.assert_called_once_with(
+            slug='custom-slug',
+            name='New Podcast',
+            rss_url='https://example.com/feed.xml',
+            language='en',
+        )
+        mock_task.delay.assert_called_once_with(
+            'custom-slug', max_episodes=None
+        )
+
+    def test_create_podcast_slug_from_name(self, client):
+        c, mock_db, mock_task = client
+        podcast_id = uuid4()
+        mock_db.get_podcast_id.return_value = None
+        mock_db.create_podcast.return_value = podcast_id
+
+        resp = c.post(
+            '/podcasts',
+            json={
+                'name': 'My Cool Podcast',
+                'rss_url': 'https://example.com/feed.xml',
+            },
+        )
+        assert resp.status_code == 201
+        data = resp.json()
+        assert data['slug'] == 'my-cool-podcast'
+
+    def test_create_podcast_slug_from_cyrillic_name(self, client):
+        c, mock_db, mock_task = client
+        podcast_id = uuid4()
+        mock_db.get_podcast_id.return_value = None
+        mock_db.create_podcast.return_value = podcast_id
+
+        resp = c.post(
+            '/podcasts',
+            json={
+                'name': 'Подкаст на русском',
+                'rss_url': 'https://example.com/feed.xml',
+            },
+        )
+        assert resp.status_code == 201
+        data = resp.json()
+        assert data['slug'] == 'podkast-na-russkom'
+
+    def test_create_podcast_already_exists(self, client):
+        c, mock_db, mock_task = client
+        mock_db.get_podcast_id.return_value = uuid4()
+
+        resp = c.post(
+            '/podcasts',
+            json={
+                'name': 'Existing Podcast',
+                'rss_url': 'https://example.com/feed.xml',
+            },
+        )
+        assert resp.status_code == 409
+        assert resp.json()['detail'] == (
+            'Podcast with this slug already exists'
+        )
+        mock_db.create_podcast.assert_not_called()
+
+
 class TestPostSearch:
     def test_search_returns_results(self, client):
-        c, mock_db = client
+        c, mock_db, mock_task = client
         podcast_id = uuid4()
         mock_db.get_podcast_id.return_value = podcast_id
         mock_db.find_similar.return_value = (
@@ -105,7 +200,7 @@ class TestPostSearch:
         )
 
     def test_search_with_unknown_podcast_slug(self, client):
-        c, mock_db = client
+        c, mock_db, mock_task = client
         mock_db.get_podcast_id.return_value = None
 
         resp = c.post(
@@ -122,7 +217,7 @@ class TestPostSearch:
 
 class TestV2Search:
     def test_search_without_include_episode(self, client):
-        c, mock_db = client
+        c, mock_db, mock_task = client
         podcast_id = uuid4()
         mock_db.get_podcast_id.return_value = podcast_id
         mock_db.find_similar_complex.return_value = (
@@ -144,7 +239,7 @@ class TestV2Search:
         mock_db.find_episode.assert_not_called()
 
     def test_search_with_include_episode(self, client):
-        c, mock_db = client
+        c, mock_db, mock_task = client
         podcast_id = uuid4()
         mock_db.get_podcast_id.return_value = podcast_id
         mock_db.find_similar_complex.return_value = (
@@ -171,7 +266,7 @@ class TestV2Search:
         assert item['sentence'] == 'sentence 0'
 
     def test_search_with_missing_episode(self, client):
-        c, mock_db = client
+        c, mock_db, mock_task = client
         podcast_id = uuid4()
         mock_db.get_podcast_id.return_value = podcast_id
         mock_db.find_similar_complex.return_value = (
@@ -194,7 +289,7 @@ class TestV2Search:
         assert data[0]['episode'] == 400
 
     def test_search_verifies_db_calls(self, client):
-        c, mock_db = client
+        c, mock_db, mock_task = client
         podcast_id = uuid4()
         mock_db.get_podcast_id.return_value = podcast_id
         mock_db.find_similar_complex.return_value = (
@@ -221,7 +316,7 @@ class TestV2Search:
         )
 
     def test_search_with_unknown_podcast_slug(self, client):
-        c, mock_db = client
+        c, mock_db, mock_task = client
         mock_db.get_podcast_id.return_value = None
 
         resp = c.get(
@@ -234,3 +329,55 @@ class TestV2Search:
         assert resp.status_code == 404
         assert resp.json()['detail'] == 'Podcast not found'
         mock_db.find_similar_complex.assert_not_called()
+
+
+class TestDeletePodcast:
+    def test_delete_podcast_success(self, client):
+        c, mock_db, mock_task = client
+        podcast_id = uuid4()
+        mock_db.get_podcast_id.return_value = podcast_id
+        mock_db.delete_podcast.return_value = True
+
+        with patch(
+            'src.shared.podcast_config.remove_podcast_config'
+        ) as mock_remove:
+            mock_remove.return_value = True
+            with patch('shutil.rmtree') as mock_rmtree:
+                with patch('pathlib.Path.exists', return_value=True):
+                    resp = c.delete('/podcasts/test-podcast')
+
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data['deleted'] is True
+        assert data['slug'] == 'test-podcast'
+        mock_db.delete_podcast.assert_called_once_with(
+            'test-podcast'
+        )
+
+    def test_delete_podcast_not_found(self, client):
+        c, mock_db, mock_task = client
+        mock_db.get_podcast_id.return_value = None
+
+        resp = c.delete('/podcasts/unknown-podcast')
+        assert resp.status_code == 404
+        assert resp.json()['detail'] == 'Podcast not found'
+        mock_db.delete_podcast.assert_not_called()
+
+    def test_delete_podcast_no_storage_dir(self, client):
+        c, mock_db, mock_task = client
+        podcast_id = uuid4()
+        mock_db.get_podcast_id.return_value = podcast_id
+        mock_db.delete_podcast.return_value = True
+
+        with patch(
+            'src.shared.podcast_config.remove_podcast_config'
+        ) as mock_remove:
+            mock_remove.return_value = True
+            with patch('shutil.rmtree') as mock_rmtree:
+                with patch(
+                    'pathlib.Path.exists', return_value=False
+                ):
+                    resp = c.delete('/podcasts/test-podcast')
+
+        assert resp.status_code == 200
+        mock_rmtree.assert_not_called()

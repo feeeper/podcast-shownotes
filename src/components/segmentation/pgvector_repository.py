@@ -87,6 +87,111 @@ class DB:
         row = self.cursor.fetchone()
         return row['id'] if row else None
 
+    def get_podcast(
+        self, podcast_slug: str
+    ) -> dict | None:
+        self.cursor.execute(
+            '''
+            SELECT id, slug, name, rss_url, language
+            FROM podcasts WHERE slug = %s
+            ''',
+            (podcast_slug,),
+        )
+        row = self.cursor.fetchone()
+        if row is None:
+            return None
+        return {
+            'id': row['id'],
+            'slug': row['slug'],
+            'name': row['name'],
+            'rss_url': row['rss_url'],
+            'language': row['language'],
+        }
+
+    def create_podcast(
+        self,
+        slug: str,
+        name: str,
+        rss_url: str,
+        language: str = 'en',
+    ) -> UUID:
+        self.cursor.execute(
+            '''
+            INSERT INTO podcasts (slug, name, rss_url, language)
+            VALUES (%s, %s, %s, %s)
+            RETURNING id
+            ''',
+            (slug, name, rss_url, language),
+        )
+        podcast_id = self.cursor.fetchone()[0]
+        self.conn.commit()
+        return podcast_id
+
+    def delete_podcast(self, podcast_slug: str) -> bool:
+        """
+        Delete a podcast and all related data.
+
+        Deletes in order: sentences, segments,
+        speaker_episode, episodes, podcast.
+
+        Returns True if podcast was deleted.
+        """
+        podcast_id = self.get_podcast_id(podcast_slug)
+        if podcast_id is None:
+            return False
+
+        # Delete sentences via segments via episodes
+        self.cursor.execute(
+            '''
+            DELETE FROM sentences
+            WHERE segment_id IN (
+                SELECT s.id FROM segments s
+                JOIN episodes e ON e.id = s.episode_id
+                WHERE e.podcast_id = %s
+            )
+            ''',
+            (podcast_id,),
+        )
+
+        # Delete segments via episodes
+        self.cursor.execute(
+            '''
+            DELETE FROM segments
+            WHERE episode_id IN (
+                SELECT id FROM episodes
+                WHERE podcast_id = %s
+            )
+            ''',
+            (podcast_id,),
+        )
+
+        # Delete speaker_episode via episodes
+        self.cursor.execute(
+            '''
+            DELETE FROM speaker_episode
+            WHERE episode_id IN (
+                SELECT id FROM episodes
+                WHERE podcast_id = %s
+            )
+            ''',
+            (podcast_id,),
+        )
+
+        # Delete episodes
+        self.cursor.execute(
+            'DELETE FROM episodes WHERE podcast_id = %s',
+            (podcast_id,),
+        )
+
+        # Delete podcast
+        self.cursor.execute(
+            'DELETE FROM podcasts WHERE id = %s',
+            (podcast_id,),
+        )
+
+        self.conn.commit()
+        return True
+
     def insert(
             self,
             segmentation_result: SegmentationResult,
