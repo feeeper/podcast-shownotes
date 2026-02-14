@@ -1,0 +1,24 @@
+meta {
+  name: Create Podcast
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/podcasts
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "My Podcast",
+    "rss_url": "https://example.com/feed.xml",
+    "language": "en",
+    "max_episodes": 5
+  }
+}
+
+settings {
+  encodeUrl: true
+}
