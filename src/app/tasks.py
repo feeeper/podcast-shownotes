@@ -221,10 +221,19 @@ def check_rss_feed(self):
     max_retries=3,
     default_retry_delay=60,
 )
-def check_podcast_feed(self, podcast_slug: str):
+def check_podcast_feed(
+    self,
+    podcast_slug: str,
+    max_episodes: int | None = None,
+):
     """
     Check RSS feed for a single podcast and trigger
     processing chains for new episodes.
+
+    Args:
+        podcast_slug: The podcast identifier
+        max_episodes: Maximum number of episodes to process
+            (None = no limit)
     """
     try:
         config = get_podcast_config(podcast_slug)
@@ -252,13 +261,34 @@ def check_podcast_feed(self, podcast_slug: str):
             f'Found {len(feed.entries)} entries.'
         )
 
+        # Sort by publication date (newest first)
+        entries = sorted(
+            feed.entries,
+            key=lambda e: (
+                e.published_parsed
+                if hasattr(e, 'published_parsed')
+                and e.published_parsed
+                else (0,) * 9
+            ),
+            reverse=True,
+        )
+
         new_episodes = []
-        for entry in feed.entries:
+        for entry in entries:
             episode_data = _process_feed_entry(
                 entry, config.slug
             )
             if episode_data:
                 new_episodes.append(episode_data)
+                if (
+                    max_episodes is not None
+                    and len(new_episodes) >= max_episodes
+                ):
+                    logger.info(
+                        f'Reached max_episodes limit '
+                        f'({max_episodes})'
+                    )
+                    break
 
         for episode_data in new_episodes:
             _trigger_episode_processing(episode_data)
@@ -621,8 +651,8 @@ def download_episode_metadata(
 @app.task(
     name='src.app.tasks.download_episode_mp3',
     bind=True,
-    max_retries=3,
-    default_retry_delay=300,
+    max_retries=5,
+    default_retry_delay=60,
 )
 def download_episode_mp3(
     self, episode_data: dict[str, Any]
@@ -631,7 +661,8 @@ def download_episode_mp3(
     Download the MP3 file for an episode.
 
     Streams the MP3 file to disk to handle large files.
-    Skips download if file already exists.
+    Supports resuming partial downloads using HTTP Range.
+    Skips download if file already exists and is complete.
     """
     podcast_slug = episode_data['podcast_slug']
     rss_guid = episode_data['rss_guid']
@@ -653,6 +684,7 @@ def download_episode_mp3(
         )
     )
     mp3_path = episode_dir / 'episode.mp3'
+    mp3_partial = episode_dir / 'episode.mp3.partial'
 
     logger.info(
         f'Downloading MP3 for {podcast_slug}: '
@@ -678,30 +710,85 @@ def download_episode_mp3(
     try:
         episode_dir.mkdir(parents=True, exist_ok=True)
 
+        # Check for partial download to resume
+        resume_pos = 0
+        if mp3_partial.exists():
+            resume_pos = mp3_partial.stat().st_size
+            logger.info(
+                f'Resuming download from '
+                f'{resume_pos / (1024 * 1024):.1f} MB'
+            )
+
+        headers = {}
+        if resume_pos > 0:
+            headers['Range'] = f'bytes={resume_pos}-'
+
         logger.info(f'Downloading from: {mp3_link}')
         response = requests.get(
-            mp3_link, stream=True, timeout=600
+            mp3_link,
+            stream=True,
+            timeout=600,
+            headers=headers,
         )
-        response.raise_for_status()
 
-        total_size = int(
-            response.headers.get('content-length', 0)
-        )
+        # Check if server supports range requests
+        if resume_pos > 0 and response.status_code == 200:
+            # Server doesn't support Range, start over
+            logger.warning(
+                'Server does not support Range requests, '
+                'starting from beginning'
+            )
+            resume_pos = 0
+        elif response.status_code == 206:
+            # Partial content - resuming
+            logger.info('Server accepted Range request')
+        else:
+            response.raise_for_status()
+
+        # Get total size
+        if response.status_code == 206:
+            content_range = response.headers.get(
+                'Content-Range', ''
+            )
+            if '/' in content_range:
+                total_size = int(
+                    content_range.split('/')[-1]
+                )
+            else:
+                total_size = resume_pos + int(
+                    response.headers.get('content-length', 0)
+                )
+        else:
+            total_size = int(
+                response.headers.get('content-length', 0)
+            )
+
         if total_size:
             logger.info(
                 f'MP3 file size: '
                 f'{total_size / (1024 * 1024):.1f} MB'
             )
 
-        downloaded = 0
-        chunk_size = 8192
-        with open(mp3_path, 'wb') as f:
+        downloaded = resume_pos
+        chunk_size = 65536  # 64KB chunks
+        mode = 'ab' if resume_pos > 0 else 'wb'
+        with open(mp3_partial, mode) as f:
             for chunk in response.iter_content(
                 chunk_size=chunk_size
             ):
                 if chunk:
                     f.write(chunk)
                     downloaded += len(chunk)
+
+        # Verify download is complete
+        if total_size and downloaded < total_size:
+            raise requests.RequestException(
+                f'Incomplete download: {downloaded} '
+                f'of {total_size} bytes'
+            )
+
+        # Rename partial to final
+        mp3_partial.rename(mp3_path)
 
         logger.info(
             f'MP3 download completed for '
@@ -718,8 +805,7 @@ def download_episode_mp3(
             f'{podcast_slug}:{rss_guid}: {e}',
             exc_info=True,
         )
-        if mp3_path.exists():
-            mp3_path.unlink()
+        # Keep partial file for resume on retry
         raise self.retry(exc=e)
 
 
