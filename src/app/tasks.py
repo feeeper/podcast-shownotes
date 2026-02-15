@@ -397,7 +397,7 @@ def _process_feed_entry(
                             entry, 'authors', []
                         )
                     ],
-                    'episode_number': (
+                    'episode': (
                         _try_extract_episode_number(
                             episode_link
                         )
@@ -445,7 +445,7 @@ def _process_feed_entry(
                     entry, 'authors', []
                 )
             ],
-            'episode_number': (
+            'episode': (
                 _try_extract_episode_number(
                     episode_link
                 )
@@ -617,9 +617,7 @@ def download_episode_metadata(
             ),
             'summary': episode_data.get('summary', ''),
             'authors': episode_data.get('authors', []),
-            'episode_number': episode_data.get(
-                'episode_number'
-            ),
+            'episode': episode_data.get('episode'),
         }
         episode_json_file = (
             episode_dir / 'episode.json'
@@ -1092,21 +1090,26 @@ def segment_episode(
             podcast_id = db.get_podcast_id(
                 podcast_slug
             )
+            existing_episode = None
+            ep_num = episode_data.get('episode')
+
+            # Fallback: extract episode number from directory name
+            if ep_num is None:
+                dir_name = episode_dir.name
+                if dir_name.isdigit():
+                    ep_num = int(dir_name)
+
+            # Try by rss_guid first
             if podcast_id and rss_guid:
                 existing_episode = (
                     db.find_episode_by_guid(
                         podcast_id, rss_guid
                     )
                 )
-            else:
-                ep_num = episode_data.get(
-                    'episode_number'
-                )
-                existing_episode = (
-                    db.find_episode(ep_num)
-                    if ep_num
-                    else None
-                )
+
+            # Fallback to episode_number if guid not found
+            if existing_episode is None and ep_num is not None:
+                existing_episode = db.find_episode(ep_num)
 
             if existing_episode:
                 logger.info(
