@@ -51,12 +51,14 @@ async def execute_search(
     query: str,
     limit: int = 10,
     offset: int = 0,
+    podcast_slug: str = "devzen",
 ) -> list[dict]:
     querystring = {
         'query': query,
         'limit': limit,
         'offset': offset,
         'include_episode': True,
+        'podcast_slug': podcast_slug,
     }
 
     response = requests.get(
